@@ -9,6 +9,15 @@ OnlyFence is a platform that allows fence creators to earn money from users who 
 - Content creator posts on his/her page
 - Content creator views post statistics
 
+## Tools 
+- Docker
+- Flask (Micro Web Framework for Python)
+- Flask_CORS (Cross-origin AJAX)
+- FlaskSQLAlchemy (Python SQL Toolkit)
+- RabbitMQ (AMQP)
+- Kong (API Gateway)
+
+
 ## Accounts
 **Firebase**    
 user: G03T02@gmail.com  
