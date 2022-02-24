@@ -11,10 +11,13 @@ OnlyFence is a platform that allows fence creators to earn money from users who 
 - [ ] Finish Proposal Slides
 
 ## User Scenarios
-- Consumer subscribes to content creator
-- Consumer views content creator's posts
-- Content creator posts on his/her page
-- Content creator views post statistics
+-Consumer creates an account
+-Content creator signs in to their account
+-Consumer subscribes to content creator
+-Content creator posts to their profile
+-Consumer views content of the subscribed content creator
+-Content creator views post statistics
+
 
 ## Tools Available
 - Docker
