@@ -3,6 +3,12 @@ OnlyFence is a platform that allows fence creators to earn money from users who 
 
 ![Fences](https://cdn.vox-cdn.com/thumbor/NXI3rAC_jN7zEcdUbBM4K6bbBPM=/0x0:3000x2000/1200x0/filters:focal(0x0:3000x2000):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/21760265/iStock_598783266.jpg)
 
+## User Scenarios
+- Consumer subscribes to content creator
+- Consumer views content creator's posts
+- Content creator posts on his/her page
+- Content creator views post statistics
+
 ## Accounts
 **Firebase**    
 user: G03T02@gmail.com  
