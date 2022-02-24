@@ -1,7 +1,7 @@
 # OnlyFence
 OnlyFence is a platform that allows fence creators to earn money from users who subscribe to their content.  
 
-![Fences](https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.thisoldhouse.com%2Ffences%2F21017711%2Fall-about-wood-fences&psig=AOvVaw11epVcpUzsW7BhleieEAaS&ust=1645792184750000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLCVvearmPYCFQAAAAAdAAAAABAE)
+![Fences](https://cdn.vox-cdn.com/thumbor/NXI3rAC_jN7zEcdUbBM4K6bbBPM=/0x0:3000x2000/1200x0/filters:focal(0x0:3000x2000):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/21760265/iStock_598783266.jpg)
 
 ## Accounts
 **Firebase**    
