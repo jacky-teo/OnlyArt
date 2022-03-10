@@ -1,0 +1,1 @@
+## Microservice that uses AMQP to do activity log ##
