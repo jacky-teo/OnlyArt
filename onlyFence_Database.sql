@@ -13,12 +13,19 @@
 CREATE DATABASE IF NOT EXISTS ONLYFENCE DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
 USE ONLYFENCE;
 
+<<<<<<< HEAD
 -- ---------------------------------------------------------------- --
 --                     CREATOR ACCOUNT TABLE                        --
 -- ---------------------------------------------------------------- --
 
 --
 -- Table structure for table `CREATORACCOUNT_SEQ` --
+=======
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `CREATORACCOUNT`
+>>>>>>> 883508286d041e0239759ae3c9b9485dbce31150
 --
 DROP TABLE IF EXISTS CREATORACCOUNT_SEQ;
 CREATE TABLE CREATORACCOUNT_SEQ
