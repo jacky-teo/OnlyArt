@@ -29,7 +29,7 @@ OnlyFence is a platform that allows fence creators to earn money from users who 
 
 
 ## Accounts
-**Firebase**    
+**For Sandbox Accounts**    
 user: G03T02@gmail.com  
 password: SubwayEatFresh123  
 
