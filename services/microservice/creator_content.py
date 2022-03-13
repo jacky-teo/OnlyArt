@@ -4,7 +4,7 @@ from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/book'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/onlyfence'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -16,8 +16,8 @@ class CREATOR_CONTENT(db.Model):
 
     POSTID = db.Column(db.String(13), primary_key=True)
     CREATORID = db.Column(db.String(64), nullable=False)
-    DESCRIPTION = db.Column(db.Float(precision=2), nullable=False)
-    IMAGE = db.Column(db.BLOB(length=None), nullable=False)
+    DESCRIPTION = db.Column(db.String(64), nullable=False)
+    IMAGE = db.Column(db.String(464), nullable=False)
     POST_DATE = db.Column(db.DateTime, nullable=False, default=datetime.now)
     modified = db.Column(db.DateTime, nullable=False,default=datetime.now, onupdate=datetime.now)
 
@@ -53,9 +53,9 @@ def get_all():
     ), 404
 
 
-@app.route("/creator_content/<string:creatorid>")
-def find_by_creatorid(creatorid):
-    content_list = CREATOR_CONTENT.query.filter_by(creatorid=creatorid).first()
+@app.route("/creator_content/<string:CREATORID>")
+def find_by_creatorid(CREATORID):
+    content_list = CREATOR_CONTENT.query.filter_by(CREATORID=CREATORID).first()
     if len(content_list):
         return jsonify(
             {
@@ -73,8 +73,8 @@ def find_by_creatorid(creatorid):
     ), 404
 
 
-@app.route("/creator_content/<string:creatorid>", methods=['POST'])
-def upload_content(creatorid):
+@app.route("/creator_content/<string:CREATORID>", methods=['POST'])
+def upload_content(CREATORID):
 
     data = request.get_json()
     content = CREATOR_CONTENT(**data)
@@ -87,7 +87,7 @@ def upload_content(creatorid):
             {
                 "code": 500,
                 "data": {
-                    "CreatorID": creatorid
+                    "CreatorID": CREATORID
                 },
                 "message": "An error occurred inserting the content."
             }
