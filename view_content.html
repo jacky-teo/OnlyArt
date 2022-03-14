@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
 
-    <title>Bookstore</title>
+    <title>View Content</title>
 
     <link rel="stylesheet" href="">
     <!--[if lt IE 9]>
@@ -31,7 +31,7 @@
             <thead class='table-dark'>
                 <tr>
                     <th>POSTID</th>
-                    <th>CREATORID 13</th>
+                    <th>CREATORID</th>
                     <th>DESCRIPTION</th>
                     <th>IMAGE</th>
                     <th>POST_DATE</th>
@@ -40,7 +40,7 @@
             </thead>
             <tbody id="contentTable"></tbody>
         </table>
-        <a id="postContentBtn" class="btn btn-primary" href="post_content.html">Add a book</a>
+        <a id="postContentBtn" class="btn btn-primary" href="post_content.html">Post</a>
     </div>
 
     <!-- Bootstrap Javascript; at the end of the <body> -->
@@ -67,7 +67,6 @@
         var serviceURL = "http://127.0.0.1:5000/creator_content";
  
         try {
-            console.log('IM IN')
             const response =
             await fetch(
                 serviceURL, { method: 'GET' }
@@ -76,6 +75,7 @@
             if (response.status == 200) {
                 // success case
                 var contents = result.data.contents; //the array is in cont within data of 
+                console.log(contents)
                 // the returned result
                 // for loop to setup all table rows with obtained book data
                 var rows = "";
