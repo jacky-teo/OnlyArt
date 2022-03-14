@@ -1,8 +1,10 @@
 ## Microservice to store who is subscribed to who ##
+from audioop import add
 from http.client import CREATED
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:password@localhost:3306/onlyfence'
@@ -87,7 +89,41 @@ def get_subscription_status():
             ## will change to page rendering/rerouting
         }
     ), 404
-    
+
+@app.route('/addsubscription')
+def create_subscription():
+    creatorid = request.args.get('CREATORID')
+    consumerid = request.args.get('CONSUMERID')
+
+    if (subscriptionLink.query.filter_by(CREATORID=creatorid,CONSUMERID=consumerid).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "message": "Already subscribed."
+            }
+        ), 400
+
+    created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+    add = subscriptionLink(creatorid, consumerid, created, modified)
+
+    try:
+        db.session.add(add)
+        db.session.commit()
+    except:
+        return jsonify(
+            {
+                "code": 500,
+                "message": "An error occurred creating subscription link"
+            }
+        ), 500
+    return jsonify( 
+        {
+            "code": 201,
+            "message": "Subscription link created"
+        }
+    ), 201
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
