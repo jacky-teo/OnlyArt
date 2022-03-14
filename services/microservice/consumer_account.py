@@ -31,3 +31,5 @@ class consumerAccount(db.Model):
     def json(self):
         return {"CONSUMERID": self.CONSUMERID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "TELEGRAM": self.TELEGRAM}
 
+if __name__ == '__main__':
+    app.run(port=5001, debug=True)

@@ -32,3 +32,7 @@ class creatorAccount(db.Model):
 
     def json(self):
         return {"CREATORID": self.CREATORID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "EMAIL": self.EMAIL,"PRICE": self.PRICE}
+
+
+if __name__ == '__main__':
+    app.run(port=5001, debug=True)
