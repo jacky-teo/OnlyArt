@@ -18,7 +18,7 @@ class creatorContent(db.Model):
     POSTID = db.Column(db.String(13), primary_key=True)
     CREATORID = db.Column(db.String(64), nullable=False)
     DESCRIPTION = db.Column(db.String(64), nullable=False)
-    IMAGE = db.Column(db.LargeBinary(length=(2**32)-1), nullable=False)
+    IMAGE = db.Column(db.String(64), nullable=False)
     POST_DATE = db.Column(db.DateTime, nullable=True, default=datetime.now)
     modified = db.Column(db.DateTime, nullable=True,default=datetime.now, onupdate=datetime.now)
 
@@ -39,7 +39,6 @@ class creatorContent(db.Model):
 def get_all():
     content_list = creatorContent.query.all()
     if len(content_list):
-
         return jsonify(
             {
                 "code": 200,
