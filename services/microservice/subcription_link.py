@@ -106,10 +106,10 @@ def create_subscription():
     created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    add = subscriptionLink(creatorid, consumerid, created, modified)
+    subcribedParing = subscriptionLink(creatorid, consumerid, created, modified)
 
     try:
-        db.session.add(add)
+        db.session.add(subcribedParing)
         db.session.commit()
     except:
         return jsonify(
