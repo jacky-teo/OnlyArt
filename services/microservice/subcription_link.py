@@ -8,13 +8,14 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:password@localhost:3306/onlyfence'
-## root@localhost will change
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False 
+# root@localhost will change
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app)
 
-class creatorAccount(db.Model): 
+
+class creatorAccount(db.Model):
     __tablename__ = "creatoraccount"
 
     CREATORID = db.Column(db.String(64), primary_key=True, nullable=False)
@@ -31,9 +32,10 @@ class creatorAccount(db.Model):
         self.PRICE = PRICE
 
     def json(self):
-        return {"CREATORID": self.CREATORID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "EMAIL": self.EMAIL,"PRICE": self.PRICE}
+        return {"CREATORID": self.CREATORID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "EMAIL": self.EMAIL, "PRICE": self.PRICE}
 
-class consumerAccount(db.Model): 
+
+class consumerAccount(db.Model):
     __tablename__ = "consumeraccount"
 
     CONSUMERID = db.Column(db.String(64), primary_key=True, nullable=False)
@@ -50,6 +52,7 @@ class consumerAccount(db.Model):
     def json(self):
         return {"CONSUMERID": self.CONSUMERID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "TELEGRAM": self.TELEGRAM}
 
+
 class subscriptionLink(db.Model):
     __tablename__ = 'subscription_link'
 
@@ -62,21 +65,25 @@ class subscriptionLink(db.Model):
 
     def __init__(self, CREATORID, CONSUMERID, CREATED, MODIFIED):
         self.CREATORID = CREATORID
-        self.CONSUMERID = CONSUMERID 
-        self.CREATED = CREATED 
-        self.MODIFIED = MODIFIED 
-    
+        self.CONSUMERID = CONSUMERID
+        self.CREATED = CREATED
+        self.MODIFIED = MODIFIED
+
     def json(self):
         return {"CREATORID": self.CREATORID, "CONSUMERID": self.CONSUMERID, "CREATED": self.CREATED, "MODIFIED": self.MODIFIED}
+
+# scenario 1
+
 
 @app.route('/subscriptionstatus')
 def get_subscription_status():
     creatorid = request.args.get('CREATORID', None)
     consumerid = request.args.get('CONSUMERID', None)
-    status = subscriptionLink.query.filter_by(CREATORID=creatorid,CONSUMERID=consumerid).first()
+    status = subscriptionLink.query.filter_by(
+        CREATORID=creatorid, CONSUMERID=consumerid).first()
 
     if (status):
-        return jsonify( 
+        return jsonify(
             {
                 "code": 200,
                 "data": status.json()
@@ -86,16 +93,19 @@ def get_subscription_status():
         {
             "code": 404,
             "message": "Not subscribed."
-            ## will change to page rendering/rerouting
+            # will change to page rendering/rerouting
         }
     ), 404
+
+# scenario 2
+
 
 @app.route('/addsubscription')
 def create_subscription():
     creatorid = request.args.get('CREATORID')
     consumerid = request.args.get('CONSUMERID')
 
-    if (subscriptionLink.query.filter_by(CREATORID=creatorid,CONSUMERID=consumerid).first()):
+    if (subscriptionLink.query.filter_by(CREATORID=creatorid, CONSUMERID=consumerid).first()):
         return jsonify(
             {
                 "code": 400,
@@ -118,12 +128,13 @@ def create_subscription():
                 "message": "An error occurred creating subscription link"
             }
         ), 500
-    return jsonify( 
+    return jsonify(
         {
             "code": 201,
             "message": "Subscription link created"
         }
     ), 201
+
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
