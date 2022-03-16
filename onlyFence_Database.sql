@@ -57,10 +57,10 @@ DELIMITER ;
 --
 -- Insert Data into `CREATORACCOUNT` --
 --
-INSERT INTO CREATORACCOUNT(USERNAME,PASSWORD,EMAIL,PAYPALID,PRICE) 
+INSERT INTO CREATORACCOUNT(USERNAME,PASSWORD,EMAIL,PRICE) 
 VALUES 
-('jackyteo', 'pass123', 'jacky.teo.2020@smu.edu.sg','MyPayPalID1',100.00),
-('notJacky', 'pass123', 'jackyteojianqi@gmail.com','MyPayPalID2',233.50);
+('jackyteo', 'pass123', 'jacky.teo.2020@smu.edu.sg',100.00),
+('notJacky', 'pass123', 'jackyteojianqi@gmail.com',233.50);
 
 -- ---------------------------------------------------------------- --
 --                     CONSUMER ACCOUNT TABLE                       --
@@ -157,7 +157,7 @@ CREATE TABLE CREATOR_CONTENT(
 	POSTID varchar(64) NOT NULL,
 	CREATORID varchar(64) NOT NULL,
 	DESCRIPTION varchar(64) NOT NULL,
-	IMAGE BLOB NOT NULL,
+	IMAGE_URL varchar(64) NOT NULL,
 	POST_DATE timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	MODIFIED timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (POSTID, CREATORID),
@@ -178,10 +178,11 @@ BEGIN
 END$$
 DELIMITER ;
 
-INSERT INTO CREATOR_CONTENT(CREATORID,DESCRIPTION,IMAGE) 
+INSERT INTO CREATOR_CONTENT(CREATORID,DESCRIPTION,IMAGE_URL) 
 VALUES 
-('CR002', 'not me', "C:\Users\Jackytjq\Downloads\wallet.png"),
-('CR002', 'please work', 'help@gmail.com');
+('CR001', 'not me', "./static/images/CR001/cr001_1.jpg"),
+('CR001', 'not me', "./static/images/CR001/cr001_2.png"),
+('CR002', 'please work', './static/images/CR002/cr002_1.png');
 
 -- ---------------------------------------------------------------- --
 --                     PAYMENT_LOG TABLE                        --
@@ -202,4 +203,17 @@ CREATE TABLE PAYMENT_LOG(
 	PRIMARY KEY (TRANSACTIONID),
 	CONSTRAINT FK_PAYMENT_CREATORID FOREIGN KEY (CREATORID) REFERENCES CREATORACCOUNT(CREATORID),
     CONSTRAINT FK_PAYMENT_CONSUMERID FOREIGN KEY (CONSUMERID) REFERENCES CONSUMERACCOUNT(CONSUMERID)
+) ENGINE=InnoDB;
+
+
+-- ---------------------------------------------------------------- --
+--                     NOTIFICATION TABLE                        --
+-- ---------------------------------------------------------------- --
+DROP TABLE IF EXISTS NOTIFICATION;
+CREATE TABLE NOTIFICATION(
+	CHATID varchar(64) NOT NULL,
+	CONSUMERID varchar(64) NOT NULL,
+    TELEGRAMTAG varchar(64) NOT NULL,
+	PRIMARY KEY (CHATID),
+	CONSTRAINT FK_NOTIFICATION_CONSUMERID FOREIGN KEY (CONSUMERID) REFERENCES CONSUMERACCOUNT(CONSUMERID)
 ) ENGINE=InnoDB;
