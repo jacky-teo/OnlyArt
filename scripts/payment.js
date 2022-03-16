@@ -4,15 +4,30 @@
 // Sandbox PayPal Environment: https://www.sandbox.paypal.com/ 
     // Use this to check sandbox account
 
-// Sandbox Personal Account
-// Email: sb-wptk414408488@personal.example.com
-// Pass: {vg<>1DI
+// Sandbox Accounts
+    // Customer 1 (SG)
+    // Email: sb-y47azb14478818@personal.example.com
+    // Pass: 9LHeM.z)
 
-// Sandbox Client ID of a REST app
-// Email: sb-vrehs14346230@business.example.com
-// Pass: AYip4<3e
-// Client ID: Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M
-// This App type is: Platform
+    // Customer 2 (SG)
+    // Email: sb-x47npc14478827@personal.example.com
+    // Pass: qS|[24%h
+
+    // Content Creator (SG)
+    // Email: sb-go47cv14389012@business.example.com
+    // Pass: hfAp.0jT
+    // Account ID: MGPG8H9TFN528
+
+    // Content Creator (US)
+    // Email: sb-hcmzn14332506@business.example.com
+    // Pass: aO=hx,N1
+    // Account ID: B32XMXM3YDPQQ
+
+// Sandbox Client ID of REST app
+    // Email: sb-vrehs14346230@business.example.com
+    // Pass: AYip4<3e
+    // Client ID: Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M
+    // This App type is: Platform
 
 // Resources
 // PayPal Standard Integration: https://developer.paypal.com/docs/checkout/standard/integrate/
