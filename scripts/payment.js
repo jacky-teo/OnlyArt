@@ -1,3 +1,48 @@
+paypal.Buttons({
+    // Sets up the transaction when a payment button is clicked
+    createOrder: function(data, actions) {
+        return actions.order.create({
+            intent: 'CAPTURE',
+            purchase_units: [{
+                amount: {
+                    value: '77.44' // Can reference variables or functions. Example: `value: document.getElementById('...').value`
+                },
+                // This code block defines who the recipient is. But with this implemented, the paypal transaction does not go through.
+                // Reference: https://developer.paypal.com/docs/multiparty/checkout/multiseller-payments/ 
+                // payee: {
+                //     email_address: 'sb-hcmzn14332506@business.example.com' // Insert recipient's email account here
+                // }
+            }]
+        });
+
+        //throw error if there is problem intiating transaction
+        //throw new Error(errorMsg)
+    },
+
+    // Finalize the transaction after payer approval
+    onApprove: function(data, actions) {
+        return actions.order.capture().then(function(orderData) {
+            // Successful capture! For dev/demo purposes:
+                console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+                var transaction = orderData.purchase_units[0].payments.captures[0];
+                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+
+            // When ready to go live, remove the alert and show a success message within this page. For example:
+            // var element = document.getElementById('paypal-button-container');
+            // element.innerHTML = '';
+            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+            // Or go to another URL:  actions.redirect('thank_you.html');
+        });
+    }
+
+    //add onCancel function to show cancellation page or return to creator's page in preview mode
+
+    //add onError function for error handling and displaying error page to users
+
+}).render('#paypal-button-container');
+
+
+
 // For Paypal Javascript SDK
 
 // Paypal Developer Dashboard: https://developer.paypal.com/developer/applications 
