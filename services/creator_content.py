@@ -18,21 +18,21 @@ class creatorContent(db.Model):
     POSTID = db.Column(db.String(13), primary_key=True)
     CREATORID = db.Column(db.String(64), nullable=False)
     DESCRIPTION = db.Column(db.String(64), nullable=False)
-    IMAGE = db.Column(db.String(64), nullable=False)
+    IMAGE_URL = db.Column(db.String(64), nullable=False) ## Storing file directory
     POST_DATE = db.Column(db.DateTime, nullable=True, default=datetime.now)
     modified = db.Column(db.DateTime, nullable=True,default=datetime.now, onupdate=datetime.now)
 
-    def __init__(self, POSTID, CREATORID, DESCRIPTION, IMAGE,POST_DATE,modified):
+    def __init__(self, POSTID, CREATORID, DESCRIPTION, IMAGE_URL,POST_DATE,modified):
         self.POSTID = POSTID
         self.CREATORID = CREATORID
         self.DESCRIPTION = DESCRIPTION
-        self.IMAGE = IMAGE
+        self.IMAGE_URL = IMAGE_URL
         self.POST_DATE = POST_DATE
         self.modified = modified
 
     def json(self):
         
-        return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE": self.IMAGE.decode("utf-8"),"POST_DATE": self.POST_DATE,"modified": self.modified}
+        return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE_URL": self.IMAGE_URL,"POST_DATE": self.POST_DATE,"modified": self.modified}
 
 
 @app.route("/creator_content")
@@ -53,6 +53,21 @@ def get_all():
             "message": "There are no content."
         }
     ), 404
+
+@app.route("/creator_content/<string:creatorID>")
+def find_by_creatorID(creatorID):
+    content_list = creatorContent.query.filter_by(CREATORID=creatorID)
+    print(content_list)
+    if content_list:
+        return jsonify({
+            "code":200,
+            "data":[content.json() for content in content_list]
+        })
+    return jsonify({
+        "code":404,
+        "message":"Content Not Found"
+        }
+    ),404  
 
 @app.route("/creator_content/upload")
 def upload_content():
@@ -76,6 +91,6 @@ def upload_content():
         }
     ), 201
 
- 
+
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
