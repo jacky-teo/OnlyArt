@@ -81,3 +81,8 @@ paypal.Buttons({
 // Paypal Multiparty Payments (for Platform App type): https://developer.paypal.com/docs/multiparty/
     // Integrate sellers before payment: https://developer.paypal.com/docs/multiparty/seller-onboarding/before-payment/ 
     // Issue Refunds from Seller to Buyer: https://developer.paypal.com/docs/multiparty/issue-refund/ 
+
+// IF PAYPAL DOESN'T WORK:
+// STRIPE
+    // https://stripe.com/docs/payments/payment-element#start-with-a-guide 
+    // https://stripe.com/docs/js 
