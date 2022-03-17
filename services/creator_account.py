@@ -16,7 +16,7 @@ CORS(app)
 class creatorAccount(db.Model):
     __tablename__ = "creatoraccount"
 
-    CREATORID = db.Column(db.String(64), primary_key=True, nullable=False)
+    CREATORID = db.Column(db.String(64), primary_key=True)
     USERNAME = db.Column(db.String(64), nullable=False)
     PASSWORD = db.Column(db.String(64), nullable=False)
     EMAIL = db.Column(db.String(64), nullable=False)
