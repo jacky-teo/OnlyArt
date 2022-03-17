@@ -30,6 +30,7 @@ CREATE TABLE CREATORACCOUNT_SEQ
 -- Table structure for table `CREATORACCOUNT` --
 --
 DROP TABLE IF EXISTS CREATORACCOUNT;
+
 CREATE TABLE IF NOT EXISTS CREATORACCOUNT (
 	CREATORID varchar(64) NOT NULL,
 	USERNAME varchar(64) NOT NULL,
@@ -157,7 +158,7 @@ CREATE TABLE CREATOR_CONTENT(
 	POSTID varchar(64) NOT NULL,
 	CREATORID varchar(64) NOT NULL,
 	DESCRIPTION varchar(64) NOT NULL,
-	IMAGE_URL varchar(64) NOT NULL,
+	IMAGE_ID varchar(64) NOT NULL,
 	POST_DATE timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	MODIFIED timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 	PRIMARY KEY (POSTID, CREATORID),
@@ -178,11 +179,16 @@ BEGIN
 END$$
 DELIMITER ;
 
-INSERT INTO CREATOR_CONTENT(CREATORID,DESCRIPTION,IMAGE_URL) 
+INSERT INTO CREATOR_CONTENT(CREATORID,DESCRIPTION,IMAGE_ID) 
 VALUES 
-('CR001', 'not me', "./static/images/CR001/cr001_1.jpg"),
-('CR001', 'not me', "./static/images/CR001/cr001_2.png"),
-('CR002', 'please work', './static/images/CR002/cr002_1.png');
+('CR001', 'this is img1', "img1"),
+('CR001', 'this is img2', "img2"),
+('CR001', 'this is img3', "img3"),
+('CR001', 'this is img4', "img4"),
+('CR002', 'this is cr2img1', 'cr2img1'),
+('CR002', 'this is cr2img2', 'cr2img2'),
+('CR002', 'this is cr2img3', 'cr2img3');
+
 
 -- ---------------------------------------------------------------- --
 --                     PAYMENT_LOG TABLE                        --
