@@ -1,0 +1,25 @@
+-- Database: `sub_link`
+--
+CREATE DATABASE IF NOT EXISTS SUB_LINK;
+USE SUB_LINK;
+
+-- ---------------------------------------------------------------- --
+--                     SUBSCRIPTION_LINK TABLE                        --
+-- ---------------------------------------------------------------- --
+
+--
+-- Table structure for table `SUBSCRIPTION LINK` --
+--
+DROP TABLE IF EXISTS SUBSCRIPTION_LINK;
+CREATE TABLE SUBSCRIPTION_LINK(
+	CREATORID varchar(64) NOT NULL,
+	CONSUMERID varchar(64) NOT NULL,
+	CREATED timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	MODIFIED timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+	PRIMARY KEY (CREATORID, CONSUMERID)
+) ENGINE=InnoDB;
+
+INSERT INTO SUBSCRIPTION_LINK(CREATORID,CONSUMERID,CREATED,MODIFIED) 
+VALUES 
+('CR001', 'CON001','2020-06-12 02:14:55', '2020-06-12 02:14:55' ),
+('CR002', 'CON002', '2020-06-12 02:14:55', '2020-06-12 02:14:55');
