@@ -6,7 +6,7 @@ from firebase_admin import storage
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/onlyfence'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/content'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -111,7 +111,7 @@ def unsubbed(creatorID):
     ),404
 
 
-@app.route("/upload")
+@app.route("/upload", METHOD="POST")
 def upload():
     init_firebase() ## Initiate firebase
 
