@@ -61,8 +61,7 @@ class creatorContent(db.Model):
 
 @app.route("/content/<string:creatorID>")
 def find_by_creatorID(creatorID):
-    init_firebase()
-
+    init_firebase() # initialize firebase
     content_list = creatorContent.query.filter_by(CREATORID=creatorID)
     bucket = storage.bucket()
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
@@ -111,7 +110,7 @@ def unsubbed(creatorID):
     ),404
 
 
-@app.route("/upload", METHOD="POST")
+@app.route("/upload")
 def upload():
     init_firebase() ## Initiate firebase
 
