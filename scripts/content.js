@@ -23,6 +23,7 @@ function showError(message) {
                 serviceURL, { method: 'GET' } // Get information from request
             );
             const result = await response.json(); // Get the results
+            console.log(result)
             if (response.status == 200) {
                 // success case
                 console.log(result.urls)
