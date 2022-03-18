@@ -1,15 +1,14 @@
 -- Database: `notification`
 --
-CREATE DATABASE IF NOT EXISTS NOTIFICATION;
-USE NOTIFICATION;
+CREATE DATABASE IF NOT EXISTS `notification` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+USE `notification`;
 
 -- ---------------------------------------------------------------- --
 --                     NOTIFICATION TABLE                        --
 -- ---------------------------------------------------------------- --
-DROP TABLE IF EXISTS NOTIFICATION;
-CREATE TABLE NOTIFICATION(
-	CHATID varchar(64) NOT NULL,
-	CONSUMERID varchar(64) NOT NULL,
-    TELEGRAMTAG varchar(64) NOT NULL,
-	PRIMARY KEY (CHATID)
-) ENGINE=InnoDB;
+DROP TABLE IF EXISTS `notification`;
+CREATE TABLE IF NOT EXISTS `notification` (
+  `chatid` varchar(64) NOT NULL,
+  `telegramtag` varchar(64) NOT NULL,
+  PRIMARY KEY (`chatid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
