@@ -62,6 +62,7 @@ class creatorContent(db.Model):
 @app.route("/content/<string:creatorID>")
 def find_by_creatorID(creatorID):
     init_firebase() # initialize firebase
+
     content_list = creatorContent.query.filter_by(CREATORID=creatorID)
     bucket = storage.bucket()
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
@@ -110,12 +111,13 @@ def unsubbed(creatorID):
     ),404
 
 
-@app.route("/upload")
+@app.route("/upload",methods=['POST'])
 def upload():
     init_firebase() ## Initiate firebase
 
     creatorID = request.args.get('creatorID',None) ## Get CreatorID
     description = request.args.get('description',None) ## Get Description
+    print(description)
     file = request.files['file'] ## Request the file from the html
     filename = file.filename.split('.') ## Split the filename
     fileExtention = filename[-1] ## Get the extension
