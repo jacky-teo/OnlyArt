@@ -108,6 +108,7 @@ def create_notif(telegramtag):
 def send_notif(creatorname):
     #some function here
     countnotif = 0
+    #json sent is a list of telegram tags to be notified
     data = request.get_json()
     #print("creatorname: ",creatorname)
     #print("data: ",data)
