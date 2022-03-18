@@ -2,6 +2,8 @@ from telegram.ext import Updater, CommandHandler
 import logging
 import os
 import sqlalchemy as db
+from dotenv import load_dotenv
+load_dotenv()
 
 teletoken = os.getenv('TELEGRAM_KEY')
 engine = db.create_engine('mysql+mysqlconnector://root:root@localhost:3306/notification')

@@ -3,8 +3,9 @@ import requests
 import os
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-
 from os import environ
+from dotenv import load_dotenv
+load_dotenv()
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/notification'
@@ -133,7 +134,7 @@ def send_notif(creatorname):
                 }
             ), 500
     else:
-        successmsg = "Notification was successful." + countnotif + " number of notifs were sent."
+        successmsg = "Notification was successful." + str(countnotif) + " number of notifs were sent."
         return jsonify(
                 {
                     "code": 201,
