@@ -15,7 +15,7 @@ def start(update, context):
     user_id = update.message.from_user.id
     user_name = update.message.from_user.name
     print(user_id,user_name)
-    query = db.insert(notification).values(chatid=user_id, userid=user_name) 
+    query = db.insert(notification).values(chatid=user_id, telegramtag=user_name) 
     ResultProxy = connection.execute(query) 
     message = 'Welcome to the bot',user_name   
     context.bot.send_message(chat_id=update.effective_chat.id, text=message)

@@ -17,14 +17,14 @@ class Notification(db.Model):
     __tablename__ = 'notification'
 
     chatid = db.Column(db.String(64), primary_key=True)
-    userid = db.Column(db.String(64), nullable=False)
+    telegramtag = db.Column(db.String(64), nullable=False)
 
-    def __init__(self, chatid, userid):
+    def __init__(self, chatid, telegramtag):
         self.chatid = chatid
-        self.userid = userid
+        self.telegramtag = telegramtag
 
     def json(self):
-        return {"chatid": self.chatid, "userid": self.userid}
+        return {"chatid": self.chatid, "telegramtag": self.telegramtag}
 
 
 @app.route("/chat")
@@ -47,9 +47,9 @@ def get_all():
     ), 404
 
 
-@app.route("/chat/<string:userid>")
-def find_by_isbn13(userid):
-    notif = Notification.query.filter_by(userid=userid).first()
+@app.route("/chat/<string:telegramtag>")
+def find_by_isbn13(telegramtag):
+    notif = Notification.query.filter_by(telegramtag=telegramtag).first()
     if notif:
         return jsonify(
             {
@@ -65,14 +65,14 @@ def find_by_isbn13(userid):
     ), 404
 
 
-@app.route("/chat/<string:userid>", methods=['POST'])
-def create_notif(userid):
-    if (Notification.query.filter_by(userid=userid).first()):
+@app.route("/chat/<string:telegramtag>", methods=['POST'])
+def create_notif(telegramtag):
+    if (Notification.query.filter_by(telegramtag=telegramtag).first()):
         return jsonify(
             {
                 "code": 400,
                 "data": {
-                    "userid": userid
+                    "telegramtag": telegramtag
                 },
                 "message": "Notification info already exists."
             }
@@ -80,7 +80,7 @@ def create_notif(userid):
 
     data = request.get_json()
     print(data['chatid'])
-    notif = Notification(data['chatid'],userid)
+    notif = Notification(data['chatid'],telegramtag)
 
     try:
         db.session.add(notif)
@@ -90,7 +90,7 @@ def create_notif(userid):
             {
                 "code": 500,
                 "data": {
-                    "userid": userid
+                    "telegramtag": telegramtag
                 },
                 "message": "An error occurred creating the notif."
             }
@@ -115,8 +115,8 @@ def send_notif(creatorname):
     for user in notiflist:
         #request send
         #print("user: ",user)
-        if (Notification.query.filter_by(userid=user).first()):
-            notif = Notification.query.filter_by(userid=user).first()
+        if (Notification.query.filter_by(telegramtag=user).first()):
+            notif = Notification.query.filter_by(telegramtag=user).first()
             notifinfo = notif.json()
             chatid = notifinfo["chatid"]
             #print("chatid: ",chatid)
