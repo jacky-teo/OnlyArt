@@ -112,7 +112,7 @@ def send_notif(creatorname):
     data = request.get_json()
     #print("creatorname: ",creatorname)
     #print("data: ",data)
-    notiflist = data["list"]
+    notiflist = data["data"]
     #print("NL: ",notiflist)
     for user in notiflist:
         #request send

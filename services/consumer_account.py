@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/onlyfence'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/onlyfence'
 # root@localhost will change
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -31,6 +31,29 @@ class consumerAccount(db.Model):
     def json(self):
         return {"CONSUMERID": self.CONSUMERID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "TELEGRAM": self.TELEGRAM}
 
+@app.route("/consumer/retrievetelegram")
+def get_telegram():
+    data = request.get_json() 
+    count=0
+    consumerlist = []
+    consumers = data["data"]
+
+    for consumer in consumers:
+        response = consumerAccount.query.filter_by(CONSUMERID=consumer).first()
+        if response:
+            # if consumer is present
+            consumerlist.append(response.TELEGRAM)
+    if len(consumerlist)== 0:
+        return jsonify({
+            "code": 404,
+            "message": "No consumer telegram tags were found."
+        }), 404
+    else:
+        return jsonify({
+                "code": 200,
+                "data": consumerlist
+            }), 200
+        
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)

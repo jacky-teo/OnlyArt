@@ -33,11 +33,8 @@ class creatorAccount(db.Model):
         return {"CREATORID": self.CREATORID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "EMAIL": self.EMAIL, "PRICE": self.PRICE}
 
 # scenario 1
-
-
-@app.route('/creatorprice')
-def get_creator_price():
-    creatorid = request.args.get('CREATORID', None)
+@app.route('/creator/price/<string:creatorid>')
+def get_creator_price(creatorid):
     status = creatorAccount.query.filter_by(
         CREATORID=creatorid).first()
 
@@ -56,11 +53,8 @@ def get_creator_price():
     ), 404
 
 # scenario 4
-
-
-@app.route('/creatorid')
-def get_creator_id():
-    creatorid = request.args.get('CREATORID', None)
+@app.route('/creator/getid/<string:creatorid>')
+def get_creator_id(creatorid):
     status = creatorAccount.query.filter_by(
         CREATORID=creatorid).first()
 
@@ -68,7 +62,9 @@ def get_creator_id():
         return jsonify(
             {
                 "code": 200,
-                "data": status.CREATORID
+                "data": [{
+                    "username":status.USERNAME,
+                    "email": status.EMAIL}]
             }
         )
     return jsonify(
