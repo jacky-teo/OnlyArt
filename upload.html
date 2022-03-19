@@ -30,9 +30,10 @@
  
 <body >
         <h1>Upload new File</h1>
-    <form action='http://localhost:5000/upload'method='POST' enctype=multipart/form-data>
-        CreatorID <input type="text" id='creatorID'>
-        Description <input type="text" id='description'>
+    
+    <form action="http://localhost:5000/upload" method='post' enctype=multipart/form-data id="forms">
+        CreatorID <input type="text" id='creatorID' name='creatorID'>
+        Description <input type="text" id='description' name='description'>
         <input type=file name=file id="file">
         <input type=submit value=Upload id='uploadbtn'>
     </form>
@@ -49,84 +50,9 @@
        crossorigin='anonymous'></script>
 
        
-<script type="module">
+<script>
 
-
-
-
-
-    // //Firebase Component
-    // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js"; //initialize firebase app
-    // import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-storage.js" //for firebase storage
-
-    // const firebaseConfig = {
-    //     apiKey: "AIzaSyBHAD9cNK6D-EkhcEP2_F0Ap26YQd_3Bnk",
-    //     authDomain: "onlyfence-9eb40.firebaseapp.com",
-    //     databaseURL: "https://onlyfence-9eb40-default-rtdb.asia-southeast1.firebasedatabase.app",
-    //     projectId: "onlyfence-9eb40",
-    //     storageBucket: "onlyfence-9eb40.appspot.com",
-    //     messagingSenderId: "861165223539",
-    //     appId: "1:861165223539:web:a0921e45a09e46b387b406"
-    // };
-    // const app = initializeApp(firebaseConfig);
-    // var uploadbtn =document.getElementById('uploadbtn')
-    // // anonymous async function 
-    // // - using await requires the function that calls it to be async
-    
-
-    // var creatorID = document.getElementById('creatorID'),
-    //     description=document.getElementById('description'),
-    //     pbar = document.getElementById('pbar'),
-    //     pbarContainer =document.getElementById('pbarContainer')
-
-    
-        
-
-    // async function UploadProcess(){
-
-    //     var file = $('#file').prop('files')[0],
-    //         fileName = file.name,
-    //         reader = new FileReader()
-
-    //     reader.readAsDataURL(file)
-    //     if (!file) {
-    //         document.getElementById('err').innerText = "No files selected"
-    //         return
-    //     }
-
-    //     // Declare Meta Data
-    //     const metaData = {
-    //         contentType: file.type
-    //     }
-
-    //     //Firebase Storage
-    //     const storage = getStorage();
-    //     //Point to firebase storage that u want to upload in
-    //     const storageRef = sRef(storage, creatorID.value + "/" + fileName);
-    //     const UploadTask = uploadBytesResumable(storageRef, file, metaData);
-    //     UploadTask.on('state-changed', (snapshot) => {
-    //         alert(fileName +" is being uploaded")
-    //          var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-    //         pbarContainer.style.visibility = "visible"
-    //         pbar.innerHTML = "Upload "+progress +"%"
-    //         pbar.style.width = progress + "%" 
-            
-    //     },
-    //     (error) => {
-    //         alert("Upload Failed Please Try Again"); // Failed to upload Error
-    //     },
-    //     ()=>{
-    //         getDownloadURL(UploadTask.snapshot.ref)
-    //             .then((downloadURL)=>{
-    //                 alert(downloadURL)
-    //         })
-    //     });
-    // }
-
-    // if(uploadbtn){
-    //     uploadbtn.addEventListener('click',UploadProcess) 
-    // }
-    </script>      
+</script>      
 </body>
 
 </html>
