@@ -53,8 +53,8 @@ def get_creator_price(creatorid):
     ), 404
 
 # scenario 4
-@app.route('/creator/getid/<string:creatorid>')
-def get_creator_id(creatorid):
+@app.route('/creator/getinfo/<string:creatorid>')
+def get_info(creatorid):
     status = creatorAccount.query.filter_by(
         CREATORID=creatorid).first()
 
