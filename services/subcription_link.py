@@ -7,7 +7,7 @@ from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:password@localhost:3306/onlyfence'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/onlyfence'
 # root@localhost will change
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -72,10 +72,8 @@ class subscriptionLink(db.Model):
     def json(self):
         return {"CREATORID": self.CREATORID, "CONSUMERID": self.CONSUMERID, "CREATED": self.CREATED, "MODIFIED": self.MODIFIED}
 
-# scenario 1
-
-
-@app.route('/subscriptionstatus')
+# scenario 1 & 4
+@app.route('/subscription/status')
 def get_subscription_status():
     creatorid = request.args.get('CREATORID', None)
     consumerid = request.args.get('CONSUMERID', None)
@@ -98,42 +96,58 @@ def get_subscription_status():
     ), 404
 
 # scenario 2
-
-
-@app.route('/addsubscription')
+@app.route('/subscription/add', methods=["POST"])
 def create_subscription():
-    creatorid = request.args.get('CREATORID')
-    consumerid = request.args.get('CONSUMERID')
+    creatorid = request.json.get('CREATORID')
+    consumerids = request.json.get('CONSUMERIDS')
 
-    if (subscriptionLink.query.filter_by(CREATORID=creatorid, CONSUMERID=consumerid).first()):
-        return jsonify(
-            {
-                "code": 400,
-                "message": "Already subscribed."
-            }
-        ), 400
+    for consumerid in consumerids:
+        if (subscriptionLink.query.filter_by(CREATORID=creatorid, CONSUMERID=consumerid).first()):
+            return jsonify(
+                {
+                    "code": 400,
+                    "message": "Already subscribed."
+                }
+            ), 400
+        else: 
+            created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
-    created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            subcribedParing = subscriptionLink(CREATORID=creatorid, CONSUMERID=consumerid, CREATED=created, MODIFIED=modified)
 
-    subcribedParing = subscriptionLink(creatorid, consumerid, created, modified)
+            try:
+                db.session.add(subcribedParing)
+                db.session.commit()
+            except Exception as e:
+                return jsonify(
+                    {
+                        "code": 500,
+                        "message": "An error occurred creating subscription link" + str(e)
+                    }
+                ), 500
+            return jsonify(
+                {
+                    "code": 201,
+                    "message": "Subscription link created"
+                }
+            ), 201
 
-    try:
-        db.session.add(subcribedParing)
-        db.session.commit()
-    except:
-        return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred creating subscription link"
-            }
-        ), 500
-    return jsonify(
-        {
-            "code": 201,
-            "message": "Subscription link created"
+# scenario 3
+@app.route('/subscription/get/<string:creatorid>')
+def get_all(creatorid):
+    creator_consumer = subscriptionLink.query.filter_by(CREATORID=creatorid)
+
+    if creator_consumer:
+        for crco in creator_consumer:
+            return jsonify({
+                "code":200,
+                "data":[crco.CONSUMERID for crco in creator_consumer]
+            }), 200
+    return jsonify({
+        "code":404,
+        "message":"Creator does not exist"
         }
-    ), 201
+    ),404         
 
 
 if __name__ == '__main__':
