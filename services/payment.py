@@ -8,7 +8,7 @@ from flask_cors import CORS
 from datetime import datetime
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/onlyfence'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/payment'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -38,7 +38,7 @@ class Payment(db.Model):
         return {"transactionid": self.transactionid, "consumerid": self.consumerid, "creatorid": self.creatorid, "payment_amount": self.payment_amount, "transaction_date": self.transaction_date, "modified": self.modified}
 
 #get all payments (for testing)
-@app.route("/payment")
+@app.route("/payments")
 def get_all():
     transactions = Payment.query.all()
     if len(transactions):
@@ -57,9 +57,9 @@ def get_all():
         }
     ), 404
 
-#invoke PayPal external transaction service (??????)
+#invoke PayPal external transaction service (?????? - might be done by payment.js instead)
 
-#create new payment record
+#create new payment record (handle successful transactions)
 
 
 if __name__ == '__main__':
