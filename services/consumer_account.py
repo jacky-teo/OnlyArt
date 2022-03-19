@@ -31,6 +31,23 @@ class consumerAccount(db.Model):
     def json(self):
         return {"CONSUMERID": self.CONSUMERID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "TELEGRAM": self.TELEGRAM}
 
+@app.route("/consumer/retrievetelegram")
+def get_telegram():
+    data = request.get_json() 
+    consumers = data["data"]
+
+    for consumer in consumers:
+        response = consumerAccount.query.filter_by(CONSUMERID=consumer).first()
+        if response:
+            # if consumer is present
+            return jsonify({
+                "code": 200,
+                "data": response.TELEGRAM
+            }), 200
+        return jsonify({
+            "code": 404,
+            "message": "Consumer does not exist."
+        }), 404
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
