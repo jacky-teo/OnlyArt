@@ -34,14 +34,12 @@ class consumerAccount(db.Model):
 @app.route("/consumer/retrievetelegram")
 def get_telegram():
     data = request.get_json() 
-    count=0
     consumerlist = []
     consumers = data["data"]
 
     for consumer in consumers:
         response = consumerAccount.query.filter_by(CONSUMERID=consumer).first()
         if response:
-            # if consumer is present
             consumerlist.append(response.TELEGRAM)
     if len(consumerlist)== 0:
         return jsonify({
