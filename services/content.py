@@ -37,8 +37,8 @@ def init_firebase():
     return firebase_app
 
 
-class creatorContent(db.Model):
-    __tablename__ = 'creator_content'
+class Content(db.Model):
+    __tablename__ = 'content'
     POSTID = db.Column(db.String(13), primary_key=True)
     CREATORID = db.Column(db.String(64), nullable=False)
     DESCRIPTION = db.Column(db.String(64), nullable=False)
@@ -63,7 +63,7 @@ class creatorContent(db.Model):
 def find_by_creatorID(creatorID):
     init_firebase() # initialize firebase
 
-    content_list = creatorContent.query.filter_by(CREATORID=creatorID)
+    content_list = Content.query.filter_by(CREATORID=creatorID)
     bucket = storage.bucket()
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
     urls = []
@@ -89,7 +89,7 @@ def find_by_creatorID(creatorID):
 def unsubbed(creatorID):
     init_firebase()
 
-    content_list = creatorContent.query.filter_by(CREATORID=creatorID).limit(3)
+    content_list = Content.query.filter_by(CREATORID=creatorID).limit(3)
     bucket = storage.bucket()
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/',max_results=4))
     urls = []
@@ -111,7 +111,7 @@ def unsubbed(creatorID):
     ),404
 
 
-@app.route("/upload",methods=['POST'])
+@app.route("/upload",methods=['POST','GET'])
 def upload():
     init_firebase() ## Initiate firebase
 
@@ -119,7 +119,7 @@ def upload():
         file = request.files['file']
         data = request.get_json()
         # creatorID= data['creatorID']
-        creatorID = "CR001"
+        creatorID = "CR004"
         # description = data['description']
         description = 'ollalalalallala'
         filename = file.filename
@@ -132,13 +132,15 @@ def upload():
             urls.append(item.public_url)
 
         imageID = 'img'+ str(len(urls)+1) ## Create the Image ID based on the number of files inside the storage under creatorID
+        postID = f'{creatorID}_{imageID}'
+        fileEXT = file.mimetype.split('/')[1]
 
-        path_on_cloud = f'{creatorID}/{filename}' ##Declare the path to upload
+        path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload
         blob = bucket.blob(path_on_cloud) #Point to the path and the file name
 
-        blob.upload_from_file(file)  #Upload the file into the storate
-
-        toUpload = creatorContent(POSTID='POI',CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,POST_DATE=datetime.now,) ## Create object to update sql
+        blob.upload_from_file(file,content_type = file.mimetype)  #Upload the file into the storate
+        postDate = datetime.now()
+        toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,POST_DATE=postDate,modified='') ## Create object to update sql
 
         try:
             db.session.add(toUpload) ## Update SQL
