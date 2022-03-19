@@ -74,9 +74,10 @@ class subscriptionLink(db.Model):
 
 # scenario 1 & 4
 @app.route('/subscription/status')
-def get_subscription_status():
-    creatorid = request.args.get('CREATORID', None)
-    consumerid = request.args.get('CONSUMERID', None)
+def get_all():
+    data = request.get_json()
+    creatorid = data["CREATORID"]
+    consumerid = data["CONSUMERID"]
     status = subscriptionLink.query.filter_by(
         CREATORID=creatorid, CONSUMERID=consumerid).first()
 
