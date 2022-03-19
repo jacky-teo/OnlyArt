@@ -138,7 +138,7 @@ def upload():
 
         blob.upload_from_file(file)  #Upload the file into the storate
 
-        toUpload = creatorContent(POSTID=,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,POST_DATE=datetime.now,) ## Create object to update sql
+        toUpload = creatorContent(POSTID='POI',CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,POST_DATE=datetime.now,) ## Create object to update sql
 
         try:
             db.session.add(toUpload) ## Update SQL
