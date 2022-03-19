@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 from firebase_admin import storage
-from requests import request
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/content'
@@ -115,48 +115,48 @@ def unsubbed(creatorID):
 def upload():
     init_firebase() ## Initiate firebase
 
-    creatorID = request.args.get('creatorID',None) ## Get CreatorID
-    description = request.args.get('description',None) ## Get Description
-    print(description)
-    file = request.files['file'] ## Request the file from the html
-    filename = file.filename.split('.') ## Split the filename
-    fileExtention = filename[-1] ## Get the extension
+    if request.method =="POST":
+        file = request.files['file']
+        data = request.get_json()
+        # creatorID= data['creatorID']
+        creatorID = "CR001"
+        # description = data['description']
+        description = 'ollalalalallala'
+        filename = file.filename
+        bucket = storage.bucket() ## Get the storage in firebase
+        blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
+        urls = [] #Create a place to store all the URLS
+        # Append all the files in blobs to URL except parent file
+        for item in blobs[1:]:
+            item.make_public()
+            urls.append(item.public_url)
 
-    bucket = storage.bucket() ## Get the storage in firebase
-    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
-    urls = [] #Create a place to store all the URLS
-    
-    # Append all the files in blobs to URL except parent file
-    for item in blobs[1:]:
-        item.make_public()
-        urls.append(item.public_url)
+        imageID = 'img'+ str(len(urls)+1) ## Create the Image ID based on the number of files inside the storage under creatorID
 
-    imageID = 'img'+ str(len(urls)+1) ## Create the Image ID based on the number of files inside the storage under creatorID
+        path_on_cloud = f'{creatorID}/{filename}' ##Declare the path to upload
+        blob = bucket.blob(path_on_cloud) #Point to the path and the file name
 
-    path_on_cloud = f'{creatorID}/{imageID}.{fileExtention}' ##Declare the path to upload
-    blob = bucket.blob(path_on_cloud) #Point to the path and the file name
+        blob.upload_from_file(file)  #Upload the file into the storate
 
-    blob.upload_from_filename(file)  #Upload the file into the storate
+        toUpload = creatorContent(POSTID=,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,POST_DATE=datetime.now,) ## Create object to update sql
 
-    toUpload = creatorContent(CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID) ## Create object to update sql
-
-    try:
-        db.session.add(toUpload) ## Update SQL
-        db.session.commit()
-    except Exception as e:
-        return jsonify(
+        try:
+            db.session.add(toUpload) ## Update SQL
+            db.session.commit()
+        except Exception as e:
+            return jsonify(
             {
                 "code": 500,
                 "message": "An error occurred while uploading the content. " + str(e)
             }
         ), 500
 
-    return jsonify(
-        {
-            "code": 201,
-            "data": toUpload.json()
-        }
-    ), 201
+        return jsonify(
+            {
+                "code": 201,
+                "data": toUpload.json()
+            }
+        ), 201
 
 
 if __name__ == '__main__':
