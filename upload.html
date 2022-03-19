@@ -29,39 +29,15 @@
 </head>
  
 <body >
-    <div class="container" id="newContent">
-        <div class="row">
-            <div class="col">
-                CREATORID: 
-            </div>
-            <div class="col">
-                <input type="text" name="creatorID" id="creatorID">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                Description: 
-            </div>
-            <div class="col">
-                <input type="text" name="description" id="description">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                Image: 
-            </div>
-            <div class="col">
-                <input type="file" name="image" id="image">
-            </div>
-        </div>
-    
-        <div class="row">
-            <div class="col">
-            <button class="btn btn-primary" id="postContent">Post Content</button>
-            </div>
-        </div>
-    </div>
-    
+        <h1>Upload new File</h1>
+    <form method=post enctype=multipart/form-data>
+        CreatorID <input type="text" id='creatorID'>
+        Description <input type="text" id='description'>
+        <input type=file name=file id="file">
+        <input type=submit value=Upload id='upload'>
+    </form>
+    <div id="progress"></div>
+    <div id="err"></div>
     <p id="error"></p>
     <!-- Bootstrap Javascript; at the end of the <body> -->
    <script 
@@ -69,46 +45,72 @@
        integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
        crossorigin='anonymous'></script>
 
-    <script>
-        
-         // Helper function to display error message
-    function showError(message) {
-        // Hide the table and button in the event of error
-        $('#newContent').hide();
-        // Display an error under the main container
-        $('#error').text("Content not added") 
-    }
+<script type="module">
+    //Firebase Component
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-app.js"; //initialize firebase app
+    import { getStorage, ref as sRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-storage.js" //for firebase storage
+    import { getDatabase, ref, set, child, update, remove, get, onValue } from "https://www.gstatic.com/firebasejs/9.2.0/firebase-database.js"
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBHAD9cNK6D-EkhcEP2_F0Ap26YQd_3Bnk",
+        authDomain: "onlyfence-9eb40.firebaseapp.com",
+        databaseURL: "https://onlyfence-9eb40-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "onlyfence-9eb40",
+        storageBucket: "onlyfence-9eb40.appspot.com",
+        messagingSenderId: "861165223539",
+        appId: "1:861165223539:web:a0921e45a09e46b387b406"
+    };
+    const app = initializeApp(firebaseConfig);
+    
+
     // anonymous async function 
     // - using await requires the function that calls it to be async
-    $('#postContent').click(async() => {           
-        // Change serviceURL to your own
-        var serviceURL = "http://127.0.0.1:5000/upload"
+    $('#upload').click(async() => { 
+        var creatorID = document.getElementById('creatorID'),
+        description=document.getElementById('description'),
+        file = $('#file').prop('files')[0],
+        pbar = document.getElementById('progress'),
+        fileName = file.name,
+        reader = new FileReader()
+        reader.readAsDataURL(file)
+
+        alert(creatorID.value)
+        alert(description.value)
+        alert(fileName)
+        // Upload to firebase
+        if (!file) {
+            document.getElementById('err').innerText = "No files selected"
+            return
+        }
+
+        // Declare Meta Data
+        const metaData = {
+            contentType: file.type
+        }
+
+        //Firebase Storage
+        const storage = getStorage();
         
-        try {
-            const response =
-             await fetch(
-               serviceURL, { method: 'POST' }
-            );
-            const data = await response.json();
+        //Point to firebase storage that u want to upload in
+        const storageRef = sRef(storage, creatorID.value + "/" + fileName);
+        const UploadTask = uploadBytesResumable(storageRef, file, metaData);
+        console.log(file)
+        UploadTask.on('state-changed', (snapshot) => {
+             var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+             pbar.innerHTML = "Upload "+progress +"%"
+             console.log(progress)
+        },
+        (error) => {
+            alert("Upload Failed Please Try Again"); // Failed to upload Errror
+        },
+        ()=>{
+            getDownloadURL(UploadTask.snapshot.ref).then((downloadURL)=>{
+                alert(downloadURL)
+            })
+        });
+    })
 
-             if (response.ok) {
-                
-                } else if (response.status == 404) {
-                    // No Conent
-                    showError(result.message);
-                } else {
-                    // unexpected outcome, throw the error
-                    throw response.status;
-
-                }
-            } catch (error) {
-                // Errors when calling the service; such as network error, 
-                // service offline, etc
-                showError
-    ('There is a problem retrieving content data, please try again later.<br />' + error);
-            } // error
-    });
-    </script>    
+    </script>      
 </body>
  
 </html>
