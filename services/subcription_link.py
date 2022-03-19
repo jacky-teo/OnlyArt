@@ -133,8 +133,8 @@ def create_subscription():
             ), 201
 
 # scenario 3
-@app.route('/subscription/get/<string:creatorid>')
-def get_all(creatorid):
+@app.route('/subscription/getsubscribers/<string:creatorid>')
+def get_all_subscribers(creatorid):
     creator_consumer = subscriptionLink.query.filter_by(CREATORID=creatorid)
 
     if creator_consumer:
