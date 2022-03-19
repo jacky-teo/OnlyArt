@@ -26,7 +26,6 @@ function showError(message) {
             console.log(result)
             if (response.status == 200) {
                 // success case
-                console.log(result.urls)
                 var contents = result.data; //the array is in cont within data of contents
                 // console.log(contents)
                 // the returned result
