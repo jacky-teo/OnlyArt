@@ -42,7 +42,7 @@ class Content(db.Model):
     POSTID = db.Column(db.String(13), primary_key=True)
     CREATORID = db.Column(db.String(64), nullable=False)
     DESCRIPTION = db.Column(db.String(64), nullable=False)
-    IMAGE_ID = db.Column(db.String(64), nullable=False) ## Storing file directory
+    IMAGE_ID = db.Column(db.String(64), nullable=False) ## Storing imageID for firebase
     POST_DATE = db.Column(db.DateTime, nullable=True, default=datetime.now)
     modified = db.Column(db.DateTime, nullable=True,default=datetime.now, onupdate=datetime.now)
 
@@ -66,7 +66,7 @@ def find_by_creatorID(creatorID):
     content_list = Content.query.filter_by(CREATORID=creatorID)
     bucket = storage.bucket()
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
-    urls = []
+    urls = [] # used later to store urls
     # upload via file
     for item in blobs[1:]:
         item.make_public()
@@ -114,15 +114,14 @@ def unsubbed(creatorID):
 @app.route("/upload",methods=['POST','GET'])
 def upload():
     init_firebase() ## Initiate firebase
-
+    
+    
     if request.method =="POST":
+
         file = request.files['file']
-        data = request.get_json()
-        # creatorID= data['creatorID']
-        creatorID = "CR004"
-        # description = data['description']
-        description = 'ollalalalallala'
-        filename = file.filename
+        creatorID= request.form['creatorID']
+    
+        description = request.form['description']
         bucket = storage.bucket() ## Get the storage in firebase
         blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
         urls = [] #Create a place to store all the URLS
@@ -142,6 +141,8 @@ def upload():
         postDate = datetime.now()
         toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,POST_DATE=postDate,modified='') ## Create object to update sql
 
+
+        print(toUpload)
         try:
             db.session.add(toUpload) ## Update SQL
             db.session.commit()
@@ -159,7 +160,7 @@ def upload():
                 "data": toUpload.json()
             }
         ), 201
-
+        
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
