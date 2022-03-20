@@ -1,0 +1,106 @@
+version: "3.8"
+## Jacky, pls check the content page. not sure which dburl you are using since im pretty sure you arent doing mysql
+##
+##
+services:  
+  consumer:
+    build:
+      context: ./
+      dockerfile: consumer.dockerfile
+    image: <dockerid>/onlyfence/consumer
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/consumeraccount
+      PYTHONUNBUFFERED: 1
+  creator:
+    build:
+      context: ./
+      dockerfile: creator.dockerfile
+    image: <dockerid>/onlyfence/creator
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/creatoraccount
+      PYTHONUNBUFFERED: 1  
+  content:
+    build:
+      context: ./
+      dockerfile: content.dockerfile
+    image: <dockerid>/onlyfence/content
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/content
+      #THIS DB URL MAY NEED BE CHANGED LATER.
+      PYTHONUNBUFFERED: 1  
+      depends_on:
+            - creator  
+  
+  notification:
+    build:
+      context: ./
+      dockerfile: notification.dockerfile
+    image: <dockerid>/onlyfence/notification
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/notification
+      #not sure but may need rabbitMQ
+      PYTHONUNBUFFERED: 1  
+  payment:
+    build:
+      context: ./
+      dockerfile: payment.dockerfile
+    image: <dockerid>/onlyfence/payment
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/payment
+      PYTHONUNBUFFERED: 1  
+  rabbitmq:
+        image: "rabbitmq:3-management"
+        hostname: "rabbitmq"
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        volumes: 
+          - rabbitmq_data:/var/lib/rabbitmq    
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:15672"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+  activity_log:
+    build:
+      context: ./
+      dockerfile: activity_log.dockerfile
+    image: <dockerid>/onlyfence/activity_log
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/activity
+      PYTHONUNBUFFERED: 1  
+      restart: on-failure
+      depends_on:
+          - rabbitmq
+      links:
+          - rabbitmq
+  error:
+    build:
+      context: ./
+      dockerfile: error.dockerfile
+    image: <dockerid>/onlyfence/error
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/error
+      #THIS DB URL MUST BE CHANGED LATER.
+      PYTHONUNBUFFERED: 1 
+      depends_on:
+          - rabbitmq
+      links:
+          - rabbitmq
+  subscription:
+    build:
+      context: ./
+      dockerfile: subscription.dockerfile
+    image: <dockerid>/onlyfence/subscription
+    restart: always
+    environment:
+      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/subscription_link
+      PYTHONUNBUFFERED: 1  
+  
