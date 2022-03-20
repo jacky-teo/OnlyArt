@@ -4,11 +4,14 @@ OnlyFence is a platform that allows fence creators to earn money from users who 
 ![Fences](https://cdn.vox-cdn.com/thumbor/NXI3rAC_jN7zEcdUbBM4K6bbBPM=/0x0:3000x2000/1200x0/filters:focal(0x0:3000x2000):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/21760265/iStock_598783266.jpg)
 
 ## TO-DO
-- [ ] Design UI page [Login & POST]
+- [Done] Design UI page [Login & POST]
 - [ ] Use of REST API 
-- [ ] Set Up Database 
-- [ ] Figure out Telegram Bot & Paypal API
-- [ ] Finish Proposal Slides
+- [Done] Set Up Database 
+- [Done] Figure out Telegram Bot & Paypal API
+- [Done] Finish Proposal Slides
+- [ ] Design the HTML pages
+- [ ] Integrate KongAPI
+- [ ] Finish Complex Microservices
 
 ## User Scenarios
 -Consumer creates an account
@@ -26,6 +29,8 @@ OnlyFence is a platform that allows fence creators to earn money from users who 
 - FlaskSQLAlchemy (Python SQL Toolkit)
 - RabbitMQ (AMQP)
 - Kong (API Gateway)
+- Firebase_admin
+- Telegram Bot
 
 
 ## Accounts
