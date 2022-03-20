@@ -7,11 +7,23 @@ paypal.Buttons({
                 amount: {
                     value: '77.44' // Can reference variables or functions. Example: `value: document.getElementById('...').value`
                 },
-                // This code block defines who the recipient is. But with this implemented, the paypal transaction does not go through.
-                // Reference: https://developer.paypal.com/docs/multiparty/checkout/multiseller-payments/ 
-                // payee: {
-                //     email_address: 'sb-hcmzn14332506@business.example.com' // Insert recipient's email account here
-                // }
+                payee: {
+                    email_address: 'sb-go47cv14389012@business.example.com' // Insert recipient's email account here
+                },
+                payment_instruction: {
+                    platform_fees: [
+                        {
+                            amount: {
+                                currency_code: "SGD",
+                                value: "5.00"
+                            },
+                            payee: {
+                                email_address: "sb-vrehs14346230@business.example.com",
+                            }
+                        }
+                    ],
+                    disbursement_mode: "INSTANT"
+                }
             }]
         });
 
@@ -25,13 +37,13 @@ paypal.Buttons({
             // Successful capture! For dev/demo purposes:
                 console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
                 var transaction = orderData.purchase_units[0].payments.captures[0];
-                alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+                // alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
 
             // When ready to go live, remove the alert and show a success message within this page. For example:
-            // var element = document.getElementById('paypal-button-container');
-            // element.innerHTML = '';
-            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-            // Or go to another URL:  actions.redirect('thank_you.html');
+                var element = document.getElementById('paypal-button-container');
+                element.innerHTML = '';
+                element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                // Or go to another URL:  actions.redirect('thank_you.html');
         });
     }
 
@@ -53,6 +65,7 @@ paypal.Buttons({
     // Customer 1 (SG)
     // Email: sb-y47azb14478818@personal.example.com
     // Pass: 9LHeM.z)
+    // ID: DVGTPJTTXK4KC
 
     // Customer 2 (SG)
     // Email: sb-x47npc14478827@personal.example.com
