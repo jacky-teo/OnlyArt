@@ -1,3 +1,13 @@
+var platform_email = "sb-vrehs14346230@business.example.com";
+var payee_email = "sb-go47cv14389012@business.example.com";
+var price = "25"
+var platform_fee = "5"
+
+document.getElementById('payment-summary').innerHTML = `
+    <b>Transfering funds to:</b> ${payee_email}<br>
+    <b>Price:</b> $${price}SGD
+    `;
+
 paypal.Buttons({
     // Sets up the transaction when a payment button is clicked
     createOrder: function(data, actions) {
@@ -5,20 +15,20 @@ paypal.Buttons({
             intent: 'CAPTURE',
             purchase_units: [{
                 amount: {
-                    value: '77.44' // Can reference variables or functions. Example: `value: document.getElementById('...').value`
+                    value: price // Can reference variables or functions. Example: `value: document.getElementById('...').value`
                 },
                 payee: {
-                    email_address: 'sb-go47cv14389012@business.example.com' // Insert recipient's email account here
+                    email_address: payee_email // Insert recipient's email account here
                 },
                 payment_instruction: {
                     platform_fees: [
                         {
                             amount: {
                                 currency_code: "SGD",
-                                value: "5.00"
+                                value: platform_fee
                             },
                             payee: {
-                                email_address: "sb-vrehs14346230@business.example.com",
+                                email_address: platform_email,
                             }
                         }
                     ],
@@ -52,8 +62,6 @@ paypal.Buttons({
     //add onError function for error handling and displaying error page to users
 
 }).render('#paypal-button-container');
-
-
 
 // For Paypal Javascript SDK
 
