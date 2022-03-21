@@ -31,6 +31,27 @@ class consumerAccount(db.Model):
     def json(self):
         return {"CONSUMERID": self.CONSUMERID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "TELEGRAM": self.TELEGRAM}
 
+@app.route("/consumer/retrievetelegram")
+def get_telegram():
+    data = request.get_json() 
+    consumerlist = []
+    consumers = data["data"]
+
+    for consumer in consumers:
+        response = consumerAccount.query.filter_by(CONSUMERID=consumer).first()
+        if response:
+            consumerlist.append(response.TELEGRAM)
+    if len(consumerlist)== 0:
+        return jsonify({
+            "code": 404,
+            "message": "No consumer telegram tags were found."
+        }), 404
+    else:
+        return jsonify({
+                "code": 200,
+                "data": consumerlist
+            }), 200
+        
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
