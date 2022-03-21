@@ -78,23 +78,39 @@ def get_all():
     data = request.get_json()
     creatorid = data["CREATORID"]
     consumerid = data["CONSUMERID"]
-    status = subscriptionLink.query.filter_by(
-        CREATORID=creatorid, CONSUMERID=consumerid).first()
 
-    if (status):
+    if (consumerAccount.query.filter_by(
+        CONSUMERID=consumerid).first() and creatorAccount.query.filter_by(
+        CREATORID=creatorid).first()):
+        # if both consumer and creator account exists
+
+        status = subscriptionLink.query.filter_by(
+            CREATORID=creatorid, CONSUMERID=consumerid).first()
+        
+        if (status):
+        # if there exists a link between consumer and creator account
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": status.json(),
+                    "message": "Already subscribed"
+                }
+            )
+        # if there does not exist a link between consumer and creator account
         return jsonify(
             {
                 "code": 200,
-                "data": status.json()
+                "data": creatorAccount.query.filter_by(CREATORID=creatorid).first().json(),
+                "message": "Not subscribed."
             }
-        )
+        ), 200
+    # consumer or creator account does not exist
     return jsonify(
         {
             "code": 404,
-            "message": "Not subscribed."
-            # will change to page rendering/rerouting
+            "message": "Creator and/or consumer does not exist."
         }
-    ), 404
+    )
 
 # scenario 2
 @app.route('/subscription/add', methods=["POST"])
