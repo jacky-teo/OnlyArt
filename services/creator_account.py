@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/onlyfence'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/onlyfence'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -49,6 +49,25 @@ def get_creator_price(creatorid):
         {
             "code": 404,
             "message": "Creator does not exist."
+        }
+    ), 404
+
+@app.route('/creator')
+def get_all():
+    creatorlist = creatorAccount.query.all()
+    if len(creatorlist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "creators": [creator.json() for creator in creatorlist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no creators."
         }
     ), 404
 
