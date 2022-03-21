@@ -32,7 +32,7 @@ services:
       #THIS DB URL MAY NEED BE CHANGED LATER.
       PYTHONUNBUFFERED: 1  
       depends_on:
-            - creator  
+            - creator
   
   notification:
     build:
