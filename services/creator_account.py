@@ -44,7 +44,7 @@ def get_creator_price():
         return jsonify(
             {
                 "code": 200,
-                "data": status.PRICE
+                "data": status.json()
             }
         )
     return jsonify(
