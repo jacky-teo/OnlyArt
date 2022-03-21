@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/onlyfence'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/onlyfence'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -33,8 +33,10 @@ class creatorAccount(db.Model):
         return {"CREATORID": self.CREATORID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "EMAIL": self.EMAIL, "PRICE": self.PRICE}
 
 # scenario 1
-@app.route('/creator/price/<string:creatorid>')
-def get_creator_price(creatorid):
+@app.route('/creator/price')
+def get_creator_price():
+    data = request.get_json()
+    creatorid = data["CREATORID"]
     status = creatorAccount.query.filter_by(
         CREATORID=creatorid).first()
 
@@ -95,4 +97,4 @@ def get_info(creatorid):
 
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(port=5002, debug=True)
