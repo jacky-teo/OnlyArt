@@ -85,8 +85,10 @@ def find_by_creatorID(creatorID):
     ),404  
 
 
-@app.route("/unsubbed/<string:creatorID>")
-def unsubbed(creatorID):
+@app.route("/unsubbed")
+def unsubbed():
+    data = request.get_json()
+    creatorID = data["CREATORID"]
     init_firebase()
 
     content_list = Content.query.filter_by(CREATORID=creatorID).limit(3)
@@ -163,4 +165,4 @@ def upload():
         
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    app.run(port=5003, debug=True)
