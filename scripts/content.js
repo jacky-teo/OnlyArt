@@ -15,7 +15,7 @@ function showError(message) {
 
         $('#contentTable').show()         
         var creatorID = $('#creatorID').val()
-        var serviceURL = "http://127.0.0.1:5000/unsubbed/"+creatorID;
+        var serviceURL = "http://127.0.0.1:5003/content/"+creatorID;
         
         try {
             const response =
