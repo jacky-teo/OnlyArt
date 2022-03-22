@@ -78,7 +78,6 @@ def receiveCaptureRequest():
                         "data": str(data),
                         "message": "Request should be in JSON."}), 400 # Bad Request Input
 
-@app.route("/payments/auth", methods=['GET'])
 def getAuthorization():
     print("--- Getting Authorization ---")
     client_id = "Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M"
