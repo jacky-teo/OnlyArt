@@ -98,7 +98,7 @@ def getAuthorization():
 
 # Retrieve Payment Info
 def retrievePaymentInfo():
-    return NULL
+    pass
 
 # Log Payment
 def logPayment(logData, auth_token):
