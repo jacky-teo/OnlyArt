@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 
-from itsdangerous import json
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/sub_link'
@@ -160,15 +160,16 @@ def create_subscription():
             ), 201
 
 # scenario 3
-@app.route('/subscription/getsubscribers/<string:creatorid>')
-def get_all_subscribers(creatorid):
-    creator_consumer = subscriptionLink.query.filter_by(CREATORID=creatorid)
+@app.route('/subscription/getsubscribers')
+def get_all_subscribers():
+    data = request.get_json()
+    creatorid = data["CREATORID"]
+    telegram = subscriptionLink.query.filter_by(CREATORID=creatorid)
 
-    if creator_consumer:
-        for crco in creator_consumer:
-            return jsonify({
+    if telegram:
+        return jsonify({
                 "code":200,
-                "data":[crco.CONSUMERID for crco in creator_consumer]
+                "data":[cons.CONSUMERTELE for cons in telegram]
             }), 200
     return jsonify({
         "code":404,
@@ -217,4 +218,4 @@ def get_all_sub_link():
 
 
 if __name__ == '__main__':
-    app.run(port=5006, debug=True)
+    app.run(port=5001, debug=True)
