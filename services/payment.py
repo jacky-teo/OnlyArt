@@ -2,6 +2,7 @@
 
 #import required modules
 # from crypt import methods
+from asyncio.windows_events import NULL
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -61,14 +62,15 @@ def get_all():
         }
     ), 404
 
-#invoke PayPal external transaction service (?????? - might be done by payment.js instead)
-@app.route("/payments/capture", methods=['POST'])
-def receiveCaptureRequest():
+#create new payment record (handle successful transactions)
+@app.route("/payments/log", methods=['POST'])
+# Receive HTTP request upon payment completion
+def receiveLogRequest():
     # Check if the order contains valid JSON 
     if request.is_json:
-        captureData = request.get_json()
+        logData = request.get_json()
         auth_token = getAuthorization()
-        result = capturePayment(captureData, auth_token)
+        result = logPayment(logData, auth_token)
         return jsonify(result), result["code"]
     else:
         data = request.get_data()
@@ -78,6 +80,7 @@ def receiveCaptureRequest():
                         "data": str(data),
                         "message": "Request should be in JSON."}), 400 # Bad Request Input
 
+# Get API Authorization Token
 def getAuthorization():
     print("--- Getting Authorization ---")
     client_id = "Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M"
@@ -93,10 +96,15 @@ def getAuthorization():
         tokens = json.loads(authorization_response.text)
         return tokens['access_token']
 
-def capturePayment(captureData, auth_token):
-    print("--- Requesting PayPal to capture the payment ---")
-    print(captureData)
+# Retrieve Payment Info
+def retrievePaymentInfo():
+    return NULL
 
+# Log Payment
+def logPayment(logData, auth_token):
+    print("--- Logging the payment ---")
+    print(logData)
+    
     return { 
         "code": "code",
         "data": {
@@ -108,9 +116,7 @@ def capturePayment(captureData, auth_token):
     # data = jsonify(data)
     # return data
 
-#create new payment record (handle successful transactions)
-
-# TESTING AUTHORIZATION
+# TESTING AUTHORIZATION -------------------------------------------
 @app.route("/payments/auth", methods=['GET'])
 def getAuthorization():
     print("--- Getting Authorization ---")
@@ -129,3 +135,15 @@ def getAuthorization():
 
 if __name__ == '__main__':
     app.run(port=5005, debug=True)
+
+# comment
+# comment
+
+"""
+comment 
+
+cvxcv
+"""
+xcvxcv
+
+
