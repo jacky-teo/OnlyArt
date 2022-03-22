@@ -220,14 +220,31 @@ def delete(postID):
         }
     ), 404
         
-@app.route("/update/<string:postID>", methods=['PUT'])
+@app.route("/update/<string:postID>", methods=['PUT','POST'])
 def update(postID):
     content = Content.query.filter_by(POSTID=postID).first()
+    information = content.json()
     if content:
+        
+        imageID =f"{information['imageID']}"
+
+        if data['IMAGE_ID']:
+            creatorID=data['CREATORID']
+            file = request.files['file'] #Get file from HTML post request
+            fileEXT = file.mimetype.split('/')[1]
+            init_firebase() ## Initiate firebase
+            bucket = storage.bucket() ## Get Storage Instance
+            path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' # Create Storage Path
+            blob = bucket.blob(path_on_cloud) # Point to Storage Path
+            blob.upload_from_file(file,content_type = file.mimetype) #Upload to storage path
+
         data = request.get_json()
         if data['DESCRIPTION']:
             content.DESCRIPTION = data['DESCRIPTION']
-            content.modified = datetime.now()
+
+        content.modified = datetime.now()
+
+        
         db.session.commit()
         return jsonify(
             {
