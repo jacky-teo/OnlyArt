@@ -8,6 +8,10 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/sub_link'
+app.config['SQLALCHEMY_BINDS'] = {
+    "consumer": 'mysql+mysqlconnector://root@localhost:3306/consumeraccount',
+    "creator": 'mysql+mysqlconnector://root@localhost:3306/creatoraccount'
+}
 # root@localhost will change
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -16,6 +20,7 @@ CORS(app)
 
 
 class creatorAccount(db.Model):
+    __bind_key__ = "creator"
     __tablename__ = "creatoraccount"
 
     CREATORID = db.Column(db.String(64), primary_key=True, nullable=False)
@@ -36,6 +41,7 @@ class creatorAccount(db.Model):
 
 
 class consumerAccount(db.Model):
+    __bind_key__ ="consumer"
     __tablename__ = "consumeraccount"
 
     CONSUMERID = db.Column(db.String(64), primary_key=True, nullable=False)
@@ -166,6 +172,24 @@ def get_all_subscribers(creatorid):
         }
     ),404         
 
+@app.route("/sub")
+def get_all_subs():
+    booklist = creatorAccount.query.all()
+    if len(booklist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "books": [book.json() for book in booklist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no books."
+        }
+    ), 404
 
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(port=5006, debug=True)

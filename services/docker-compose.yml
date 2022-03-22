@@ -10,7 +10,7 @@ services:
     image: <dockerid>/onlyfence/consumer
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/consumeraccount
+      dbURL: mysql+mysqlconnector://root@localhost:3306/consumer
       PYTHONUNBUFFERED: 1
   creator:
     build:
@@ -19,7 +19,7 @@ services:
     image: <dockerid>/onlyfence/creator
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/creatoraccount
+      dbURL: mysql+mysqlconnector://root@localhost:3306/creator
       PYTHONUNBUFFERED: 1  
   content:
     build:
@@ -28,7 +28,7 @@ services:
     image: <dockerid>/onlyfence/content
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/content
+      dbURL: mysql+mysqlconnector://root@localhost:3306/content
       #THIS DB URL MAY NEED BE CHANGED LATER.
       PYTHONUNBUFFERED: 1  
       depends_on:
@@ -41,7 +41,7 @@ services:
     image: <dockerid>/onlyfence/notification
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/notification
+      dbURL: mysql+mysqlconnector://root@localhost:3306/notification
       #not sure but may need rabbitMQ
       PYTHONUNBUFFERED: 1  
   payment:
@@ -51,7 +51,7 @@ services:
     image: <dockerid>/onlyfence/payment
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/payment
+      dbURL: mysql+mysqlconnector://root@localhost:3306/payment
       PYTHONUNBUFFERED: 1  
   rabbitmq:
         image: "rabbitmq:3-management"
@@ -73,7 +73,7 @@ services:
     image: <dockerid>/onlyfence/activity_log
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/activity
+      dbURL: mysql+mysqlconnector://root@localhost:3306/activity
       PYTHONUNBUFFERED: 1  
       restart: on-failure
       depends_on:
@@ -87,7 +87,7 @@ services:
     image: <dockerid>/onlyfence/error
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/error
+      dbURL: mysql+mysqlconnector://root@localhost:3306/error
       #THIS DB URL MUST BE CHANGED LATER.
       PYTHONUNBUFFERED: 1 
       depends_on:
@@ -101,6 +101,6 @@ services:
     image: <dockerid>/onlyfence/subscription
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://root@localhost:3306/onlyfence/subscription_link
+      dbURL: mysql+mysqlconnector://root@localhost:3306/subscription_link
       PYTHONUNBUFFERED: 1  
   
