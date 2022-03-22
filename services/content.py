@@ -43,20 +43,22 @@ class Content(db.Model):
     CREATORID = db.Column(db.String(64), nullable=False)
     DESCRIPTION = db.Column(db.String(64), nullable=False)
     IMAGE_ID = db.Column(db.String(64), nullable=False) ## Storing imageID for firebase
+    IMG_EXT = db.Column(db.String(64), nullable=False)
     POST_DATE = db.Column(db.DateTime, nullable=True, default=datetime.now)
     modified = db.Column(db.DateTime, nullable=True,default=datetime.now, onupdate=datetime.now)
 
-    def __init__(self, POSTID, CREATORID, DESCRIPTION, IMAGE_ID,POST_DATE,modified):
+    def __init__(self, POSTID, CREATORID, DESCRIPTION, IMAGE_ID,IMG_EXT,POST_DATE,modified):
         self.POSTID = POSTID
         self.CREATORID = CREATORID
         self.DESCRIPTION = DESCRIPTION
         self.IMAGE_ID = IMAGE_ID
+        self.IMG_EXT = IMG_EXT
         self.POST_DATE = POST_DATE
         self.modified = modified
 
     def json(self):
         
-        return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE_ID": self.IMAGE_ID,"POST_DATE": self.POST_DATE,"modified": self.modified}
+        return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE_ID": self.IMAGE_ID,"IMG_EXT":self.IMG_EXT,"POST_DATE": self.POST_DATE,"modified": self.modified}
 
 
 @app.route("/content/<string:creatorID>")
@@ -68,6 +70,7 @@ def find_by_creatorID(creatorID):
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
     urls = [] # used later to store urls
     # upload via file
+    
     for item in blobs[1:]:
         item.make_public()
         urls.append(item.public_url)
@@ -85,7 +88,7 @@ def find_by_creatorID(creatorID):
     ),404  
 
 
-@app.route("/unsubbed")
+@app.route("/unsubbed") ## My unsub is broken T____T
 def unsubbed():
     data = request.get_json()
     creatorID = data["CREATORID"]
@@ -128,11 +131,27 @@ def upload():
         blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
         urls = [] #Create a place to store all the URLS
         # Append all the files in blobs to URL except parent file
+        url_links =[]
         for item in blobs[1:]:
             item.make_public()
             urls.append(item.public_url)
+            url_links.append(item.path)
 
-        imageID = 'img'+ str(len(urls)+1) ## Create the Image ID based on the number of files inside the storage under creatorID
+        lastImgID = None
+        for url in url_links:
+            url = url.lower()
+            id = url.split("f")[2]
+            lastImgID =id 
+        
+        if lastImgID != None:
+
+        # ['img1.png', 'img3.png']
+            lastImgID = lastImgID.replace('img','')
+            lastImgID = lastImgID.replace('.png','')
+            imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
+        else:
+            imageID = 'img1'
+
         postID = f'{creatorID}_{imageID}'
         fileEXT = file.mimetype.split('/')[1]
 
@@ -141,10 +160,7 @@ def upload():
 
         blob.upload_from_file(file,content_type = file.mimetype)  #Upload the file into the storate
         postDate = datetime.now()
-        toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,POST_DATE=postDate,modified='') ## Create object to update sql
-
-
-        print(toUpload)
+        toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,IMG_EXT=fileEXT,POST_DATE=postDate,modified='') ## Create object to update sql
         try:
             db.session.add(toUpload) ## Update SQL
             db.session.commit()
@@ -162,7 +178,72 @@ def upload():
                 "data": toUpload.json()
             }
         ), 201
+
+@app.route("/delete/<string:postID>",methods=['POST','GET','DELETE'])
+def delete(postID):
+    init_firebase() ## Initiate firebase
+    creatorID,imageID= postID.split('_')
+    
+    ## Get postID information from Database
+    content = Content.query.filter_by(POSTID=postID).first()
+    
+    ## Get Creator ID
+    if content:
+        data = content.json()
+        print(data)
+
+        if data['IMG_EXT']:
+            
+            fileEXT = data['IMG_EXT']
+            bucket = storage.bucket() ## Get the storage in firebase
+            path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload 
+            blob = bucket.blob(path_on_cloud) #Find the blob in database
+            blob.delete() #Deletes the blob
+
+        db.session.delete(content)
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "PostID": postID
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "PostID": postID
+            },
+            "message": "Content not found."
+        }
+    ), 404
         
+@app.route("/update/<string:postID>", methods=['PUT'])
+def update(postID):
+    content = Content.query.filter_by(POSTID=postID).first()
+    if content:
+        data = request.get_json()
+        if data['DESCRIPTION']:
+            content.DESCRIPTION = data['DESCRIPTION']
+            content.modified = datetime.now()
+        db.session.commit()
+        return jsonify(
+            {
+                "code": 200,
+                "data": content.json()
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "postID": postID
+            },
+            "message": "Book not found."
+        }
+    ), 404
 
 if __name__ == '__main__':
     app.run(port=5003, debug=True)
