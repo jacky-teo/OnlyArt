@@ -6,11 +6,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 
+from itsdangerous import json
+
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/sub_link'
 app.config['SQLALCHEMY_BINDS'] = {
-    "consumer": 'mysql+mysqlconnector://root@localhost:3306/consumeraccount',
-    "creator": 'mysql+mysqlconnector://root@localhost:3306/creatoraccount'
+    "consumer": 'mysql+mysqlconnector://root@localhost:3306/consumer',
+    "creator": 'mysql+mysqlconnector://root@localhost:3306/creator'
 }
 # root@localhost will change
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -80,7 +82,7 @@ class subscriptionLink(db.Model):
 
 # scenario 1 & 4
 @app.route('/subscription/status')
-def get_all():
+def check_status():
     data = request.get_json()
     creatorid = data["CREATORID"]
     consumerid = data["CONSUMERID"]
@@ -99,7 +101,8 @@ def get_all():
                 {
                     "code": 200,
                     "data": status.json(),
-                    "message": "Already subscribed"
+                    "message": "Already subscribed",
+                    "isSubbed": 1
                 }
             )
         # if there does not exist a link between consumer and creator account
@@ -107,7 +110,8 @@ def get_all():
             {
                 "code": 200,
                 "data": creatorAccount.query.filter_by(CREATORID=creatorid).first().json(),
-                "message": "Not subscribed."
+                "message": "Not subscribed.",
+                "isSubbed": 2
             }
         ), 200
     # consumer or creator account does not exist
@@ -171,25 +175,46 @@ def get_all_subscribers(creatorid):
         "message":"Creator does not exist"
         }
     ),404         
-
-@app.route("/sub")
-def get_all_subs():
-    booklist = creatorAccount.query.all()
-    if len(booklist):
+#both testing urls below.
+@app.route("/account")
+def get_all_account():
+    #change below to consumer or creator account accordingly for testing
+    accountlist = consumerAccount.query.all()
+    if len(accountlist):
         return jsonify(
             {
                 "code": 200,
                 "data": {
-                    "books": [book.json() for book in booklist]
+                    "books": [account.json() for account in accountlist]
                 }
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "There are no books."
+            "message": "There are no accounts."
         }
     ), 404
+
+@app.route("/getallsublink")
+def get_all_sub_link():
+    sublinklist = subscriptionLink.query.all()
+    if len(sublinklist):
+        return jsonify(
+            {
+                "code": 200,
+                "data": {
+                    "books": [link.json() for link in sublinklist]
+                }
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "There are no sub links."
+        }
+    ), 404
+
 
 if __name__ == '__main__':
     app.run(port=5006, debug=True)
