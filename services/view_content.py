@@ -57,7 +57,7 @@ def getStatus(creator_consumer):
     # else:          
         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
         #     body=message)
-     
+
     creatorPrice = invoke_http(creator_url, json=subData)
     
     crCode = creatorPrice["code"]
