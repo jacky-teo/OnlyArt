@@ -7,7 +7,7 @@ SUPPORTED_HTTP_METHODS = set([
 def invoke_http(url, method='GET', json=None, **kwargs):
     code = 200
     result = {}
-
+    
     try:
         if method.upper() in SUPPORTED_HTTP_METHODS:
             r = requests.request(method, url, json = json, **kwargs)
