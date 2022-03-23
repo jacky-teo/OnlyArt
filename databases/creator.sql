@@ -48,7 +48,7 @@ DELIMITER ;
 --
 INSERT INTO CREATORACCOUNT(USERNAME,PASSWORD,EMAIL,PRICE) 
 VALUES 
-('jackyteo', 'pass123', 'jacky.teo.2020@smu.edu.sg',100.00),
+('jackyteo', 'pass123', 'sb-go47cv14389012@business.example.com',100.00),
 ('notJacky', 'pass123', 'jackyteojianqi@gmail.com',233.50);
 
 
