@@ -61,8 +61,10 @@ class Content(db.Model):
         return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE_ID": self.IMAGE_ID,"IMG_EXT":self.IMG_EXT,"POST_DATE": self.POST_DATE,"modified": self.modified}
 
 
-@app.route("/content/<string:creatorID>")
-def find_by_creatorID(creatorID):
+@app.route("/subbed")
+def find_by_creatorID():
+    data = request.get_json()
+    creatorID = data["CREATORID"]
     init_firebase() # initialize firebase
 
     content_list = Content.query.filter_by(CREATORID=creatorID)

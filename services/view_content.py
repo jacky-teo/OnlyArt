@@ -16,6 +16,7 @@ CORS(app)
 subscription_url = "http://localhost:5006/subscription/status"
 creator_url = "http://localhost:5002/creator/price"
 unsubbed_url = "http://localhost:5003/unsubbed"
+subbed_url = "http://localhost:5003/subbed"
 
 @app.route("/view_content")
 def view_content():
@@ -42,6 +43,7 @@ def getStatus(creator_consumer):
     subCode = subStatus["code"]
     subMsg = json.dumps(subStatus["message"])
     subData = subStatus['data']
+    subType = subStatus['isSubbed']
 
     if subCode not in range(200, 300):
         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
@@ -74,8 +76,12 @@ def getStatus(creator_consumer):
         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
         #     body=message)
     
-    unsubbed = invoke_http(unsubbed_url, json=crData)
-    return unsubbed
+    if subType == 1:
+        unsubbed = invoke_http(unsubbed_url, json=crData)
+        return unsubbed
+    else: 
+        subbed = invoke_http(subbed_url, json=crData)
+        return subbed
 
 
 
