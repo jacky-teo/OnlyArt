@@ -18,6 +18,7 @@ subscription_url = "http://localhost:5001/subscription/status"
 creator_url = "http://localhost:5002/creator/price"
 upload_url = "http://localhost:5003/upload"
 
+#Step 1 Upload the image
 @app.route("/upload")
 def view_content():
     if request.is_json:
