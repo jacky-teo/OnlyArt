@@ -3,6 +3,9 @@ var payee_email = "sb-go47cv14389012@business.example.com";
 var price = "25"
 var platform_fee = "5"
 
+// HTTP Request the order details (API call)
+// teRequest from payment microservice OR complex microservice
+
 document.getElementById('payment-summary').innerHTML = `
     <b>Transfering funds to:</b> ${payee_email}<br>
     <b>Price:</b> $${price}SGD
