@@ -18,9 +18,14 @@ subscription_url = "http://localhost:5001/subscription/status"
 creator_url = "http://localhost:5002/creator/price"
 upload_url = "http://localhost:5003/upload"
 
-#Step 1 Upload the image
-@app.route("/upload")
-def view_content():
+#Step 1 Upload the image & Upload information is returned (content.py)
+# - 
+#Step 2 Get list of people who subscribed to the creator to send out notification
+#Step 3 Send information to Notifcation.py
+#DONE
+
+@app.route("/post_content")
+def post_content():
     if request.is_json:
         try: 
             creator_consumer = request.get_json()
@@ -38,6 +43,7 @@ def view_content():
                         "code": 500,
                         "message": "view_content.py internal error: " + ex_str
                     }), 500
+
 def getStatus(creator_consumer):
     subStatus = invoke_http(subscription_url, json=creator_consumer)
 
