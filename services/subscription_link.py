@@ -128,38 +128,38 @@ def check_status():
 @app.route('/subscription/add', methods=["POST"])
 def create_subscription():
     creatorid = request.json.get('CREATORID')
-    consumerids = request.json.get('CONSUMERIDS')
+    consumerid = request.json.get('CONSUMERID')
 
-    for consumerid in consumerids:
-        if (subscriptionLink.query.filter_by(CREATORID=creatorid, CONSUMERID=consumerid).first()):
+    if (subscriptionLink.query.filter_by(CREATORID=creatorid, CONSUMERID=consumerid).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "message": "Already subscribed."
+            }
+        ), 400
+    else: 
+        created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        telegram = consumerAccount.query.filter_by(CONSUMERID=consumerid).first()
+
+        subcribedParing = subscriptionLink(CREATORID=creatorid, CONSUMERID=consumerid, TELEGRAM= telegram.TELEGRAM, CREATED=created, MODIFIED=modified)
+
+        try:
+            db.session.add(subcribedParing)
+            db.session.commit()
+        except Exception as e:
             return jsonify(
                 {
-                    "code": 400,
-                    "message": "Already subscribed."
+                    "code": 500,
+                    "message": "An error occurred creating subscription link" + str(e)
                 }
-            ), 400
-        else: 
-            created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-            modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-            subcribedParing = subscriptionLink(CREATORID=creatorid, CONSUMERID=consumerid, CREATED=created, MODIFIED=modified)
-
-            try:
-                db.session.add(subcribedParing)
-                db.session.commit()
-            except Exception as e:
-                return jsonify(
-                    {
-                        "code": 500,
-                        "message": "An error occurred creating subscription link" + str(e)
-                    }
-                ), 500
-            return jsonify(
-                {
-                    "code": 201,
-                    "message": "Subscription link created"
-                }
-            ), 201
+            ), 500
+        return jsonify(
+            {
+                "code": 201,
+                "message": "Subscription link created"
+            }
+        ), 201
 
 # scenario 3
 @app.route('/subscription/getsubscribers')
@@ -171,7 +171,7 @@ def get_all_subscribers():
     if telegram:
         return jsonify({
                 "code":200,
-                "data":[cons.CONSUMERTELE for cons in telegram]
+                "data":[cons.TELEGRAM for cons in telegram]
             }), 200
     return jsonify({
         "code":404,
