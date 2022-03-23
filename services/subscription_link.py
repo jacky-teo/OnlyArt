@@ -165,6 +165,7 @@ def create_subscription():
 @app.route('/subscription/getsubscribers')
 def get_all_subscribers():
     data = request.get_json()
+    print(data)
     creatorid = data["CREATORID"]
     telegram = subscriptionLink.query.filter_by(CREATORID=creatorid)
 
