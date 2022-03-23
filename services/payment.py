@@ -76,9 +76,11 @@ def receiveLogRequest():
         data = request.get_data()
         print("Received an invalid request:")
         print(data)
-        return jsonify({"code": 400,
-                        "data": str(data),
-                        "message": "Request should be in JSON."}), 400 # Bad Request Input
+        return jsonify({
+            "code": 400,
+            "data": str(data),
+            "message": "Request should be in JSON."
+        }), 400 # Bad Request Input
 
 # Get API Authorization Token
 def getAuthorization():
@@ -144,6 +146,3 @@ comment
 
 cvxcv
 """
-xcvxcv
-
-

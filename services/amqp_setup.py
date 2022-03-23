@@ -17,6 +17,7 @@ connection = pika.BlockingConnection(
     # - Try: simply re-run the program or refresh the page.
     # For rare cases, it's incompatibility between RabbitMQ and the machine running it,
     # - Use the Docker version of RabbitMQ instead: https://www.rabbitmq.com/download.html
+
 channel = connection.channel()
 # Set up the exchange if the exchange doesn't exist
 # - use a 'topic' exchange to enable interaction
@@ -38,6 +39,7 @@ channel.queue_declare(queue=queue_name, durable=True)
 channel.queue_bind(exchange=exchangename, queue=queue_name, routing_key='*.error') 
     # bind the queue to the exchange via the key
     # any routing_key with two words and ending with '.error' will be matched
+    
 
 ############   Activity_Log queue    #############
 #delcare Activity_Log queue
