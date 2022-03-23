@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
 from firebase_admin import storage
-
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/content'
@@ -120,66 +120,69 @@ def unsubbed():
 
 @app.route("/upload",methods=['POST','GET'])
 def upload():
-    init_firebase() ## Initiate firebase
+    data = request.get_json()
+    data = json.loads(data)
+    # init_firebase() ## Initiate firebase
     
     
-    if request.method =="POST":
+    # if request.method =="POST":
 
-        file = request.files['file']
-        creatorID= request.form['creatorID']
+    #     file = request.files['file']
+    #     creatorID= request.form['creatorID']
     
-        description = request.form['description']
-        bucket = storage.bucket() ## Get the storage in firebase
-        blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
-        urls = [] #Create a place to store all the URLS
-        # Append all the files in blobs to URL except parent file
-        url_links =[]
-        for item in blobs[1:]:
-            item.make_public()
-            urls.append(item.public_url)
-            url_links.append(item.path)
+    #     # description = request.form['description']
+    # bucket = storage.bucket() ## Get the storage in firebase
+    # blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
+    # urls = [] #Create a place to store all the URLS
+    # # Append all the files in blobs to URL except parent file
+    # url_links =[]
+    # for item in blobs[1:]:
+    #     item.make_public()
+    #     urls.append(item.public_url)
+    #     url_links.append(item.path)
 
-        lastImgID = None
-        for url in url_links:
-            url = url.lower()
-            id = url.split("f")[2]
-            lastImgID =id 
-        
-        if lastImgID != None:
+    # lastImgID = None
+    # for url in url_links:
+    #     url = url.lower()
+    #     id = url.split("f")[2]
+    #     lastImgID =id 
+    
+    # if lastImgID != None:
 
-        # ['img1.png', 'img3.png']
-            lastImgID = lastImgID.replace('img','')
-            lastImgID = lastImgID.replace('.png','')
-            imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
-        else:
-            imageID = 'img1'
+    # # ['img1.png', 'img3.png']
+    #     lastImgID = lastImgID.replace('img','')
+    #     lastImgID = lastImgID.replace('.png','')
+    #     imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
+    # else:
+    #     imageID = 'img1'
 
-        postID = f'{creatorID}_{imageID}'
-        fileEXT = file.mimetype.split('/')[1]
+    # postID = f'{creatorID}_{imageID}'
+    # fileEXT = file.mimetype.split('/')[1]
 
-        path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload
-        blob = bucket.blob(path_on_cloud) #Point to the path and the file name
+    # path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload
+    # blob = bucket.blob(path_on_cloud) #Point to the path and the file name
 
-        blob.upload_from_file(file,content_type = file.mimetype)  #Upload the file into the storate
-        postDate = datetime.now()
-        toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,IMG_EXT=fileEXT,POST_DATE=postDate,modified='') ## Create object to update sql
-        try:
-            db.session.add(toUpload) ## Update SQL
-            db.session.commit()
-        except Exception as e:
-            return jsonify(
-            {
-                "code": 500,
-                "message": "An error occurred while uploading the content. " + str(e)
-            }
-        ), 500
-
+    # blob.upload_from_file(file,content_type = file.mimetype)  #Upload the file into the storate
+    # postDate = datetime.now()
+    postID,creatorID,description,imageID,imageEXT = data['POSTID'],data['CREATORID'],data['DESCRIPTION'],data['IMAGE_ID'],data['IMG_EXT']
+    toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,IMG_EXT=imageEXT,POST_DATE=None,modified=None) ## Create object to update sql
+    try:
+        db.session.add(toUpload) ## Update SQL
+        db.session.commit()
+    except Exception as e:
         return jsonify(
-            {
-                "code": 201,
-                "data": toUpload.json()
-            }
-        ), 201
+        {
+            "code": 500,
+            "message": "An error occurred while uploading the content. " + str(e)
+        }
+    ), 500
+
+    return jsonify(
+        {
+            "code": 201,
+            "data": toUpload.json()
+        }
+    ), 201
 
 @app.route("/delete/<string:postID>",methods=['POST','GET','DELETE'])
 def delete(postID):
