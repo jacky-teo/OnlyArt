@@ -13,7 +13,7 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-subscription_url = "http://localhost:5001/subscription/status"
+subscription_url = "http://localhost:5006/subscription/status"
 creator_url = "http://localhost:5002/creator/price"
 unsubbed_url = "http://localhost:5003/unsubbed"
 

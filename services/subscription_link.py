@@ -66,21 +66,21 @@ class subscriptionLink(db.Model):
 
     CREATORID = db.Column(db.String(64), primary_key=True, nullable=False)
     CONSUMERID = db.Column(db.String(64), primary_key=True, nullable=False)
+    TELEGRAM = db.Column(db.String(64), primary_key=True, nullable=False)
     CREATED = db.Column(db.ForeignKey(
         'creatoraccount.CREATORID', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
-    CONSUMERTELE = db.Column(db.String(64), primary_key=True, nullable=False)
     MODIFIED = db.Column(db.ForeignKey(
         'consumeraccount.CONSUMERID', ondelete='CASCADE', onupdate='CASCADE'), nullable=False, index=True)
 
-    def __init__(self, CREATORID, CONSUMERID, CREATED, CONSUMERTELE,MODIFIED):
+    def __init__(self, CREATORID, CONSUMERID, TELEGRAM, CREATED,MODIFIED):
         self.CREATORID = CREATORID
         self.CONSUMERID = CONSUMERID
+        self.TELEGRAM = TELEGRAM
         self.CREATED = CREATED
-        self.CONSUMERTELE = CONSUMERTELE
         self.MODIFIED = MODIFIED
 
     def json(self):
-        return {"CREATORID": self.CREATORID, "CONSUMERID": self.CONSUMERID, "CREATED": self.CREATED,'CONSUMERTELE' :self.CONSUMERTELE ,"MODIFIED": self.MODIFIED}
+        return {"CREATORID": self.CREATORID, "CONSUMERID": self.CONSUMERID, 'TELEGRAM' :self.TELEGRAM, "CREATED": self.CREATED,"MODIFIED": self.MODIFIED}
 
 # scenario 1 & 4
 @app.route('/subscription/status')
