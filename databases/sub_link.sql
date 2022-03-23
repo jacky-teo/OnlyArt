@@ -104,7 +104,6 @@ INSERT INTO CONSUMERACCOUNT(USERNAME,PASSWORD,TELEGRAM)
 VALUES ('imnew', 'pass123','@tinklebell'),
 ('logi', 'pass123','@hutthutt');
 
-
 -- ---------------------------------------------------------------- --
 --                     SUBSCRIPTION_LINK TABLE                        --
 -- ---------------------------------------------------------------- --
