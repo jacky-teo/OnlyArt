@@ -14,9 +14,10 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-subscription_url = "http://localhost:5001/subscription/status"
-creator_url = "http://localhost:5002/creator/price"
 upload_url = "http://localhost:5003/upload"
+subscription_url = "http://localhost:5001/subscription/getsubscribers"
+notification_url = "http://localhost:5002/notify/"
+
 
 #Step 1 Upload the image & Upload information is returned (content.py)
 # - 
@@ -26,66 +27,33 @@ upload_url = "http://localhost:5003/upload"
 
 @app.route("/post_content")
 def post_content():
-    if request.is_json:
-        try: 
-            creator_consumer = request.get_json()
-            result = getStatus(creator_consumer)
-            return(result)
+    try: 
+        uploadInformation = upload_content()
+        telegramTags = getTelegramTags()
+        return telegramTags
+    except Exception as e:
+                # Unexpected error in code
+                exc_type, exc_obj, exc_tb = sys.exc_info()
+                fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+                print(ex_str)
 
-        except Exception as e:
-                    # Unexpected error in code
-                    exc_type, exc_obj, exc_tb = sys.exc_info()
-                    fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-                    ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
-                    print(ex_str)
+                return jsonify({
+                    "code": 500,
+                    "message": "view_content.py internal error: " + ex_str
+                }), 500
 
-                    return jsonify({
-                        "code": 500,
-                        "message": "view_content.py internal error: " + ex_str
-                    }), 500
+def upload_content():
+    uploadInformation = invoke_http(upload_url)
+    return uploadInformation
 
-def getStatus(creator_consumer):
-    subStatus = invoke_http(subscription_url, json=creator_consumer)
+def getTelegramTags(uploadInformation):
+    telegramTags = invoke_http(upload_url,json=uploadInformation)
+    return telegramTags
 
-    subCode = subStatus["code"]
-    subMsg = json.dumps(subStatus["message"])
-    subData = subStatus['data']
-
-    if subCode not in range(200, 300):
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
-        #     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-
-        return {
-            "code": 500,
-            "data": {"subStatus": subStatus},
-            "message": "Failed to obtain subscription status"
-        }    
-    # else:          
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
-        #     body=message)
-     
-    creatorPrice = invoke_http(creator_url, json=subData)
-    
-    crCode = creatorPrice["code"]
-    crData = creatorPrice["data"]
-    
-    if crCode not in range(200, 300):
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
-        #     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
-
-        return {
-            "code": 500,
-            "data": {"creatorPrice": creatorPrice},
-            "message": "Failed to obtain creator price."
-        }    
-    # else:          
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
-        #     body=message)
-    
-    unsubbed = invoke_http(unsubbed_url, json=crData)
-    return unsubbed
-
-
+def notifyUsers(uploadInformation,telegramTags):
+    notification_status = None
+    return notification_status
 
 if __name__ == "__main__":
     app.run(port=5100, debug=True)
