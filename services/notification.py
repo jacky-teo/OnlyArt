@@ -8,7 +8,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/notification'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/notification'  #For Mac6
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/notification'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 token = os.getenv('TELEGRAM_KEY')
 
@@ -104,7 +105,7 @@ def create_notif(telegramtag):
         }
     ), 201
 
-@app.route("/notify/<string:creatorname>",methods=["POST"])
+@app.route("/notify/<string:creatorname>",methods=["POST",'GET'])
 def send_notif(creatorname):
     #some function here
     countnotif = 0
@@ -113,6 +114,7 @@ def send_notif(creatorname):
     #print("creatorname: ",creatorname)
     #print("data: ",data)
     notiflist = data["data"]
+    print(notiflist)
     #print("NL: ",notiflist)
     for user in notiflist:
         #request send
