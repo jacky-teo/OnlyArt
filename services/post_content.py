@@ -15,29 +15,6 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-# PROJECT_ID = 'onlyfence-9eb40'
-# IS_EXTERNAL_PLATFORM = True
-# firebase_app = None
-
-# def init_firebase():
-#     global firebase_app
-#     if firebase_app:
-#         return firebase_app
-
-#     import firebase_admin
-#     from firebase_admin import credentials
-#     if IS_EXTERNAL_PLATFORM:
-#         cred = credentials.Certificate('keys/firebase-adminsdk.json')
-#     else:
-#         cred = credentials.ApplicationDefault()
-
-#     firebase_app = firebase_admin.initialize_app(cred, {
-#         # 'projectId': PROJECT_ID,
-#         'storageBucket': f"{PROJECT_ID}.appspot.com"
-#     })
-
-    # return firebase_app
-
 upload_url = "http://localhost:5003/upload"
 subscription_url = "http://localhost:5006/subscription/getsubscribers"
 notification_url = "http://localhost:5000/notify/"
@@ -59,10 +36,11 @@ def post_content():
     data = upload_firebase(file,creatorID,description)
     data_json =  json.dumps(data) 
     try: 
-        uploadInformation = upload_content(data_json)
-        # telegramTags = invoke_http(subscription_url,json=uploadInformation)
-        # return telegramTags
-        return uploadInformation
+        upload_content(data_json) # Upload image into firebase and it goes to SQL
+        creatorID_JSON = json.dumps({"CREATORID":creatorID})
+        consumerTelegram = telegramTags(creatorID_JSON)
+        notifyStatus = notifyUsers(consumerTelegram,creatorID)
+        return notifyStatus
 
     except Exception as e:
                 # Unexpected error in code
@@ -87,10 +65,13 @@ def upload_content(json):
     return uploadInformation
 
 
+def telegramTags(uploadInformation):
+    tags = invoke_http(subscription_url,method="GET",json=uploadInformation)
+    return tags
 
-
-def notifyUsers(uploadInformation,telegramTags):
-    notification_status = None
+def notifyUsers(tags,creatorID):
+    
+    notification_status = invoke_http(f"{notification_url}{creatorID}",json=tags)
     return notification_status
 
 if __name__ == "__main__":
