@@ -68,3 +68,19 @@ def upload_firebase(file,creatorID,description):
     } #Create a data to transfer as json
     #Convert to JSON
     return data
+
+def delete_firebase(postID,fileEXT):
+    init_firebase() ## Initiate firebase
+    creatorID,imageID= postID.split('_')
+    bucket = storage.bucket() ## Get the storage in firebase
+    path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload 
+    blob = bucket.blob(path_on_cloud) #Find the blob in database
+    blob.delete() #Deletes the blob
+
+
+def update_firebase(creatorID,imageID,file,fileEXT):
+    init_firebase()
+    bucket = storage.bucket() ## Get Storage Instance
+    path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' # Create Storage Path
+    blob = bucket.blob(path_on_cloud) # Point to Storage Path
+    blob.upload_from_file(file,content_type = file.mimetype) #Upload to storage path
