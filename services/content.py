@@ -4,6 +4,7 @@ from flask_cors import CORS
 from datetime import datetime
 from firebase_admin import storage
 import json
+from firebase import delete_firebase,update_firebase
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/content'
@@ -122,48 +123,6 @@ def unsubbed():
 def upload():
     data = request.get_json()
     data = json.loads(data)
-    # init_firebase() ## Initiate firebase
-    
-    
-    # if request.method =="POST":
-
-    #     file = request.files['file']
-    #     creatorID= request.form['creatorID']
-    
-    #     # description = request.form['description']
-    # bucket = storage.bucket() ## Get the storage in firebase
-    # blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
-    # urls = [] #Create a place to store all the URLS
-    # # Append all the files in blobs to URL except parent file
-    # url_links =[]
-    # for item in blobs[1:]:
-    #     item.make_public()
-    #     urls.append(item.public_url)
-    #     url_links.append(item.path)
-
-    # lastImgID = None
-    # for url in url_links:
-    #     url = url.lower()
-    #     id = url.split("f")[2]
-    #     lastImgID =id 
-    
-    # if lastImgID != None:
-
-    # # ['img1.png', 'img3.png']
-    #     lastImgID = lastImgID.replace('img','')
-    #     lastImgID = lastImgID.replace('.png','')
-    #     imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
-    # else:
-    #     imageID = 'img1'
-
-    # postID = f'{creatorID}_{imageID}'
-    # fileEXT = file.mimetype.split('/')[1]
-
-    # path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload
-    # blob = bucket.blob(path_on_cloud) #Point to the path and the file name
-
-    # blob.upload_from_file(file,content_type = file.mimetype)  #Upload the file into the storate
-    # postDate = datetime.now()
     postID,creatorID,description,imageID,imageEXT = data['POSTID'],data['CREATORID'],data['DESCRIPTION'],data['IMAGE_ID'],data['IMG_EXT']
     toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,IMG_EXT=imageEXT,POST_DATE=None,modified=None) ## Create object to update sql
     try:
@@ -187,23 +146,15 @@ def upload():
 @app.route("/delete/<string:postID>",methods=['POST','GET','DELETE'])
 def delete(postID):
     init_firebase() ## Initiate firebase
-    creatorID,imageID= postID.split('_')
-    
+    # creatorID,imageID= postID.split('_')
     ## Get postID information from Database
     content = Content.query.filter_by(POSTID=postID).first()
-    
     ## Get Creator ID
     if content:
         data = content.json()
-        print(data)
-
         if data['IMG_EXT']:
-            
             fileEXT = data['IMG_EXT']
-            bucket = storage.bucket() ## Get the storage in firebase
-            path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload 
-            blob = bucket.blob(path_on_cloud) #Find the blob in database
-            blob.delete() #Deletes the blob
+            delete_firebase(postID,fileEXT)
 
         db.session.delete(content)
         db.session.commit()
@@ -230,18 +181,13 @@ def update(postID):
     content = Content.query.filter_by(POSTID=postID).first()
     information = content.json()
     if content:
-        
         imageID =f"{information['imageID']}"
-
         if data['IMAGE_ID']:
             creatorID=data['CREATORID']
             file = request.files['file'] #Get file from HTML post request
-            fileEXT = file.mimetype.split('/')[1]
-            init_firebase() ## Initiate firebase
-            bucket = storage.bucket() ## Get Storage Instance
-            path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' # Create Storage Path
-            blob = bucket.blob(path_on_cloud) # Point to Storage Path
-            blob.upload_from_file(file,content_type = file.mimetype) #Upload to storage path
+            if file:
+                fileEXT = file.mimetype.split('/')[1]
+                update_firebase(creatorID,imageID,file,fileEXT)
 
         data = request.get_json()
         if data['DESCRIPTION']:
