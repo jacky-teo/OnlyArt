@@ -58,50 +58,6 @@ def post_content():
         description = request.form['description']  ## Get the description from form
     data = upload_firebase(file,creatorID,description)
     data_json =  json.dumps(data) 
-    # bucket = storage.bucket() ## Get the storage in firebase
-    # blobs = list(bucket.list_blobs(prefix=f'{creatorID}/')) #Point to creator's directory
-    # urls = [] #Create a place to store all the URLS
-    # url_links =[]# Append all the links in blobs to URL except parent file
-
-    # # Append all the files in blobs to URL except parent file
-    # for item in blobs[1:]: 
-    #     item.make_public() #Get a session url that is public
-    #     urls.append(item.public_url) #Get a session url that is public
-    #     url_links.append(item.path) #Get the url pathing
-
-    # lastImgID = None  #Declared to use image naming
-    # for url in url_links: 
-    #     url = url.lower() 
-    #     id = url.split("f")[2] #Declared split the path by f
-    #     lastImgID =id  #Assign image ID
-    
-    # if lastImgID != None: #If its not none,
-
-    # # ['img1.png', 'img3.png']
-    #     lastImgID = lastImgID.replace('img','')
-    #     lastImgID = lastImgID.replace('.png','')
-    #     imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
-    # else:
-    #     imageID = 'img1'
-
-    # postID = f'{creatorID}_{imageID}' #Create a post id
-    # fileEXT = file.mimetype.split('/')[1]
-
-    # path_on_cloud = f'{creatorID}/{imageID}.{fileEXT}' ##Declare the path to upload
-    # blob = bucket.blob(path_on_cloud) #Point to the path and the file name
-
-    # blob.upload_from_file(file,content_type = file.mimetype)  #Upload the file into the storate
-    
-    # data = {
-    #     'POSTID':postID,
-    #     'CREATORID':creatorID,
-    #     'DESCRIPTION':description,
-    #     'IMAGE_ID':imageID,
-    #     'IMG_EXT':fileEXT,
-    #     'POST_DATE':None,
-    #     'modified':None,
-    # } #Create a data to transfer as json
-    # data_json =  json.dumps(data) #Convert to JSON
     try: 
         uploadInformation = upload_content(data_json)
         # telegramTags = invoke_http(subscription_url,json=uploadInformation)
