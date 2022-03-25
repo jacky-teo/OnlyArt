@@ -36,7 +36,7 @@ def post_content():
     data = upload_firebase(file,creatorID,description)
     data_json =  json.dumps(data) 
     try: 
-        upload_content(data_json) # Upload image into firebase and it goes to SQL
+        uploadinformation = upload_content(data_json) # Upload image into firebase and it goes to SQL
         creatorID_JSON = json.dumps({"CREATORID":creatorID})
         consumerTelegram = telegramTags(creatorID_JSON)
         notifyStatus = notifyUsers(consumerTelegram,creatorID)
