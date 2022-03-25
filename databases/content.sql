@@ -26,7 +26,7 @@ CREATE TABLE CONTENT(
 
 -- INSERT INTO CONTENT(POSTID,CREATORID,DESCRIPTION,IMAGE_ID) 
 -- VALUES 
--- ('CR001_IMG1','CR001', 'this is img1', "img1"),
+-- ('CR001_IMG1','CR001', 'this is img1', "img1",'png'),
 -- ('CR001_IMG2','CR001', 'this is img2', "img2"),
 -- ('CR001_IMG3','CR001', 'this is img3', "img3"),
 -- ('CR001_IMG4','CR001', 'this is img4', "img4"),
