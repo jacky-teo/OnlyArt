@@ -4,7 +4,7 @@ from flask_cors import CORS
 from datetime import datetime
 from firebase_admin import storage
 import json
-from firebase import delete_firebase,update_firebase
+from firebase import delete_firebase,update_firebase,init_firebase
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/content'
@@ -13,30 +13,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 CORS(app)
-
-PROJECT_ID = 'onlyfence-9eb40'
-IS_EXTERNAL_PLATFORM = True
-firebase_app = None
-
-def init_firebase():
-    global firebase_app
-    if firebase_app:
-        return firebase_app
-
-    import firebase_admin
-    from firebase_admin import credentials
-    if IS_EXTERNAL_PLATFORM:
-        cred = credentials.Certificate('keys/firebase-adminsdk.json')
-    else:
-        cred = credentials.ApplicationDefault()
-
-    firebase_app = firebase_admin.initialize_app(cred, {
-        # 'projectId': PROJECT_ID,
-        'storageBucket': f"{PROJECT_ID}.appspot.com"
-    })
-
-    return firebase_app
-
 
 class Content(db.Model):
     __tablename__ = 'content'
