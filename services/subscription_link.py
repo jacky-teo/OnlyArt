@@ -9,10 +9,10 @@ from datetime import datetime
 import json
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/sub_link'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/sub_link'
 app.config['SQLALCHEMY_BINDS'] = {
-    "consumer": 'mysql+mysqlconnector://root@localhost:3306/consumer',
-    "creator": 'mysql+mysqlconnector://root@localhost:3306/creator'
+    "consumer": 'mysql+mysqlconnector://is213@localhost:3306/consumer',
+    "creator": 'mysql+mysqlconnector://is213@localhost:3306/creator'
 }
 # root@localhost will change
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False

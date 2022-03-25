@@ -39,10 +39,10 @@
 
     <!-- display gallery-->
     <div id='app'>
-        <div class='container-fluid text-center py-5'> Showing {{petnumber}} Results</div>
+        <div class='container-fluid text-center py-5'> Showing {{numcreators}} Results</div>
         <div class='container-fluid px-5' id='cardgallery'>
           <div class='row'>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for='pet in petlist'>
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for='pet in creatorlist'>
               <div class="card my-3 mx-3 petcard">
                 <div class="card-body">
                   <h5 class="card-title overflow-hidden">{{pet.creatorname}}</h5>
@@ -69,19 +69,18 @@
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
-    console.log('allpets js is being referenced');
 const app = Vue.createApp({
     data() {
         return {
-            petlist: [],
-            petnumber: 0,
+            creatorlist: [],
+            numcreators: 0,
             numpages: 1,
             resultsperpage: 12,
             thispage: 1,
         }
     },
     methods: {
-        getPetsList() {
+        getCreators() {
             //var petcount = 0;
             console.log('getpetlist function is running');
             var url_string = window.location.href; //window.location.href
@@ -116,17 +115,17 @@ const app = Vue.createApp({
                             let petobject = {};
                             petobject['creatorID'] = `/screens/petprofile.html?creatorID=${creatorID}`;
                             petobject['creatorname'] = creatorname;
-                            this.petlist.push(petobject);
+                            this.creatorlist.push(petobject);
                         }
 
-                        this.petnumber += 1;
-                        console.log('this petnumber: ', this.petnumber)
+                        this.numcreators += 1;
+                        console.log('this numcreators: ', this.numcreators)
                     }
-                    console.log(this.petlist);
-                    //this.petnumber = 35; //test 
-                    console.log('pets: ', this.petnumber)
+                    console.log(this.creatorlist);
+                    //this.numcreators = 35; //test 
+                    console.log('pets: ', this.numcreators)
                     console.log('resultsperpage: ', this.resultsperpage)
-                    this.numpages = Math.ceil(this.petnumber / this.resultsperpage);
+                    this.numpages = Math.ceil(this.numcreators / this.resultsperpage);
                     console.log('numpages', this.numpages)
 
                 },
@@ -141,7 +140,7 @@ const app = Vue.createApp({
 
     },
     created() {
-        this.getPetsList();
+        this.getCreators();
     }
 })
 const vm = app.mount('#app')
