@@ -1,9 +1,3 @@
-## Microservice that uses AMQP to do activity log ##
-
-#!/usr/bin/env python3
-# The above shebang (#!) operator tells Unix-like environments
-# to run this file as a python3 script
-
 import json
 import os
 
@@ -14,7 +8,7 @@ monitorBindingKey='post.*'
 def postMadeLog():
     amqp_setup.check_setup()
         
-    queue_name = 'Post_Log'
+    queue_name = 'Activity_Log'
     
     # set up a consumer and start to wait for coming messages
     amqp_setup.channel.basic_consume(queue=queue_name, on_message_callback=callback, auto_ack=True)

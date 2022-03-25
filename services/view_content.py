@@ -6,8 +6,8 @@ import os, sys
 
 from invokes import invoke_http
 
-# import amqp_setup
-# import pika
+import amqp_setup
+import pika
 import json
 
 app = Flask(__name__)
@@ -44,10 +44,10 @@ def getStatus(creator_consumer):
     subMsg = json.dumps(subStatus["message"])
     subData = subStatus['data']
     subType = subStatus['isSubbed']
+    message = subMsg
 
     if subCode not in range(200, 300):
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
-        #     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post.error", body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         return {
             "code": 500,
@@ -55,8 +55,8 @@ def getStatus(creator_consumer):
             "message": "Failed to obtain subscription status"
         }    
     # else:          
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
-        #     body=message)
+    #     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post.info", 
+    #         body=message)
 
     creatorPrice = invoke_http(creator_url, json=subData)
     
@@ -64,8 +64,7 @@ def getStatus(creator_consumer):
     crData = creatorPrice["data"]
     
     if crCode not in range(200, 300):
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.error", 
-        #     body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
+    #     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post.error", body=message, properties=pika.BasicProperties(delivery_mode = 2)) 
 
         return {
             "code": 500,
@@ -73,8 +72,7 @@ def getStatus(creator_consumer):
             "message": "Failed to obtain creator price."
         }    
     # else:          
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="order.info", 
-        #     body=message)
+    #     amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post.info", body=message)
     
     if subType == 1:
         unsubbed = invoke_http(unsubbed_url, json=crData)
