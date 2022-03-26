@@ -40,10 +40,16 @@
     </style>
 </head>
 <body>
-
+    <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="creator_gallery.html">OnlyFences</a>
+          </div>
+    </nav>
     <div class="loader" id="loader"></div>
+    
     <div id="app" class="mx-5" style="display:none">
-        <div class="text-center fs-1 m-3">Here are your gorgeous Fences</div>
+        <div class="text-center fs-1 m-3">CREATOR {{creatorid}}</div>
+        <div class="text-center"><button type="button" class="btn btn-dark">Subscribe</button> </div>
         <div class="card-group row-cols-3">
             <div class="col" v-for="post in postlist">
                 <div class="card m-3">
@@ -68,7 +74,8 @@
     const app = Vue.createApp({
         data(){
             return {
-                postlist:[]
+                postlist:[],
+                creatorid:""
             }
         },
         methods:{
@@ -79,6 +86,7 @@
                 console.log('cid condition: ', thisurl.searchParams.get("cid"))
                 if (thisurl.searchParams.get("cid") != null) {
                     var CID = thisurl.searchParams.get("cid");
+                    this.creatorid=CID;
                     console.log("CID: ",CID)
                 }
                 let output = null;
