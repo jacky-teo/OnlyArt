@@ -46,10 +46,9 @@ def view(creator_consumer):
     subStatus = invoke_http(subscription_url, json=creator_consumer)
 
     subCode = subStatus["code"]
-    subMsg = json.dumps(subStatus["message"])
     subData = subStatus['data']
     subType = subStatus['isSubbed']
-    message = subMsg
+    message = subStatus["message"]
 
     if subCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view.error",
