@@ -5,23 +5,22 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
-from itsdangerous import json       #not sure how to use this module (copy pasted from labs) but fyi its for security purposes
+# from itsdangerous import json       #not sure how to use this module (copy pasted from labs) but fyi its for security purposes
 import requests
 from invokes import *
 import amqp_setup
-import pika
+# import pika
 import json
 import amqp_setup
-#NEED CONSUMER ID + PAYPAL EMAIL
+
 app = Flask(__name__)
 CORS(app)
 
 creator_URL = "http://localhost:5002/creator/price"
 add_subscription_URL ="http://localhost:5006/subscription/add"
 
-
-#app handles incoming HTTP request
-@app.route("/subscribe", methods=['POST', 'GET'])
+# app handles incoming HTTP request
+@app.route("/subscribe", methods=['POST'])
 def check_request():
     # Check if input data is valid and if request data is in json format
     if request.is_json:
@@ -29,7 +28,7 @@ def check_request():
             #input data correct, call processSubscription function
             attempt = request.get_json()
             print("\nReceived a request to subscribe in JSON:", attempt)
-            result = retrieveInformation(attempt)
+            result = retrieveCreatorInformation(attempt)
             return result
 
         except Exception as e:
@@ -46,7 +45,7 @@ def check_request():
             }), 400 # Bad Request Input
 
 
-def retrieveInformation(attempt):
+def retrieveCreatorInformation(attempt):
     # Pull creator information from creator_account
     print('\n-----Invoking creator_account microservice-----')
     subscribe_result = invoke_http(creator_URL, method="GET", json=attempt)
