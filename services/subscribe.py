@@ -97,35 +97,35 @@ def retrieveCreatorInformation(attempt):
         # invoke_http(activity_log_URL, method="POST", json=order_result)            
         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.info", body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
-# @app.route("/confirmSubscription", methods = ['GET', 'POST'])
-# #function that passes in result from PayPal service after payment processed
-# def confirmPayment():
-#     print('\n Check if payment was processed successfully')
-#     #check if input data is valid and if request data is in json format
-#     if request.is_json:
-#         try: 
-#             #input data correct, call processSubscription function
-#             attempt = request.get_json()
-#             print("\nReceived a request to subscribe in JSON:", attempt)
-#             result = invoke_http(add_subscription_URL, method='POST', json =attempt)
-#             return result
+@app.route("/confirmSubscription", methods = ['POST'])
+# Function that passes in result from PayPal service after payment processed
+def confirmPayment():
+    print('Check if payment was processed successfully')
+    #check if input data is valid and if request data is in json format
+    if request.is_json:
+        try: 
+            #input data correct, call processSubscription function
+            attempt = request.get_json()
+            print("Received a request to subscribe in JSON:", attempt)
+            result = invoke_http(add_subscription_URL, method='POST', json =attempt)
+            return result
 
-#         except Exception as e:
-#             #exception for error handling
-#             exc_type, exc_obj, exc_tb = sys.exc_info()
-#             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-#             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
-#             print(ex_str)
+        except Exception as e:
+            #exception for error handling
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+            print(ex_str)
 
-#             print('Failed to subscribe. Invalid JSON')
-#             return jsonify({
-#                 "code": 400,
-#                 "message": "Request should be in JSON. Error: " + ex_str
-#             }), 400 
-#     #return error response if input invalid
-#     #receive JSON from UI
-#     #update subscription link
-#     #thank you page
+            print('Failed to subscribe. Invalid JSON')
+            return jsonify({
+                "code": 400,
+                "message": "Request should be in JSON. Error: " + ex_str
+            }), 400 
+    #return error response if input invalid
+    #receive JSON from UI
+    #update subscription link
+    #thank you page
         
 if __name__ == "__main__":
     

@@ -69,6 +69,15 @@ paypal.Buttons({
 
 }).render('#paypal-button-container');
 
+async function confirmSubscription(){
+    pass
+}
+
+
+
+
+
+
 // For Paypal Javascript SDK
 
 // Paypal Developer Dashboard: https://developer.paypal.com/developer/applications 
