@@ -40,7 +40,7 @@ def post_content():
         creatorID_JSON = json.dumps({"CREATORID":creatorID}) ## Add creatorID as a json file
         consumerTelegram = telegramTags(creatorID_JSON) ## Get all the followers that are subscribed to creator
         creatorinfo= creatorInformation(creatorID)#/creator/getinfo/<string:creatorid>
-        print(creatorinfo)
+        print(creatorinfo['data'])
         # print(type (creatorinfo))
         notifyStatus = notifyUsers(consumerTelegram,creatorname="jacky")
         return notifyStatus
