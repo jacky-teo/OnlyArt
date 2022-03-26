@@ -10,9 +10,39 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>View Content</title>
+    <style>
+        .center{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%) 
+        }
+        .loader {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        z-index: 1;
+        width: 120px;
+        height: 120px;
+        margin: -76px 0 0 -76px;
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #2b2b2b;
+        -webkit-animation: spin 2s linear infinite;
+        animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
-    <div id="app" class="mx-3">
+
+    <div class="loader" id="loader"></div>
+    <div id="app" class="mx-3" style="display:none">
         <div class="card-group">
             <div class="card" v-for="post in postlist">
                 <img :src="post.imgurl" class="card-img-top" alt="...">
@@ -30,6 +60,11 @@
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
+    //mainbody = document.getElementById("app");
+    //mainbody.addEventListener("load", function(){
+    //document.getElementById("loader").style.display = "none";    
+    //document.getElementById("app").style.display = "block";
+   // });
     console.log("-----script running----")
     const app = Vue.createApp({
         data(){
@@ -63,6 +98,9 @@
                             this.postlist.push(listobject);
 
                         }
+                        console.log("done");
+                        document.getElementById("app").style.display = "block";
+                        document.getElementById("loader").style.display = "none";
                     },
                     (error) => {
                         console.log(error)
