@@ -45,14 +45,14 @@ def find_by_creatorID():
     init_firebase() # initialize firebase
 
     content_list = Content.query.filter_by(CREATORID=creatorID)
-    bucket = storage.bucket()
-    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
+    bucket = storage.bucket() #link to storage inside firebase
+    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/')) #get a list of images under specified creator
     urls = [] # used later to store urls
     # upload via file
     
     for item in blobs[1:]:
         item.make_public()
-        urls.append(item.public_url)
+        urls.append(item.public_url) #Get a list of Public URLS so images can be views
 
     if content_list:
         return jsonify({
@@ -67,20 +67,20 @@ def find_by_creatorID():
     ),404  
 
 
-@app.route("/unsubbed") ## My unsub is broken T____T
+@app.route("/unsubbed")
 def unsubbed():
     data = request.get_json()
-    creatorID = data["CREATORID"]
+    creatorID = data["CREATORID"] 
     init_firebase()
 
-    content_list = Content.query.filter_by(CREATORID=creatorID).limit(3)
+    content_list = Content.query.filter_by(CREATORID=creatorID).limit(3) #Limit the number of images users can view to 3
     bucket = storage.bucket()
-    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/',max_results=4))
+    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/',max_results=4)) #limit the number of images the users can view to 3
     urls = []
     # upload via file
-    for item in blobs[1:]:
+    for item in blobs[1:]:  #ignore the first file cause is a full storage folder
         item.make_public()
-        urls.append(item.public_url)
+        urls.append(item.public_url) 
 
     if content_list:
         return jsonify({
@@ -130,7 +130,7 @@ def delete(postID):
         data = content.json()
         if data['IMG_EXT']:
             fileEXT = data['IMG_EXT']
-            delete_firebase(postID,fileEXT)
+            delete_firebase(postID,fileEXT) ## calls firebase atomic mircoservice to delete image inside firebase
 
         db.session.delete(content)
         db.session.commit()
@@ -163,7 +163,7 @@ def update(postID):
             file = request.files['file'] #Get file from HTML post request
             if file:
                 fileEXT = file.mimetype.split('/')[1]
-                update_firebase(creatorID,imageID,file,fileEXT)
+                update_firebase(creatorID,imageID,file,fileEXT) ## calls firebase atomic mircoservice to update image inside firebase
 
         data = request.get_json()
         if data['DESCRIPTION']:

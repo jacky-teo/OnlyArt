@@ -34,8 +34,8 @@ def post_content():
         creatorID= request.form['creatorID'] ## Get the CreatorID from form
         description = request.form['description']  ## Get the description from form
 
-    data = upload_firebase(file,creatorID,description)
-    data_json =  json.dumps(data) 
+    data = upload_firebase(file,creatorID,description) #uploads all the information into firebase
+    data_json =  json.dumps(data)  # converts data into json
     try: 
         upload_content(data_json) # Upload image into firebase and it goes to SQL
         creatorID_JSON = json.dumps({"CREATORID":creatorID}) ## Add creatorID as a json file
