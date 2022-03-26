@@ -22,14 +22,14 @@ add_subscription_URL ="http://localhost:5006/subscription/add"
 
 #app handles incoming HTTP request
 @app.route("/subscribe", methods=['POST', 'GET'])
-def create_subscription():
-    #check if input data is valid and if request data is in json format
+def check_request():
+    # Check if input data is valid and if request data is in json format
     if request.is_json:
         try: 
             #input data correct, call processSubscription function
             attempt = request.get_json()
             print("\nReceived a request to subscribe in JSON:", attempt)
-            result = processSubscription(attempt)
+            result = retrieveInformation(attempt)
             return result
 
         except Exception as e:
@@ -39,16 +39,16 @@ def create_subscription():
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
             print(ex_str)
 
-            print('Failed to subscribe')
+            print('Failed to subscribe. Invalid JSON')
             return jsonify({
-                "code": 500,
-                "message": "subscribe.py internal error: " + ex_str
-            }), 500 #return error response if input invalid
+                "code": 400,
+                "message": "Request should be in JSON. Error: " + ex_str
+            }), 400 # Bad Request Input
 
 
-def processSubscription(attempt):
-    #Verify if consumer has already subscribed through subscription link
-    print('\n-----Invoking subscriber link check microservice-----')
+def retrieveInformation(attempt):
+    # Pull creator information from creator_account
+    print('\n-----Invoking creator_account microservice-----')
     subscribe_result = invoke_http(creator_URL, method="GET", json=attempt)
     print('subscribe_result:', subscribe_result)
 
@@ -129,11 +129,11 @@ def confirmPayment():
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
             print(ex_str)
 
-            print('Failed to subscribe')
+            print('Failed to subscribe. Invalid JSON')
             return jsonify({
-                "code": 500,
-                "message": "subscribe.py internal error: " + ex_str
-            }), 500 
+                "code": 400,
+                "message": "Request should be in JSON. Error: " + ex_str
+            }), 400 
     #return error response if input invalid
     #receive JSON from UI
     #update subscription link
