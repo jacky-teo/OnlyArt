@@ -83,9 +83,9 @@ def get_info(creatorid):
         return jsonify(
             {
                 "code": 200,
-                "data": [{
+                "data": {
                     "username":status.USERNAME,
-                    "email": status.EMAIL}]
+                    "email": status.EMAIL}
             }
         )
     return jsonify(
