@@ -10,15 +10,6 @@ document.getElementById('payment-information').innerHTML = `
 async function redirectPayment() {
     console.log("--- JS FUNCTION redirectPayment() ---")
     
-    // const Http = new XMLHttpRequest();
-    // const url='http://localhost:5002/creator/price?CREATORID=CR001';
-    // Http.open("GET", url);
-    // Http.send();
-
-    // Http.onreadystatechange = (e) => {
-    //     console.log(Http.responseText)
-    // }
-    
     var subscribeURL = "http://localhost:5101/subscribe"
     var data = {CREATORID: sessionStorage.getItem('creatorID')}
     var otherParams = {
