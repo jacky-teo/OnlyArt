@@ -100,7 +100,7 @@ def retrieveCreatorInformation(attempt):
 @app.route("/confirmSubscription", methods = ['POST'])
 # Function that passes in result from PayPal service after payment processed
 def confirmPayment():
-    print('Check if payment was processed successfully')
+    print('Checking if payment was processed successfully')
     #check if input data is valid and if request data is in json format
     if request.is_json:
         try: 
