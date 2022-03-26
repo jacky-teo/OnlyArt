@@ -7,8 +7,8 @@ import sys
 
 from invokes import invoke_http
 
-from amqp_setup import amqp_setup
 import pika
+import amqp_setup
 import json
 
 app = Flask(__name__)
@@ -25,7 +25,7 @@ def view_content():
     if request.is_json:
         try:
             creator_consumer = request.get_json()
-            result = getStatus(creator_consumer)
+            result = view(creator_consumer)
             return(result)
 
         except Exception as e:
@@ -42,7 +42,7 @@ def view_content():
             }), 500
 
 
-def getStatus(creator_consumer):
+def view(creator_consumer):
     subStatus = invoke_http(subscription_url, json=creator_consumer)
 
     subCode = subStatus["code"]
@@ -82,11 +82,43 @@ def getStatus(creator_consumer):
         amqp_setup.channel.basic_publish(
             exchange=amqp_setup.exchangename, routing_key="view.info", body=message)
 
-    if subType == 1:
+    if subType == 2:
         unsubbed = invoke_http(unsubbed_url, json=crData)
+
+        conCode = unsubbed["code"]
+        message = unsubbed["message"]
+
+        if conCode not in range(200, 300):
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.unsubbed_content.error",
+                                             body=message, properties=pika.BasicProperties(delivery_mode=2))
+
+            return {
+                "code": 500,
+                "data": {"unsubbedContent": unsubbed},
+                "message": "Failed to obtain unsubbed content"
+            }
+        else:
+            amqp_setup.channel.basic_publish(
+                exchange=amqp_setup.exchangename, routing_key="view_content.unsubbed_content.info", body=message)
+
         return unsubbed
     else:
         subbed = invoke_http(subbed_url, json=crData)
+        conCode = subbed["code"]
+        message = subbed["message"]
+
+        if conCode not in range(200, 300):
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subbed_content.error",
+                                             body=message, properties=pika.BasicProperties(delivery_mode=2))
+
+            return {
+                "code": 500,
+                "data": {"subbedContent": subbed},
+                "message": "Failed to obtain subbed content"
+            }
+        else:
+            amqp_setup.channel.basic_publish(
+                exchange=amqp_setup.exchangename, routing_key="view_content.subbed_content.info", body=message)
         return subbed
 
 
