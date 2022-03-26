@@ -48,13 +48,15 @@ def find_by_creatorID():
     init_firebase()  # initialize firebase
 
     content_list = Content.query.filter_by(CREATORID=creatorID)
-    bucket = storage.bucket()
+    bucket = storage.bucket()  # link to storage inside firebase
+    # get a list of images under specified creator
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
     urls = []  # used later to store urls
     # upload via file
 
     for item in blobs[1:]:
         item.make_public()
+        # Get a list of Public URLS so images can be views
         urls.append(item.public_url)
 
     if content_list:
@@ -77,12 +79,14 @@ def unsubbed():
     creatorID = data["CREATORID"]
     init_firebase()
 
-    content_list = Content.query.filter_by(CREATORID=creatorID).limit(3)
+    content_list = Content.query.filter_by(CREATORID=creatorID).limit(
+        3)  # Limit the number of images users can view to 3
     bucket = storage.bucket()
+    # limit the number of images the users can view to 3
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/', max_results=4))
     urls = []
     # upload via file
-    for item in blobs[1:]:
+    for item in blobs[1:]:  # ignore the first file cause is a full storage folder
         item.make_public()
         urls.append(item.public_url)
 
@@ -139,6 +143,7 @@ def delete(postID):
         data = content.json()
         if data['IMG_EXT']:
             fileEXT = data['IMG_EXT']
+            # calls firebase atomic mircoservice to delete image inside firebase
             delete_firebase(postID, fileEXT)
 
         db.session.delete(content)
@@ -174,6 +179,7 @@ def update(postID):
             file = request.files['file']  # Get file from HTML post request
             if file:
                 fileEXT = file.mimetype.split('/')[1]
+                # calls firebase atomic mircoservice to update image inside firebase
                 update_firebase(creatorID, imageID, file, fileEXT)
 
         data = request.get_json()
