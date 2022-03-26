@@ -46,13 +46,14 @@ def get_creator_price():
         return jsonify(
             {
                 "code": 200,
-                "data": status.json()
+                "data": status.json(),
+                'message': 'Creator price returned successfully'
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "Creator does not exist."
+            "message": "Creator does not exist"
         }
     ), 404
 
@@ -66,13 +67,14 @@ def get_all():
                 "code": 200,
                 "data": {
                     "creators": [creator.json() for creator in creatorlist]
-                }
+                },
+                'message': 'List of creators successfully returned'
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "There are no creators."
+            "message": "There are no creators"
         }
     ), 404
 
@@ -90,13 +92,14 @@ def get_info(creatorid):
                 "code": 200,
                 "data": {
                     "username": status.USERNAME,
-                    "email": status.EMAIL}
+                    "email": status.EMAIL},
+                'message': 'Creator information successfully returned'
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "Creator does not exist."
+            "message": "Creator does not exist"
         }
     ), 404
 
