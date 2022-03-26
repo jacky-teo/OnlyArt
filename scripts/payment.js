@@ -1,13 +1,16 @@
 var platform_email = "sb-vrehs14346230@business.example.com";
-var payee_email = "sb-go47cv14389012@business.example.com";
-var price = "25"
-var platform_fee = "5"
+var payee_username = sessionStorage.getItem('creatorUsername');
+var payee_email = sessionStorage.getItem('creatorEmail');
+var price = sessionStorage.getItem('price');
+var platform_fee = "5";
 
 // HTTP Request the order details (API call)
 // teRequest from payment microservice OR complex microservice
 
 document.getElementById('payment-summary').innerHTML = `
-    <b>Transfering funds to:</b> ${payee_email}<br>
+    <b>Transfering funds to:</b> <br>
+    ${payee_username}<br>
+    ${payee_email}<br>
     <b>Price:</b> $${price}SGD
     `;
 

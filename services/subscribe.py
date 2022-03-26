@@ -26,7 +26,7 @@ def check_request():
         try: 
             #input data correct, call processSubscription function
             attempt = request.get_json()
-            print("\nReceived a request to subscribe in JSON:", attempt)
+            print("Received a request to subscribe in JSON:", attempt)
             result = retrieveCreatorInformation(attempt)
             return result
 
@@ -46,8 +46,7 @@ def check_request():
 
 def retrieveCreatorInformation(attempt):
     # Pull creator information from creator_account
-    print('\n-----Invoking creator_account microservice-----')
-    print(attempt)
+    print('-----Invoking creator_account microservice-----')
     retrieveInfo = invoke_http(creator_URL, method="GET", json=attempt)
     print('information_request:', retrieveInfo)
     
@@ -84,12 +83,14 @@ def retrieveCreatorInformation(attempt):
 
         print(price)
         creatorID = data['CREATORID']
+        creatorUsername = data['USERNAME']
         email = data['EMAIL']
         return {
                 "code": 200,
                 "price": price,
                 "creatorID" : creatorID ,
                 "creatorEmail": email,
+                "creatorUsername": creatorUsername
             }
 
         # Update Activity AMQP 
