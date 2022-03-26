@@ -55,11 +55,15 @@ paypal.Buttons({
                 var transaction = orderData.purchase_units[0].payments.captures[0];
                 // alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
 
+            console.log("Payment completed.")
+            confirmSubscription(orderData)
+
             // When ready to go live, remove the alert and show a success message within this page. For example:
                 var element = document.getElementById('paypal-button-container');
                 element.innerHTML = '';
                 element.innerHTML = '<h3>Thank you for your payment!</h3>';
                 // Or go to another URL:  actions.redirect('thank_you.html');
+
         });
     }
 
@@ -69,8 +73,55 @@ paypal.Buttons({
 
 }).render('#paypal-button-container');
 
-async function confirmSubscription(){
-    pass
+async function confirmSubscription(data){
+    console.log("--- JS FUNCTION redirectPayment() ---")
+    
+    var subscribeURL = "http://localhost:5101/confirmSubscription"
+    var otherParams = {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }
+
+    // STOPPING HERE, NEED TO FIND MORE INFORMATION ================================================================================================
+    try {
+        console.log('LOADING...')
+        const response = 
+            await fetch(
+                subscribeURL, otherParams
+            );
+        
+        const result = await response.json();
+            if (response.status === 200) {
+                // Success Case
+                console.log('SUCCESS CASE')
+                console.log(result)
+
+                // code = result.code
+                // creatorUsername = result.creatorUsername
+                // creatorEmail = result.creatorEmail
+                // creatorID = result.creatorID
+                // price = result.price
+                
+                // sessionStorage.setItem('creatorUsername',creatorUsername)
+                // sessionStorage.setItem('creatorEmail',creatorEmail)
+                // sessionStorage.setItem('price',price)
+
+                // window.location.href = "./payment.html";
+            } else if (response.status === 404) {
+                // Error
+                console.log('Error: Response 404')
+            } else {
+                // Error
+                console.log('Error: Response ???')
+                throw response.status
+            }
+    } catch (error) {
+        console.log('Error: Error in the service')
+    }
 }
 
 
