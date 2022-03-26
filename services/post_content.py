@@ -33,17 +33,17 @@ def post_content():
         file = request.files['file'] ## Get the file to be uploaded
         creatorID= request.form['creatorID'] ## Get the CreatorID from form
         description = request.form['description']  ## Get the description from form
-    data = upload_firebase(file,creatorID,description)
-    data_json =  json.dumps(data) 
+
+    data = upload_firebase(file,creatorID,description) #uploads all the information into firebase
+    data_json =  json.dumps(data)  # converts data into json
     try: 
-        uploadinformation = upload_content(data_json) # Upload image into firebase and it goes to SQL
+        upload_content(data_json) # Upload image into firebase and it goes to SQL
         creatorID_JSON = json.dumps({"CREATORID":creatorID}) ## Add creatorID as a json file
         consumerTelegram = telegramTags(creatorID_JSON) ## Get all the followers that are subscribed to creator
-        creatorinfo= creatorInformation(creatorID)#/creator/getinfo/<string:creatorid>
-        print(creatorinfo['data'])
-        # print(type (creatorinfo))
-        notifyStatus = notifyUsers(consumerTelegram,creatorname="jacky")
-        return notifyStatus
+        creatorinfo= creatorInformation(creatorID)# Get creator information
+        creatorname = creatorinfo['data']['username'] #Get creator name to use for notification status
+        notifyStatus = notifyUsers(consumerTelegram,creatorname) #notify users
+        return notifyStatus # returns notification to users
 
     except Exception as e:
                 # Unexpected error in code
@@ -54,10 +54,10 @@ def post_content():
 
                 return jsonify({
                     "code": 500,
-                    "message": "post_content.py internal error: " + ex_str
+                    "message": "post_content internal error: " + ex_str
                 }), 500
 
-def upload_content(json):
+def upload_content(json): 
     uploadInformation = invoke_http(upload_url,method='POST',json=json)
     if uploadInformation['code'] not in range(200,300):
         return {
@@ -68,13 +68,25 @@ def upload_content(json):
     return uploadInformation
 
 
-def telegramTags(uploadInformation):
+def telegramTags(uploadInformation): 
     tags = invoke_http(subscription_url,method="GET",json=uploadInformation)
+    if tags['code'] not in range(200,300):
+        return {
+            "code": 500,
+            "data": {"tags":tags},
+            "message": "Failed to retrieve subscribers"
+        }  
     return tags
 
 def notifyUsers(tags,creatorname):
     
     notification_status = invoke_http(f"{notification_url}{creatorname}",json=tags)
+    if notification_status['code'] not in range(200,300):
+        return {
+            "code": 500,
+            "data": {"notification_status":notification_status},
+            "message": "Failed to notify users"
+        }
     return notification_status
 
 def creatorInformation(creatorID):
