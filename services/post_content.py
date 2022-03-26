@@ -74,7 +74,7 @@ def upload_content(json):
     message = uploadInformation['message']
 
     if uploadCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload.error",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.error",
                                          body=message, properties=pika.BasicProperties(delivery_mode=2))
 
         return {
@@ -83,7 +83,7 @@ def upload_content(json):
             "message": "Failed to upload image"
         }
     else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload.info",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.info",
                                          body=message)
     return uploadInformation
 
@@ -94,7 +94,7 @@ def telegramTags(uploadInformation):
     message = tags['message']
 
     if tagsCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.telegram.error",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.error",
                                          body=message)
         return {
             "code": 500,
@@ -102,7 +102,7 @@ def telegramTags(uploadInformation):
             "message": "Failed to retrieve subscribers"
         }
     else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.telegram.info",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",
                                          body=message)
     return tags
 
@@ -114,7 +114,7 @@ def notifyUsers(tags, creatorname):
     message = notification_status['message']
 
     if notiCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.notification.error",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.error",
                                          body=message)
         return {
             "code": 500,
@@ -122,7 +122,7 @@ def notifyUsers(tags, creatorname):
             "message": "Failed to notify users"
         }
     else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.notification.info",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.info",
                                          body=message)
     return notification_status
 
@@ -133,7 +133,7 @@ def creatorInformation(creatorID):
     message = info['message']
 
     if infoCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.creator.error",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.get_creator.error",
                                          body=message)
         return {
             "code": 500,
@@ -141,7 +141,7 @@ def creatorInformation(creatorID):
             "message": "Failed to notify retrieve creator ID"
         }
     else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.creator.info",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.get_creator.info",
                                          body=message)
     return info
 
