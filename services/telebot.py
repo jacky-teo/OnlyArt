@@ -6,7 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 teletoken = os.getenv('TELEGRAM_KEY')
-engine = db.create_engine('mysql+mysqlconnector://root:root@localhost:3306/notification')
+# engine = db.create_engine('mysql+mysqlconnector://root:root@localhost:3306/notification') # For Mac
+engine = db.create_engine('mysql+mysqlconnector://is213@localhost:3306/notification')
 connection = engine.connect()
 metadata = db.MetaData()
 notification = db.Table('notification', metadata, autoload=True, autoload_with=engine)
