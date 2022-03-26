@@ -51,7 +51,7 @@ def view(creator_consumer):
     message = subStatus["message"]
 
     if subCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view.error",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.error",
                                          body=message, properties=pika.BasicProperties(delivery_mode=2))
 
         return {
@@ -60,7 +60,7 @@ def view(creator_consumer):
             "message": "Failed to obtain subscription status"
         }
     else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view.info",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.info",
                                          body=message)
 
     creatorPrice = invoke_http(creator_url, json=subData)
@@ -69,7 +69,7 @@ def view(creator_consumer):
     crData = creatorPrice["data"]
 
     if crCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view.error",
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.error",
                                          body=message, properties=pika.BasicProperties(delivery_mode=2))
 
         return {
@@ -79,7 +79,7 @@ def view(creator_consumer):
         }
     else:
         amqp_setup.channel.basic_publish(
-            exchange=amqp_setup.exchangename, routing_key="view.info", body=message)
+            exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.info", body=message)
 
     if subType == 2:
         unsubbed = invoke_http(unsubbed_url, json=crData)
