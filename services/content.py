@@ -4,7 +4,7 @@ from flask_cors import CORS
 from datetime import datetime
 from firebase_admin import storage
 import json
-from firebase import delete_firebase,update_firebase,init_firebase
+from firebase import delete_firebase, update_firebase, init_firebase
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/content'
@@ -14,17 +14,20 @@ db = SQLAlchemy(app)
 
 CORS(app)
 
+
 class Content(db.Model):
     __tablename__ = 'content'
     POSTID = db.Column(db.String(13), primary_key=True)
     CREATORID = db.Column(db.String(64), nullable=False)
     DESCRIPTION = db.Column(db.String(64), nullable=False)
-    IMAGE_ID = db.Column(db.String(64), nullable=False) ## Storing imageID for firebase
+    # Storing imageID for firebase
+    IMAGE_ID = db.Column(db.String(64), nullable=False)
     IMG_EXT = db.Column(db.String(64), nullable=False)
     POST_DATE = db.Column(db.DateTime, nullable=True, default=datetime.now)
-    modified = db.Column(db.DateTime, nullable=True,default=datetime.now, onupdate=datetime.now)
+    modified = db.Column(db.DateTime, nullable=True,
+                         default=datetime.now, onupdate=datetime.now)
 
-    def __init__(self, POSTID, CREATORID, DESCRIPTION, IMAGE_ID,IMG_EXT,POST_DATE,modified):
+    def __init__(self, POSTID, CREATORID, DESCRIPTION, IMAGE_ID, IMG_EXT, POST_DATE, modified):
         self.POSTID = POSTID
         self.CREATORID = CREATORID
         self.DESCRIPTION = DESCRIPTION
@@ -34,40 +37,41 @@ class Content(db.Model):
         self.modified = modified
 
     def json(self):
-        
-        return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE_ID": self.IMAGE_ID,"IMG_EXT":self.IMG_EXT,"POST_DATE": self.POST_DATE,"modified": self.modified}
+
+        return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE_ID": self.IMAGE_ID, "IMG_EXT": self.IMG_EXT, "POST_DATE": self.POST_DATE, "modified": self.modified}
 
 
 @app.route("/subbed")
 def find_by_creatorID():
     data = request.get_json()
     creatorID = data["CREATORID"]
-    init_firebase() # initialize firebase
+    init_firebase()  # initialize firebase
 
     content_list = Content.query.filter_by(CREATORID=creatorID)
     bucket = storage.bucket()
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
-    urls = [] # used later to store urls
+    urls = []  # used later to store urls
     # upload via file
-    
+
     for item in blobs[1:]:
         item.make_public()
         urls.append(item.public_url)
 
     if content_list:
         return jsonify({
-            "code":200,
-            "data":[content.json() for content in content_list],
-            "urls":urls
+            "code": 200,
+            "data": [content.json() for content in content_list],
+            "urls": urls,
+            'message': 'Content found'
         })
     return jsonify({
-        "code":404,
-        "message":"Content Not Found"
-        }
-    ),404  
+        "code": 404,
+        "message": "Content not found"
+    }
+    ), 404
 
 
-@app.route("/unsubbed") ## My unsub is broken T____T
+@app.route("/unsubbed")
 def unsubbed():
     data = request.get_json()
     creatorID = data["CREATORID"]
@@ -75,7 +79,7 @@ def unsubbed():
 
     content_list = Content.query.filter_by(CREATORID=creatorID).limit(3)
     bucket = storage.bucket()
-    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/',max_results=4))
+    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/', max_results=4))
     urls = []
     # upload via file
     for item in blobs[1:]:
@@ -84,53 +88,58 @@ def unsubbed():
 
     if content_list:
         return jsonify({
-            "code":200,
-            "data":[content.json() for content in content_list],
-            "urls":urls
+            "code": 200,
+            "data": [content.json() for content in content_list],
+            "urls": urls,
+            'message': 'Content found'
         })
     return jsonify({
-        "code":404,
-        "message":"Content Not Found"
-        }
-    ),404
+        "code": 404,
+        "message": "Content not found"
+    }
+    ), 404
 
 
-@app.route("/upload",methods=['POST','GET'])
+@app.route("/upload", methods=['POST', 'GET'])
 def upload():
     data = request.get_json()
     data = json.loads(data)
-    postID,creatorID,description,imageID,imageEXT = data['POSTID'],data['CREATORID'],data['DESCRIPTION'],data['IMAGE_ID'],data['IMG_EXT']
-    toUpload = Content(POSTID=postID,CREATORID=creatorID,DESCRIPTION=description,IMAGE_ID=imageID,IMG_EXT=imageEXT,POST_DATE=None,modified=None) ## Create object to update sql
+    postID, creatorID, description, imageID, imageEXT = data['POSTID'], data[
+        'CREATORID'], data['DESCRIPTION'], data['IMAGE_ID'], data['IMG_EXT']
+    toUpload = Content(POSTID=postID, CREATORID=creatorID, DESCRIPTION=description, IMAGE_ID=imageID,
+                       IMG_EXT=imageEXT, POST_DATE=None, modified=None)  # Create object to update sql
     try:
-        db.session.add(toUpload) ## Update SQL
+        db.session.add(toUpload)  # Update SQL
         db.session.commit()
     except Exception as e:
         return jsonify(
-        {
-            "code": 500,
-            "message": "An error occurred while uploading the content. " + str(e)
-        }
-    ), 500
+            {
+                "code": 500,
+                "message": "An error occurred while uploading the content. " + str(e)
+            }
+        ), 500
 
     return jsonify(
         {
             "code": 201,
-            "data": toUpload.json()
+            "data": toUpload.json(),
+            'message': 'Upload successful'
         }
     ), 201
 
-@app.route("/delete/<string:postID>",methods=['POST','GET','DELETE'])
+
+@app.route("/delete/<string:postID>", methods=['POST', 'GET', 'DELETE'])
 def delete(postID):
-    init_firebase() ## Initiate firebase
+    init_firebase()  # Initiate firebase
     # creatorID,imageID= postID.split('_')
-    ## Get postID information from Database
+    # Get postID information from Database
     content = Content.query.filter_by(POSTID=postID).first()
-    ## Get Creator ID
+    # Get Creator ID
     if content:
         data = content.json()
         if data['IMG_EXT']:
             fileEXT = data['IMG_EXT']
-            delete_firebase(postID,fileEXT)
+            delete_firebase(postID, fileEXT)
 
         db.session.delete(content)
         db.session.commit()
@@ -139,7 +148,8 @@ def delete(postID):
                 "code": 200,
                 "data": {
                     "PostID": postID
-                }
+                },
+                'message': 'Delete successful'
             }
         )
     return jsonify(
@@ -151,19 +161,20 @@ def delete(postID):
             "message": "Content not found."
         }
     ), 404
-        
-@app.route("/update/<string:postID>", methods=['PUT','POST'])
+
+
+@app.route("/update/<string:postID>", methods=['PUT', 'POST'])
 def update(postID):
     content = Content.query.filter_by(POSTID=postID).first()
     information = content.json()
     if content:
-        imageID =f"{information['imageID']}"
+        imageID = f"{information['imageID']}"
         if data['IMAGE_ID']:
-            creatorID=data['CREATORID']
-            file = request.files['file'] #Get file from HTML post request
+            creatorID = data['CREATORID']
+            file = request.files['file']  # Get file from HTML post request
             if file:
                 fileEXT = file.mimetype.split('/')[1]
-                update_firebase(creatorID,imageID,file,fileEXT)
+                update_firebase(creatorID, imageID, file, fileEXT)
 
         data = request.get_json()
         if data['DESCRIPTION']:
@@ -171,12 +182,12 @@ def update(postID):
 
         content.modified = datetime.now()
 
-        
         db.session.commit()
         return jsonify(
             {
                 "code": 200,
-                "data": content.json()
+                "data": content.json(),
+                'message': 'Update successful'
             }
         )
     return jsonify(
@@ -185,9 +196,10 @@ def update(postID):
             "data": {
                 "postID": postID
             },
-            "message": "content not found."
+            "message": "Content not found."
         }
     ), 404
+
 
 if __name__ == '__main__':
     app.run(port=5003, debug=True)
