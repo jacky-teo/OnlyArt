@@ -42,11 +42,11 @@
         <div class='container-fluid text-center py-5'> Showing {{numcreators}} Results</div>
         <div class='container-fluid px-5' id='cardgallery'>
           <div class='row'>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for='pet in creatorlist'>
-              <div class="card my-3 mx-3 petcard">
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for='creator in creatorlist'>
+              <div class="card my-3 mx-3 creatorcard">
                 <div class="card-body">
-                  <h5 class="card-title overflow-hidden">{{pet.creatorname}}</h5>
-                  <a :href="pet.creatorID" class="stretched-link"></a>
+                  <h5 class="card-title overflow-hidden">{{creator.creatorname}}</h5>
+                  <a :href="creator.creatorID" class="stretched-link"></a>
                 </div>
     
               </div>
@@ -81,8 +81,8 @@ const app = Vue.createApp({
     },
     methods: {
         getCreators() {
-            //var petcount = 0;
-            console.log('getpetlist function is running');
+            //var creatorcount = 0;
+            console.log('getcreatorlist function is running');
             var url_string = window.location.href; //window.location.href
             var url = new URL(url_string);
             console.log('pageid condition: ', url.searchParams.get("page"))
@@ -100,7 +100,7 @@ const app = Vue.createApp({
                 .then((response) => {
                     console.log("response: ",response)
                     output = response.data.data.creators
-                    //petData = response.data // global var
+                    //creatorData = response.data // global var
                     console.log("output: ",output)
                     for (result of output) {
                         creatorname = result.USERNAME;
@@ -112,10 +112,10 @@ const app = Vue.createApp({
                         console.log('lower: ', (Number(this.thispage) - 1) * this.resultsperpage);
 
                         if (lowercondition && uppercondition) {
-                            let petobject = {};
-                            petobject['creatorID'] = `/screens/petprofile.html?creatorID=${creatorID}`;
-                            petobject['creatorname'] = creatorname;
-                            this.creatorlist.push(petobject);
+                            let creatorobject = {};
+                            creatorobject['creatorID'] = `creator_info.html?cid=CR${creatorID}`;
+                            creatorobject['creatorname'] = creatorname;
+                            this.creatorlist.push(creatorobject);
                         }
 
                         this.numcreators += 1;
@@ -123,7 +123,7 @@ const app = Vue.createApp({
                     }
                     console.log(this.creatorlist);
                     //this.numcreators = 35; //test 
-                    console.log('pets: ', this.numcreators)
+                    console.log('creators: ', this.numcreators)
                     console.log('resultsperpage: ', this.resultsperpage)
                     this.numpages = Math.ceil(this.numcreators / this.resultsperpage);
                     console.log('numpages', this.numpages)
