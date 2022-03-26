@@ -8,10 +8,9 @@ import os, sys
 # from itsdangerous import json       #not sure how to use this module (copy pasted from labs) but fyi its for security purposes
 import requests
 from invokes import *
-import amqp_setup
-# import pika
+import pika
 import json
-import amqp_setup
+# import amqp_setup
 
 app = Flask(__name__)
 CORS(app)
@@ -48,47 +47,39 @@ def check_request():
 def retrieveCreatorInformation(attempt):
     # Pull creator information from creator_account
     print('\n-----Invoking creator_account microservice-----')
-    subscribe_result = invoke_http(creator_URL, method="GET", json=attempt)
-    print('subscribe_result:', subscribe_result)
-
+    print(attempt)
+    retrieveInfo = invoke_http(creator_URL, method="GET", json=attempt)
+    print('information_request:', retrieveInfo)
     
-    code = subscribe_result["code"]
-    message = json.dumps(subscribe_result) 
+    code = retrieveInfo["code"]
+    # message = json.dumps(retrieveInfo) 
 
-    amqp_setup.check_setup()
+    # amqp_setup.check_setup()
 
-    #Check subscribe_result. If error, send error message to error.py and return error
-    if code not in range(200, 300):
-        # Inform the error microservice
-        print('\n\n-----Publishing the (subscribe error) message with routing_key=subscribe.error-----')
+    # Check HTTP request. 
+    if code not in range(200, 300): # Error!
+        # # Inform the error microservice
+        # print('\n\n-----Publishing the error message with routing_key=subscribe.error-----')
 
-        #route error message to error microservice
-        {amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.error", body=message, properties=pika.BasicProperties(delivery_mode = 2)) }
+        # # Route error message to error microservice
+        # {amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.error", body=message, properties=pika.BasicProperties(delivery_mode = 2)) }
 
-        # - reply from the invocation is not used;
-        # continue even if this invocation fails    
-        print("\nSubscribe status ({:d}) published to the RabbitMQ Exchange:".format(
-            code), subscribe_result)
+        # # - reply from the invocation is not used;
+        # # continue even if this invocation fails    
+        # print("\nStatus ({:d}) published to the RabbitMQ Exchange:".format(
+        #     code), creator_information)
 
         # 7. Return error
         return {
             "code": 500,
-            "data": {"subscribe_result": subscribe_result},
-            "message": "Subcribe failure sent for error handling."
+            "data": {"retrieveInfo": retrieveInfo},
+            "message": "Request failure sent for error handling."
         }
 
-
-    #consumer not subscribed to creator. proceed with subscription payment
-    else:
-        #retrieve payment details through creator_account microservice
+    else: # Success! 
+        # Retrieve payment details through creator_account microservice
         
-        #redirect consumer to payment.html to initiate payment
-
-
-        # 4. Record new order
-        # record the activity log anyway
-        #print('\n\n-----Invoking activity_log microservice-----')
-        data = subscribe_result['data']
+        data = retrieveInfo['data']
         price = data['PRICE']
 
         print(price)
@@ -98,45 +89,42 @@ def retrieveCreatorInformation(attempt):
                 "code": 200,
                 "price": price,
                 "creatorID" : creatorID ,
-                "creatorEmail": email
+                "creatorEmail": email,
             }
-        #send json to UI
 
-
-        #print('\n\n-----Publishing the (subscribe info) message with routing_key=subscribe.info-----')        
-
+        # Update Activity AMQP 
         # invoke_http(activity_log_URL, method="POST", json=order_result)            
-        #amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.info", body=message, properties=pika.BasicProperties(delivery_mode = 2))
+        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.info", body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
-@app.route("/confirmSubscription", methods = ['GET', 'POST'])
-#function that passes in result from PayPal service after payment processed
-def confirmPayment():
-    print('\n Check if payment was processed successfully')
-    #check if input data is valid and if request data is in json format
-    if request.is_json:
-        try: 
-            #input data correct, call processSubscription function
-            attempt = request.get_json()
-            print("\nReceived a request to subscribe in JSON:", attempt)
-            result = invoke_http(add_subscription_URL, method='POST', json =attempt)
-            return result
+# @app.route("/confirmSubscription", methods = ['GET', 'POST'])
+# #function that passes in result from PayPal service after payment processed
+# def confirmPayment():
+#     print('\n Check if payment was processed successfully')
+#     #check if input data is valid and if request data is in json format
+#     if request.is_json:
+#         try: 
+#             #input data correct, call processSubscription function
+#             attempt = request.get_json()
+#             print("\nReceived a request to subscribe in JSON:", attempt)
+#             result = invoke_http(add_subscription_URL, method='POST', json =attempt)
+#             return result
 
-        except Exception as e:
-            #exception for error handling
-            exc_type, exc_obj, exc_tb = sys.exc_info()
-            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-            ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
-            print(ex_str)
+#         except Exception as e:
+#             #exception for error handling
+#             exc_type, exc_obj, exc_tb = sys.exc_info()
+#             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+#             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+#             print(ex_str)
 
-            print('Failed to subscribe. Invalid JSON')
-            return jsonify({
-                "code": 400,
-                "message": "Request should be in JSON. Error: " + ex_str
-            }), 400 
-    #return error response if input invalid
-    #receive JSON from UI
-    #update subscription link
-    #thank you page
+#             print('Failed to subscribe. Invalid JSON')
+#             return jsonify({
+#                 "code": 400,
+#                 "message": "Request should be in JSON. Error: " + ex_str
+#             }), 400 
+#     #return error response if input invalid
+#     #receive JSON from UI
+#     #update subscription link
+#     #thank you page
         
 if __name__ == "__main__":
     
