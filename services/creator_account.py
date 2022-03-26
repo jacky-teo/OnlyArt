@@ -33,6 +33,8 @@ class creatorAccount(db.Model):
         return {"CREATORID": self.CREATORID, "USERNAME": self.USERNAME, "PASSWORD": self.PASSWORD, "EMAIL": self.EMAIL, "PRICE": self.PRICE}
 
 # scenario 1
+
+
 @app.route('/creator/price')
 def get_creator_price():
     data = request.get_json()
@@ -54,6 +56,7 @@ def get_creator_price():
         }
     ), 404
 
+
 @app.route('/creator')
 def get_all():
     creatorlist = creatorAccount.query.all()
@@ -74,6 +77,8 @@ def get_all():
     ), 404
 
 # scenario 4
+
+
 @app.route('/creator/getinfo/<string:creatorid>')
 def get_info(creatorid):
     status = creatorAccount.query.filter_by(
@@ -84,7 +89,7 @@ def get_info(creatorid):
             {
                 "code": 200,
                 "data": {
-                    "username":status.USERNAME,
+                    "username": status.USERNAME,
                     "email": status.EMAIL}
             }
         )
