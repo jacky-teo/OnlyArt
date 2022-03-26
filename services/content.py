@@ -185,7 +185,7 @@ def update(postID):
             "data": {
                 "postID": postID
             },
-            "message": "Book not found."
+            "message": "content not found."
         }
     ), 404
 
