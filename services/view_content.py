@@ -20,7 +20,7 @@ unsubbed_url = "http://localhost:5003/unsubbed"
 subbed_url = "http://localhost:5003/subbed"
 
 
-@app.route("/view_content")
+@app.route("/view_content",methods=["POST","GET"])
 def view_content():
     if request.is_json:
         try:
@@ -40,6 +40,12 @@ def view_content():
                 "code": 500,
                 "message": "view_content.py internal error: " + ex_str
             }), 500
+    else:
+        return jsonify({
+                "code": 400,
+                "message": "no json was parsed or invalid json"
+            }), 400
+
 
 
 def view(creator_consumer):

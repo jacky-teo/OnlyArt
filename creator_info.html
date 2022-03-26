@@ -15,7 +15,7 @@
     <div id="app" class="mx-3">
         <div class="card-group">
             <div class="card" v-for="post in postlist">
-                <img src="..." class="card-img-top" alt="...">
+                <img :src="post.imgurl" class="card-img-top" alt="...">
                 <div class="card-body">
                   <h5 class="card-title">{{post.creator}}</h5>
                   <p class="card-text">{{post.desc}}</p>
@@ -42,17 +42,22 @@
                 console.log("getcontent running...")
                 let output = null;
                 const url="http://127.0.0.1:5100/view_content";
-                axios.get(url, {"CREATORID":"CR001","CONSUMERID":"CON001"})
+                const imgurl="https://storage.googleapis.com/onlyfence-9eb40.appspot.com/"
+                axios.post(url,{"CREATORID":"CR001","CONSUMERID":"CON001"})
                     .then((response) => {
                         console.log("response: ",response)
-                        output = response.data;
+                        output = response.data.data;
                         console.log(output);
                         for (result of output){
+                            cid = result.CREATORID
+                            imgid = result.IMAGE_ID
+                            ext = result.IMG_EXT
+                            postimgurl = imgurl+cid+"/"+imgid+"."+ext
+                            console.log("url: ",postimgurl)
                             listobject = {};
                             listobject['creator'] = result.CREATORID;
                             listobject['desc']= result.DESCRIPTION;
-                            listobject['imgid']= result.IMAGE_ID;
-                            listobject['ext']= result.IMG_EXT;
+                            listobject['imgurl']=postimgurl
                             listobject['postid']= result.POSTID
                             listobject['postdate']= result.POST_DATE;
                             this.postlist.push(listobject);
@@ -67,7 +72,7 @@
             }
         },
         created(){
-            this.getContent();
+            this.getContent()
         }
     })
     const vm = app.mount("#app")
