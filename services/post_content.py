@@ -18,7 +18,7 @@ CORS(app)
 upload_url = "http://localhost:5003/upload"
 subscription_url = "http://localhost:5006/subscription/getsubscribers"
 notification_url = "http://localhost:5000/notify/"
-
+creator_url = "http://localhost:5002/creator/getinfo/"
 
 #Step 1 Upload the image & Upload information is returned (content.py)
 # - 
@@ -37,9 +37,12 @@ def post_content():
     data_json =  json.dumps(data) 
     try: 
         uploadinformation = upload_content(data_json) # Upload image into firebase and it goes to SQL
-        creatorID_JSON = json.dumps({"CREATORID":creatorID})
-        consumerTelegram = telegramTags(creatorID_JSON)
-        notifyStatus = notifyUsers(consumerTelegram,creatorID)
+        creatorID_JSON = json.dumps({"CREATORID":creatorID}) ## Add creatorID as a json file
+        consumerTelegram = telegramTags(creatorID_JSON) ## Get all the followers that are subscribed to creator
+        creatorinfo= creatorInformation(creatorID)#/creator/getinfo/<string:creatorid>
+        print(creatorinfo)
+        # print(type (creatorinfo))
+        notifyStatus = notifyUsers(consumerTelegram,creatorname="jacky")
         return notifyStatus
 
     except Exception as e:
@@ -69,10 +72,14 @@ def telegramTags(uploadInformation):
     tags = invoke_http(subscription_url,method="GET",json=uploadInformation)
     return tags
 
-def notifyUsers(tags,creatorID):
+def notifyUsers(tags,creatorname):
     
-    notification_status = invoke_http(f"{notification_url}{creatorID}",json=tags)
+    notification_status = invoke_http(f"{notification_url}{creatorname}",json=tags)
     return notification_status
+
+def creatorInformation(creatorID):
+    info = invoke_http(f'{creator_url}{creatorID}')
+    return info
 
 if __name__ == "__main__":
     app.run(port=5100, debug=True)
