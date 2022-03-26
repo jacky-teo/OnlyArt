@@ -42,7 +42,7 @@ channel.queue_declare(queue=queue_name, durable=True)
 
 # bind Activity_Log queue
 channel.queue_bind(exchange=exchangename,
-                   queue=queue_name, routing_key='post.*')
+                   queue=queue_name, routing_key='#')
 # bind the queue to the exchange via the key
 # 'routing_key=#' => any routing_key would be matched
 
