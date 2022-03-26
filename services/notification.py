@@ -9,11 +9,13 @@ load_dotenv()
 
 app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/notification'  #For Mac
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/notification' # for windows
+# for windows
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/notification'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 token = os.getenv('TELEGRAM_KEY')
 
 db = SQLAlchemy(app)
+
 
 class Notification(db.Model):
     __tablename__ = 'notification'
@@ -38,7 +40,8 @@ def get_all():
                 "code": 200,
                 "data": {
                     "chats": [chat.json() for chat in chatlist]
-                }
+                },
+                'message': 'Successfully retrieved chat ids'
             }
         )
     return jsonify(
@@ -56,7 +59,8 @@ def find_by_isbn13(telegramtag):
         return jsonify(
             {
                 "code": 200,
-                "data": notif.json()
+                "data": notif.json(),
+                'message': 'Notification information found'
             }
         )
     return jsonify(
@@ -82,7 +86,7 @@ def create_notif(telegramtag):
 
     data = request.get_json()
     print(data['chatid'])
-    notif = Notification(data['chatid'],telegramtag)
+    notif = Notification(data['chatid'], telegramtag)
 
     try:
         db.session.add(notif)
@@ -94,22 +98,24 @@ def create_notif(telegramtag):
                 "data": {
                     "telegramtag": telegramtag
                 },
-                "message": "An error occurred creating the notif."
+                "message": "An error occurred creating the notification"
             }
         ), 500
 
     return jsonify(
         {
             "code": 201,
-            "data": notif.json()
+            "data": notif.json(),
+            'message': 'Notification created'
         }
     ), 201
 
-@app.route("/notify/<string:creatorname>",methods=["POST",'GET'])
+
+@app.route("/notify/<string:creatorname>", methods=["POST", 'GET'])
 def send_notif(creatorname):
-    #some function here
+    # some function here
     countnotif = 0
-    #json sent is a list of telegram tags to be notified
+    # json sent is a list of telegram tags to be notified
     data = request.get_json()
     #print("creatorname: ",creatorname)
     #print("data: ",data)
@@ -117,34 +123,37 @@ def send_notif(creatorname):
     print(notiflist)
     #print("NL: ",notiflist)
     for user in notiflist:
-        #request send
+        # request send
         #print("user: ",user)
         if (Notification.query.filter_by(telegramtag=user).first()):
             notif = Notification.query.filter_by(telegramtag=user).first()
             notifinfo = notif.json()
             chatid = notifinfo["chatid"]
             #print("chatid: ",chatid)
-            chatmsg = "Creator " + creatorname + " has posted! Check it out on OnlyFences now!"
+            chatmsg = "Creator " + creatorname + \
+                " has posted! Check it out on OnlyFences now!"
             #chatparams = {'chat_id': chatid , 'text': chatmsg}
-            sendurl = "https://api.telegram.org/bot" + token + "/sendMessage" + "?chat_id=" + chatid + "&text=" + chatmsg 
+            sendurl = "https://api.telegram.org/bot" + token + \
+                "/sendMessage" + "?chat_id=" + chatid + "&text=" + chatmsg
             r = requests.get(sendurl)
             countnotif += 1
-    if countnotif == 0:        
+    if countnotif == 0:
         return jsonify(
-                {
-                    "code": 500,
-                    "message": "Notification was unsuccessful. No notifs sent."
-                }
-            ), 500
+            {
+                "code": 500,
+                "message": "Notification was unsuccessful. No notifs sent."
+            }
+        ), 500
     else:
-        successmsg = "Notification was successful." + str(countnotif) + " number of notifs were sent."
+        successmsg = "Notification was successful." + \
+            str(countnotif) + " number of notifs were sent."
         return jsonify(
-                {
-                    "code": 201,
-                    "message": successmsg
-                }
-            ), 201
+            {
+                "code": 201,
+                "message": successmsg
+            }
+        ), 201
 
 
 if __name__ == '__main__':
-     app.run(host='127.0.0.1', port=5000, debug=True)
+    app.run(host='127.0.0.1', port=5000, debug=True)
