@@ -187,8 +187,7 @@ def get_all_subscribers():
     return jsonify({
         "code": 404,
         "message": "Creator does not exist"
-    }
-    ), 404
+    }), 404
 
 
 if __name__ == '__main__':
