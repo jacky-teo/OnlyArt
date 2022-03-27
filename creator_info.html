@@ -90,27 +90,27 @@
                     console.log("CID: ",CID)
                 }
                 let output = null;
+                var counter = 0
                 const url="http://127.0.0.1:5100/view_content";
                 const imgurl="https://storage.googleapis.com/onlyfence-9eb40.appspot.com/"
                 axios.post(url,{"CREATORID":CID,"CONSUMERID":"CON001"})
                     .then((response) => {
                         console.log("response: ",response)
                         output = response.data.data;
-                        console.log(output);
+                        urls = response.data.urls; // Get all image URLs
                         for (result of output){
-                            cid = result.CREATORID
-                            imgid = result.IMAGE_ID
-                            ext = result.IMG_EXT
-                            postimgurl = imgurl+cid+"/"+imgid+"."+ext
-                            console.log("url: ",postimgurl)
+                            // cid = result.CREATORID
+                            // imgid = result.IMAGE_ID
+                            // ext = result.IMG_EXT
+                            // postimgurl = imgurl+cid+"/"+imgid+"."+ext
                             listobject = {};
                             listobject['creator'] = result.CREATORID;
                             listobject['desc']= result.DESCRIPTION;
-                            listobject['imgurl']=postimgurl
+                            listobject['imgurl']=urls[counter] // using this line instead cause ive already stored the imageURLs inside the responsee
                             listobject['postid']= result.POSTID
                             listobject['postdate']= result.POST_DATE;
                             this.postlist.push(listobject);
-
+                            counter ++
                         }
                         console.log("done");
                         document.getElementById("app").style.display = "block";

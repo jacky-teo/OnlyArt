@@ -1,6 +1,6 @@
 ## Complex Microservice when creator post a content ##
 ## Complex Microservice when consumer views content ##
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,redirect
 from flask_cors import CORS
 from firebase_admin import storage
 import os
@@ -51,7 +51,8 @@ def post_content():
         creatorname = creatorinfo['data']['username']
         notifyStatus = notifyUsers(
             consumerTelegram, creatorname)  # notify users
-        return notifyStatus  # returns notification to users
+        if notifyStatus['code'] == 201:
+            return  redirect("http://localhost/OnlyFence/upload_success.html")  # redirect users to upload_success.html
 
     except Exception as e:
         # Unexpected error in code
