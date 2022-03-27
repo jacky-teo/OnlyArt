@@ -52,9 +52,8 @@ def view(creator_consumer):
     subStatus = invoke_http(subscription_url, json=creator_consumer)
 
     subCode = subStatus["code"]
-    subData = subStatus['data']
-    subType = subStatus['isSubbed']
-    message = subStatus["message"]
+    # message = subStatus["message"]
+    message = json.dumps(subStatus)
 
     if subCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.error",
@@ -65,9 +64,13 @@ def view(creator_consumer):
             "data": {"subStatus": subStatus},
             "message": "Failed to obtain subscription status"
         }
+
     else:
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.info",
                                          body=message)
+
+    subData = subStatus['data']
+    subType = subStatus['isSubbed']
 
     creatorPrice = invoke_http(creator_url, json=subData)
 

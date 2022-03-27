@@ -3,7 +3,7 @@ import os
 
 import amqp_setup
 
-monitorBindingKey='post.*'
+monitorBindingKey='#.info'
 
 def postMadeLog():
     amqp_setup.check_setup()
@@ -16,13 +16,13 @@ def postMadeLog():
     #it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
-    print("\nReceived an post log by " + __file__)
+    print("\nReceived an activity log by " + __file__)
     processPostLog(json.loads(body))
     print() # print a new line feed
 
-def processPostLog(post):
-    print("Recording an post log:")
-    print(post)
+def processPostLog(activity):
+    print("Recording an activity log:")
+    print(activity)
 
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')

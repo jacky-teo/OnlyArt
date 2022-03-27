@@ -29,7 +29,7 @@ channel.queue_declare(queue=queue_name, durable=True)
 
 # bind Error queue
 channel.queue_bind(exchange=exchangename,
-                   queue=queue_name, routing_key='*.error')
+                   queue=queue_name, routing_key='#.error')
 # bind the queue to the exchange via the key
 # any routing_key with two words and ending with '.error' will be matched
 
@@ -42,7 +42,7 @@ channel.queue_declare(queue=queue_name, durable=True)
 
 # bind Activity_Log queue
 channel.queue_bind(exchange=exchangename,
-                   queue=queue_name, routing_key='#')
+                   queue=queue_name, routing_key='#.info')
 # bind the queue to the exchange via the key
 # 'routing_key=#' => any routing_key would be matched
 
