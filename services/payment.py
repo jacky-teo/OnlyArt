@@ -42,7 +42,7 @@ class Payment(db.Model):
     def json(self):
         return {"transactionid": self.transactionid, "consumerid": self.consumerid, "creatorid": self.creatorid, "payment_amount": self.payment_amount, "transaction_date": self.transaction_date, "modified": self.modified}
 
-#get all payments (for testing)
+#get all payment logs (for testing)
 @app.route("/payments")
 def get_all():
     transactions = Payment.query.all()
@@ -62,87 +62,78 @@ def get_all():
         }
     ), 404
 
-#create new payment record (handle successful transactions)
-@app.route("/payments/log", methods=['POST'])
-# Receive HTTP request upon payment completion
-def receiveLogRequest():
-    # Check if the order contains valid JSON 
-    if request.is_json:
-        logData = request.get_json()
-        auth_token = getAuthorization()
-        result = logPayment(logData, auth_token)
-        return jsonify(result), result["code"]
-    else:
-        data = request.get_data()
-        print("Received an invalid request:")
-        print(data)
-        return jsonify({
-            "code": 400,
-            "data": str(data),
-            "message": "Request should be in JSON."
-        }), 400 # Bad Request Input
+# #create new payment record (handle successful transactions)
+# @app.route("/payments/log", methods=['POST'])
+# # Receive HTTP request upon payment completion
+# def receiveLogRequest():
+#     # Check if the order contains valid JSON 
+#     if request.is_json:
+#         logData = request.get_json()
+#         auth_token = getAuthorization()
+#         result = logPayment(logData, auth_token)
+#         return jsonify(result), result["code"]
+#     else:
+#         data = request.get_data()
+#         print("Received an invalid request:")
+#         print(data)
+#         return jsonify({
+#             "code": 400,
+#             "data": str(data),
+#             "message": "Request should be in JSON."
+#         }), 400 # Bad Request Input
 
-# Get API Authorization Token
-def getAuthorization():
-    print("--- Getting Authorization ---")
-    client_id = "Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M"
-    client_secret = "EEyi_jCVZqhDRwq8gvtrh6hnJw6QPuNCGhXqUsLaNr99zeJxWYMwa3kOdM6tYrS8_IrkRT6mQFo8wZ1R"
-    auth_URL = "https://api-m.sandbox.paypal.com/v1/oauth2/token"
-    auth_payload = {'grant_type':'client_credentials'}
-    authorization_response = requests.post(auth_URL, auth=(client_id,client_secret), data = auth_payload)
+# # Get API Authorization Token
+# def getAuthorization():
+#     print("--- Getting Authorization ---")
+#     client_id = "Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M"
+#     client_secret = "EEyi_jCVZqhDRwq8gvtrh6hnJw6QPuNCGhXqUsLaNr99zeJxWYMwa3kOdM6tYrS8_IrkRT6mQFo8wZ1R"
+#     auth_URL = "https://api-m.sandbox.paypal.com/v1/oauth2/token"
+#     auth_payload = {'grant_type':'client_credentials'}
+#     authorization_response = requests.post(auth_URL, auth=(client_id,client_secret), data = auth_payload)
     
-    if authorization_response.status_code != 200: 
-        print("Failed to obtain token from the OAuth 2.0 server")
-    else: 
-        print("Successfully obtained a new token")
-        tokens = json.loads(authorization_response.text)
-        return tokens['access_token']
+#     if authorization_response.status_code != 200: 
+#         print("Failed to obtain token from the OAuth 2.0 server")
+#     else: 
+#         print("Successfully obtained a new token")
+#         tokens = json.loads(authorization_response.text)
+#         return tokens['access_token']
 
-# Retrieve Payment Info
-def retrievePaymentInfo():
-    pass
+# # Retrieve Payment Info
+# def retrievePaymentInfo():
+#     pass
 
-# Log Payment
-def logPayment(logData, auth_token):
-    print("--- Logging the payment ---")
-    print(logData)
+# # Log Payment
+# def logPayment(logData, auth_token):
+#     print("--- Logging the payment ---")
+#     print(logData)
     
-    return { 
-        "code": "code",
-        "data": {
-            "status": "status"
-        },
-        "message": "message"
-    }
-    # data = request.get_json()
-    # data = jsonify(data)
-    # return data
+#     return { 
+#         "code": "code",
+#         "data": {
+#             "status": "status"
+#         },
+#         "message": "message"
+#     }
+#     # data = request.get_json()
+#     # data = jsonify(data)
+#     # return data
 
-# TESTING AUTHORIZATION -------------------------------------------
-@app.route("/payments/auth", methods=['GET'])
-def getAuthorization():
-    print("--- Getting Authorization ---")
-    client_id = "Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M"
-    client_secret = "EEyi_jCVZqhDRwq8gvtrh6hnJw6QPuNCGhXqUsLaNr99zeJxWYMwa3kOdM6tYrS8_IrkRT6mQFo8wZ1R"
-    auth_URL = "https://api-m.sandbox.paypal.com/v1/oauth2/token"
-    auth_payload = {'grant_type':'client_credentials'}
-    authorization_response = requests.post(auth_URL, auth=(client_id,client_secret), data = auth_payload)
+# # TESTING AUTHORIZATION -------------------------------------------
+# @app.route("/payments/auth", methods=['GET'])
+# def getAuthorization():
+#     print("--- Getting Authorization ---")
+#     client_id = "Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M"
+#     client_secret = "EEyi_jCVZqhDRwq8gvtrh6hnJw6QPuNCGhXqUsLaNr99zeJxWYMwa3kOdM6tYrS8_IrkRT6mQFo8wZ1R"
+#     auth_URL = "https://api-m.sandbox.paypal.com/v1/oauth2/token"
+#     auth_payload = {'grant_type':'client_credentials'}
+#     authorization_response = requests.post(auth_URL, auth=(client_id,client_secret), data = auth_payload)
     
-    if authorization_response.status_code != 200: 
-        print("Failed to obtain token from the OAuth 2.0 server")
-    else: 
-        print("Successfully obtained a new token")
-        tokens = json.loads(authorization_response.text)
-        return tokens['access_token']
+#     if authorization_response.status_code != 200: 
+#         print("Failed to obtain token from the OAuth 2.0 server")
+#     else: 
+#         print("Successfully obtained a new token")
+#         tokens = json.loads(authorization_response.text)
+#         return tokens['access_token']
 
-if __name__ == '__main__':
-    app.run(port=5005, debug=True)
-
-# comment
-# comment
-
-"""
-comment 
-
-cvxcv
-"""
+# if __name__ == '__main__':
+#     app.run(port=5005, debug=True)

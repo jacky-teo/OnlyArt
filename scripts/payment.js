@@ -1,6 +1,8 @@
 var platform_email = "sb-vrehs14346230@business.example.com";
+var consumerID = sessionStorage.getItem('consumerID')
 var payee_username = sessionStorage.getItem('creatorUsername');
 var payee_email = sessionStorage.getItem('creatorEmail');
+var creatorID = sessionStorage.getItem('creatorID')
 var price = sessionStorage.getItem('price');
 var platform_fee = "5";
 
@@ -56,7 +58,13 @@ paypal.Buttons({
                 // alert('Transaction '+ transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
 
             console.log("Payment completed.")
-            confirmSubscription(orderData)
+            
+            orderData["CREATORID"] = creatorID
+            orderData["CREATORUSERNAME"] = payee_username
+            orderData["CONSUMERID"] = consumerID
+            console.log(orderData)
+
+            confirmSubscription(JSON.stringify(orderData))
 
             // When ready to go live, remove the alert and show a success message within this page. For example:
                 var element = document.getElementById('paypal-button-container');
@@ -74,7 +82,7 @@ paypal.Buttons({
 }).render('#paypal-button-container');
 
 async function confirmSubscription(data){
-    console.log("--- JS FUNCTION redirectPayment() ---")
+    console.log("--- JS FUNCTION confirmSubscription() ---")
     
     var subscribeURL = "http://localhost:5101/confirmSubscription"
     var otherParams = {
@@ -83,7 +91,7 @@ async function confirmSubscription(data){
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: data
     }
 
     // STOPPING HERE, NEED TO FIND MORE INFORMATION ================================================================================================
