@@ -29,19 +29,52 @@
 </head>
  
 <body >
-        <h1>Upload new File</h1>
-    
-    <form action="http://localhost:5100/post_content" method='post' enctype=multipart/form-data id="forms">
-        CreatorID <input type="text" id='creatorID' name='creatorID'>
-        Description <input type="text" id='description' name='description'>
-        <input type=file name=file id="file">
-        <input type=submit value=Upload id='uploadbtn'>
-    </form>
-    
-        <!-- <div class="progress mt-3" style='height:25px; visibility:hidden' id='pbarContainer'>
-            <div class="progress-bar" role="progressbar" id="pbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-            </div> -->
+        <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">OnlyFences</a>
+          </div>
+        </nav>
+        
+    <div class="container">
+        <h1>Upload New Content</h1>
+        <br/>
+
+        <form action="http://localhost:5100/post_content" method='post' enctype=multipart/form-data id="forms">
+
+        <div class="row">
+            <div class="col">
+                <div class="input-group flex-nowrap">
+                            <span class="input-group-text" id="addon-wrapping">CreatorID</span>
+                            <input type="text" class="form-control" name='creatorID' placeholder="please input ur creatorID" aria-label="CreatorID" aria-describedby="addon-wrapping">
+                </div>
+            </div>
         </div>
+        <br/>
+        
+        <div class="row">
+            <div class="col">
+                <div class="input-group">
+                    <span class="input-group-text">Description</span>
+                    <textarea class="form-control" aria-label="Description" name='description'></textarea>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col">
+                 <div class="input-group">
+                <input type="file" class="form-control" name=file id="file" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                <button class="btn btn-outline-secondary" type="submit" id="inputGroupFileAddon04">Upload</button>
+                
+        </div>
+            </div>
+        </div>
+       
+                <!-- <input type=file name=file id="file">
+                <input type=submit value=Upload id='uploadbtn'> -->
+         </form>
+    </div>
+    </div>
     <div id="err"></div>
     <!-- Bootstrap Javascript; at the end of the <body> -->
    <script 
