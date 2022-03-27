@@ -100,15 +100,16 @@ def retrieveCreatorInformation(attempt):
 @app.route("/confirmSubscription", methods = ['POST'])
 # Function that passes in result from PayPal service after payment processed
 def confirmPayment():
-    print('Checking if payment was processed successfully')
+    print('Checking if payment was processed successfully...')
     #check if input data is valid and if request data is in json format
     if request.is_json:
         try: 
             #input data correct, call processSubscription function
             attempt = request.get_json()
-            print("Received a request to subscribe in JSON:", attempt)
-            result = invoke_http(add_subscription_URL, method='POST', json =attempt)
-            return result
+            print("Received a request to link subscription in JSON:", attempt)
+            subscriptionLinkResult = updateSubscriptionLink(attempt)
+            print("Subscription Link Status: " + result['code'] + ": " + result['message'])
+            return subscriptionLinkResult
 
         except Exception as e:
             #exception for error handling
@@ -126,6 +127,20 @@ def confirmPayment():
     #receive JSON from UI
     #update subscription link
     #thank you page
+
+def updateSubscriptionLink(data):
+    print('Updating Subscription Link service...')
+
+    # consumerID = data['CONSUMERID']
+    # creatorID = data['CREATORID']
+    prepJSON = {
+        "CONSUMERID": data['CONSUMERID'],
+        "CREATORID": data['CREATORID']
+    }
+    result = invoke_http(add_subscription_URL, method='POST', json=prepJSON)
+
+    return result
+
         
 if __name__ == "__main__":
     
