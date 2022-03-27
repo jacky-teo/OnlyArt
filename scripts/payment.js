@@ -62,6 +62,7 @@ paypal.Buttons({
             orderData["CREATORID"] = creatorID
             orderData["CREATORUSERNAME"] = payee_username
             orderData["CONSUMERID"] = consumerID
+            orderData["PRICE"] = price
             console.log(orderData)
 
             confirmSubscription(JSON.stringify(orderData))

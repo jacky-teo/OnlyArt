@@ -2,22 +2,25 @@
 
 #import required modules
 # from crypt import methods
+import os, sys
 from asyncio.windows_events import NULL
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import json
-import requests
+# import json
+# import requests
 # from invokes import invoke_http
 
+
 from datetime import datetime
+
+from invokes import invoke_http
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/payment'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-
 CORS(app)  
 
 class Payment(db.Model):
@@ -62,9 +65,55 @@ def get_all():
         }
     ), 404
 
-# #create new payment record (handle successful transactions)
-# @app.route("/payments/log", methods=['POST'])
-# # Receive HTTP request upon payment completion
+#create new payment record (handle successful transactions)
+@app.route("/payments/log", methods=['POST'])
+# Receive HTTP request upon payment completion
+def receiveLogRequest():
+    # Check if the order contains valid JSON
+    if request.is_json:
+        try:            
+            transaction_id = request.json.get('TRANSACTIONID')
+            creator_id = request.json.get('CREATORID')
+            consumer_id = request.json.get('CONSUMERID')
+            paymentamount = request.json.get('PAYMENTAMOUNT')
+
+            paymentLog = Payment(
+                transactionid=transaction_id, 
+                consumerid=consumer_id, 
+                creatorid=creator_id, 
+                payment_amount=paymentamount, 
+                transaction_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
+                modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            
+            try:
+                db.session.add(paymentLog)
+                db.session.commit()
+            except Exception as e: 
+                return jsonify(
+                    {
+                        "code": 500, 
+                        "message": "An error occured creating Payment Log: " + str(e)
+                    }
+                ), 500 # Internal Server Error
+            return jsonify(
+                {
+                    "code": 201,
+                    "message": "Payment Logged"
+                }
+            ), 201 # Success
+        except Exception as e:
+            #exception for error handling
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
+            print(ex_str)
+
+            print('Failed to log. Invalid JSON')
+            return jsonify({
+                "code": 400,
+                "message": "Request should be in JSON. Error: " + ex_str
+            }), 400 # Bad Request Input
+
 # def receiveLogRequest():
 #     # Check if the order contains valid JSON 
 #     if request.is_json:
@@ -135,5 +184,5 @@ def get_all():
 #         tokens = json.loads(authorization_response.text)
 #         return tokens['access_token']
 
-# if __name__ == '__main__':
-#     app.run(port=5005, debug=True)
+if __name__ == '__main__':
+    app.run(port=5005, debug=True)

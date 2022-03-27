@@ -17,6 +17,7 @@ CORS(app)
 
 creator_URL = "http://localhost:5002/creator/price"
 add_subscription_URL ="http://localhost:5006/subscription/add"
+add_paymentLog_URL = "http://localhost:5005/payments/log"
 
 # app handles incoming HTTP request
 @app.route("/subscribe", methods=['POST'])
@@ -104,12 +105,22 @@ def confirmPayment():
     #check if input data is valid and if request data is in json format
     if request.is_json:
         try: 
-            #input data correct, call processSubscription function
             attempt = request.get_json()
             print("Received a request to link subscription in JSON:", attempt)
+
+            # Update Subscription Link
             subscriptionLinkResult = updateSubscriptionLink(attempt)
-            print("Subscription Link Status: " + result['code'] + ": " + result['message'])
-            return subscriptionLinkResult
+            subscriptionLinkResult_code = subscriptionLinkResult['code']
+            subscriptionLinkResult_message = subscriptionLinkResult['message']
+            print("Subscription Link Status: " + subscriptionLinkResult_code + ": " + subscriptionLinkResult_message)
+
+            # Update Payment Log
+            paymentLogResult = updatePaymentLog(attempt)
+            paymentLogResult_code = paymentLogResult['code']
+            paymentLogResult_message = paymentLogResult['message']
+            print("Payment Log Status: " + paymentLogResult_code + ": " + paymentLogResult_message)
+
+            return ""
 
         except Exception as e:
             #exception for error handling
@@ -130,9 +141,6 @@ def confirmPayment():
 
 def updateSubscriptionLink(data):
     print('Updating Subscription Link service...')
-
-    # consumerID = data['CONSUMERID']
-    # creatorID = data['CREATORID']
     prepJSON = {
         "CONSUMERID": data['CONSUMERID'],
         "CREATORID": data['CREATORID']
@@ -141,6 +149,17 @@ def updateSubscriptionLink(data):
 
     return result
 
+def updatePaymentLog(data):
+    print('Updating Payment Log service...')
+    prepJSON = {
+        "TRANSACTIONID": data['id'],
+        "CONSUMERID": data['CONSUMERID'],
+        "CREATORID": data['CREATORID'],
+        "PAYMENT_AMOUNT": data['PRICE']
+    }
+    result = invoke_http(add_paymentLog_URL, method='POST', json=prepJSON)
+
+    return result
         
 if __name__ == "__main__":
     
