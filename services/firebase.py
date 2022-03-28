@@ -1,4 +1,5 @@
 from firebase_admin import storage
+import json
 PROJECT_ID = 'onlyfence-9eb40'
 IS_EXTERNAL_PLATFORM = True
 firebase_app = None
@@ -57,17 +58,17 @@ def upload_firebase(file,creatorID,description):
     blob = bucket.blob(path_on_cloud) #Point to the path and the file name
 
     blob.upload_from_file(file,content_type = file.mimetype)  #Upload the file into the storate
-    data = {
-        'POSTID':postID,
-        'CREATORID':creatorID,
-        'DESCRIPTION':description,
-        'IMAGE_ID':imageID,
-        'IMG_EXT':fileEXT,
-        'POST_DATE':None,
-        'modified':None,
-    } #Create a data to transfer as json
     #Convert to JSON
-    return data
+    data = json.dumps({
+                'POSTID':postID,
+                'CREATORID':creatorID,
+                'DESCRIPTION':description,
+                'IMAGE_ID':imageID,
+                'IMG_EXT':fileEXT,
+                'POST_DATE':None,
+                'modified':None
+            } )
+    return  data
 
 def delete_firebase(postID,fileEXT):
     init_firebase() ## Initiate firebase
