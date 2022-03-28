@@ -1,5 +1,8 @@
 version: "3.8"
 
+volumes:
+  rabbitmq_data:
+
 services:  
 
   consumer:
@@ -62,16 +65,10 @@ services:
       - creator
 
   rabbitmq:
-        image: "rabbitmq:3-management"
-        hostname: "rabbitmq"
-        ports:
-            - "5672:5672"
-            - "15672:15672"
-        healthcheck:
-            test: ["CMD", "curl", "-f", "http://localhost:15672"]
-            interval: 30s
-            timeout: 10s
-            retries: 5
+    image: rabbitmq:3-management
+    hostname: esd-rabbit
+    volumes: 
+      - rabbitmq_data:/var/lib/rabbitmq
 
   activity_log:
     build:
@@ -83,6 +80,8 @@ services:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/activity
       PYTHONUNBUFFERED: 1  
       restart: on-failure
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
     depends_on:
       - rabbitmq
     links:
@@ -97,6 +96,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/error
       PYTHONUNBUFFERED: 1 
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
     depends_on:
       - rabbitmq
     links:
@@ -121,6 +122,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/post_content
       PYTHONUNBUFFERED: 1 
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
     depends_on:
       - content
       - notification
@@ -136,6 +139,8 @@ services:
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/view_content
       PYTHONUNBUFFERED: 1 
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
     depends_on:
         - content
         - subscription_link
