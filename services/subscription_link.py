@@ -170,12 +170,14 @@ def create_subscription():
 # scenario 3
 
 
-@app.route('/subscription/getsubscribers')
-def get_all_subscribers():
-    data = request.get_json()
-    data = json.loads(data)
-    creatorid = data['CREATORID']
-    print(f"IM HERE -- {creatorid}")
+@app.route('/subscription/getsubscribers/<string:creatorid>')
+def get_all_subscribers(creatorid):
+    # data = request.get_json()
+    # data = json.dumps(data)
+    # creatorid = request.json.get("CREATORID")
+    # creatorid=data['creator']
+    # print(creatorid)
+    # print(f"IM HERE -- {creatorid}")
     telegram = subscriptionLink.query.filter_by(CREATORID=creatorid)
 
     if telegram:
