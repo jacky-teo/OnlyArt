@@ -33,25 +33,37 @@ def post_content():
     if request.method == "POST":  # Check if method is POST before proceeding
         file = request.files['file']  # Get the file to be uploaded
         creatorID = request.form['creatorID']  # Get the CreatorID from form
-        # Get the description from form
-        description = request.form['description']
+        description = request.form['description']# Get the description from form
 
     # uploads all the information into firebase
-    data = upload_firebase(file, creatorID, description)
-    data_json = json.dumps(data)  # converts data into json
+    data_json = upload_firebase(file, creatorID, description)
+    print('----------After Firebase------------')
+    print(data_json)
+    print('------------------------------------')
     try:
         # Upload image into firebase and it goes to SQL
-        upload_content(data_json)
+        uploadInformation = upload_content(data_json)
+        print('--------Data Uploaded into SQL-----------')
+        print(uploadInformation)
+        print('-----------------------------------------')
         # Add creatorID as a json file
-        creatorID_JSON = json.dumps({"CREATORID": creatorID})
+        # creatorID_JSON = json.dumps({"CREATORID": creatorID})
+        
         # Get all the followers that are subscribed to creator
-        consumerTelegram = telegramTags(creatorID_JSON)
+        consumerTelegram = telegramTags(creatorID)
+        print('--------- Collected Telegram tags ---------')
+        print(consumerTelegram)
+        print('-------------------------------------------')
         creatorinfo = creatorInformation(creatorID)  # Get creator information
         # Get creator name to use for notification status
         creatorname = creatorinfo['data']['username']
-        notifyStatus = notifyUsers(
-            consumerTelegram, creatorname)  # notify users
-        if notifyStatus['code'] == 201:
+        notifyStatus = notifyUsers(consumerTelegram, creatorname)  # notify users
+        print('--------- Users Notified ---------')
+        print(notifyStatus)
+        print('-------------------------------------------')
+
+        if notifyStatus['code'] == 201 and creatorinfo['code'] == 200 and uploadInformation['code'] == 201 and consumerTelegram['code']==200:
+            print('REDIRECTING PAGE AS UPLOAD AND NOTIFCATION IS SUCCESSFUL')
             return  redirect("http://localhost/OnlyFence/upload_success.html")  # redirect users to upload_success.html
 
     except Exception as e:
@@ -89,11 +101,10 @@ def upload_content(json):
     return uploadInformation
 
 
-def telegramTags(uploadInformation):
-    tags = invoke_http(subscription_url, method="GET", json=uploadInformation)
+def telegramTags(creatorID):
+    tags = invoke_http(f'{subscription_url}/{creatorID}', method="GET",)
     tagsCode = tags['code']
     message = tags['message']
-
     if tagsCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.error",
                                          body=message)
