@@ -1,131 +1,142 @@
 version: "3.8"
 
 services:  
+
   consumer:
     build:
       context: ./
       dockerfile: consumer.dockerfile
-    image: <dockerid>/onlyfence/consumer
+    image: bryan2chong/onlyfence/consumer
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/consumer
       PYTHONUNBUFFERED: 1
+  
+
   creator:
     build:
       context: ./
       dockerfile: creator.dockerfile
-    image: <dockerid>/onlyfence/creator
+    image: bryan2chong/onlyfence/creator
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/creator
-      PYTHONUNBUFFERED: 1  
+      PYTHONUNBUFFERED: 1 
+  
   content:
     build:
       context: ./
       dockerfile: content.dockerfile
-    image: <dockerid>/onlyfence/content
+    image: bryan2chong/onlyfence/content
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/content
   
       PYTHONUNBUFFERED: 1  
-      depends_on:
-            - creator
+
+    depends_on:
+      - creator
+    
   
   notification:
     build:
       context: ./
       dockerfile: notification.dockerfile
-    image: <dockerid>/onlyfence/notification
+    image: bryan2chong/onlyfence/notification
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/notification
      
       PYTHONUNBUFFERED: 1  
+
   payment:
     build:
       context: ./
       dockerfile: payment.dockerfile
-    image: <dockerid>/onlyfence/payment
+    image: bryan2chong/onlyfence/payment
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/payment
       PYTHONUNBUFFERED: 1  
-      depends_on:
-            - creator
+    depends_on:
+      - creator
+
   rabbitmq:
         image: "rabbitmq:3-management"
         hostname: "rabbitmq"
         ports:
             - "5672:5672"
             - "15672:15672"
-        volumes: 
-          - rabbitmq_data:/var/lib/rabbitmq    
         healthcheck:
             test: ["CMD", "curl", "-f", "http://localhost:15672"]
             interval: 30s
             timeout: 10s
             retries: 5
+
   activity_log:
     build:
       context: ./
       dockerfile: activity_log.dockerfile
-    image: <dockerid>/onlyfence/activity_log
+    image: bryan2chong/onlyfence/activity_log
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/activity
       PYTHONUNBUFFERED: 1  
       restart: on-failure
-      depends_on:
-          - rabbitmq
-      links:
-          - rabbitmq
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+
   error:
     build:
       context: ./
       dockerfile: error.dockerfile
-    image: <dockerid>/onlyfence/error
+    image: bryan2chong/onlyfence/error
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/error
       PYTHONUNBUFFERED: 1 
-      depends_on:
-          - rabbitmq
-      links:
-          - rabbitmq
+    depends_on:
+      - rabbitmq
+    links:
+      - rabbitmq
+
   subscription_link:
     build:
       context: ./
       dockerfile: subscription_link.dockerfile
-    image: <dockerid>/onlyfence/subscription_link
+    image: bryan2chong/onlyfence/subscription_link
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/subscription_link
       PYTHONUNBUFFERED: 1  
+
   post_content:
     build:
       context: ./
       dockerfile: post_content.dockerfile
-    image: <dockerid>/onlyfence/post_content
+    image: bryan2chong/onlyfence/post_content
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/post_content
       PYTHONUNBUFFERED: 1 
-      depends_on:
-          -content
-          -notification
-          -subscription_link
-          -creator
+    depends_on:
+      - content
+      - notification
+      - subscription_link
+      - creator
+
   view_content:
     build:
       context: ./
       dockerfile: view_content.dockerfile
-    image: <dockerid>/onlyfence/view_content
+    image: bryan2chong/onlyfence/view_content
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@localhost:3306/view_content
       PYTHONUNBUFFERED: 1 
-      depends_on:
-          -content
-          -subscription_link
-          -creator
+    depends_on:
+        - content
+        - subscription_link
+        - creator
