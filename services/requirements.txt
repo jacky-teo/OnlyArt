@@ -1,5 +1,4 @@
 crypto==1.4.1
-firebase==3.0.1
 firebase-admin==5.2.0
 Flask==2.0.2
 Flask-Cors==3.0.10
