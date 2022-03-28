@@ -8,23 +8,38 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
 <body class="bg-dark">
-    <div class="container mt-5 py-5 bg-dark text-white">
-        <div class="mb-3 row">
-            <label for="username" class="col-sm-2 col-form-label">Username</label>
-            <div class="col-sm-10">
-                <input type="email" class="form-control" id="exampleFormControlInput1">
+    <div class="container mt-5 bg-light text-dark col-sm-10 rounded-3">
+        <div class="row">
+            <!-- left half of login  -->
+            <div class="col-sm-6 absolute left-half py-5 ps-5">
+                <div class="mb-3 row">
+                    <label for="username" class="col-sm-2 col-form-label">Username</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="username">
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
+                    <div class="col-sm-10">
+                        <input type="password" class="form-control" id="inputPassword">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col text-end"><button type="button" class="btn btn-danger">die fast w pain</button></div>
+                    <div class="col text-start"><button type="button" class="btn btn-primary">die slow no pain</button></div>
+                </div>
+            </div>
+
+            <!-- right half of login (make it an auto carousel showing sneaky fence images?) -->
+            <div class="col-sm-6 bg-warning rounded-3">     
+                <!-- rounded corners needs to only be on right top and bottom corners !! - not done -->
+                <!-- this random form part is just for TESTING -->
+                <div>sexy pics of fences</div>
+                <div>sexy pics of fences</div>
+                <div>sexy pics of fences</div>
+                <div>sexy pics of fences</div>
             </div>
         </div>
-        <div class="mb-3 row">
-            <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-            <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword">
-            </div>
-        </div>
-    <div class="row">
-        <div class="col text-end"><button type="button" class="btn btn-danger">Red Pill</button></div>
-        <div class="col text-start"><button type="button" class="btn btn-primary">Blue Pill</button></div>
-    </div>
     </div>
 
 </body>

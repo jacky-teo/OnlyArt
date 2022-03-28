@@ -1,1 +1,9 @@
-// vue.js for login form
+const app = Vue.createApp({
+    data() {
+        return {
+            isUser: false,
+            isCreator: false,
+            
+        }
+    }
+})
