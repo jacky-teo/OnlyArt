@@ -107,11 +107,26 @@ def unsubbed():
 @app.route("/upload", methods=['POST', 'GET'])
 def upload():
     data = request.get_json()
+    
     data = json.loads(data)
-    postID, creatorID, description, imageID, imageEXT = data['POSTID'], data[
-        'CREATORID'], data['DESCRIPTION'], data['IMAGE_ID'], data['IMG_EXT']
+    print('--------Upload data-----------')
+    print(data)
+    print('------------------------------')
+    postID, creatorID, description, imageID, imageEXT = data['POSTID'], data['CREATORID'], data['DESCRIPTION'], data['IMAGE_ID'], data['IMG_EXT']
+    # postID,creatorID, description,imageID,imageEXT = request.json.get('POSTID', None),request.json.get('CREATORID', None),request.json.get('DESCRIPTION', None),request.json.get('IMAGE_ID', None),request.json.get('IMG_EXT', None)
+    if (Content.query.filter_by(POSTID=postID).first()):
+        return jsonify(
+            {
+                "code": 400,
+                "data": {
+                    "POSTID": postID
+                },
+                "message": "Cotent already exists."
+            }
+        ), 400
     toUpload = Content(POSTID=postID, CREATORID=creatorID, DESCRIPTION=description, IMAGE_ID=imageID,
                        IMG_EXT=imageEXT, POST_DATE=None, modified=None)  # Create object to update sql
+    
     try:
         db.session.add(toUpload)  # Update SQL
         db.session.commit()
