@@ -11,6 +11,10 @@ app = Flask(__name__)
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:root@localhost:3306/notification'  #For Mac
 # for windows
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/notification'
+#USE FOR DOCKER ONLY. UNCOMMENT THIS AND COMMENT OUT THE is213@localhost DATABASE URL WHEN USING DOCKER-------------------
+#from os import environ
+#app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+#------------------------------------------------------------------------------------------
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 token = os.getenv('TELEGRAM_KEY')
 
