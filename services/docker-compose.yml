@@ -12,8 +12,10 @@ services:
     image: bryan2chong/onlyfence/consumer
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/consumer
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/consumer
       PYTHONUNBUFFERED: 1
+    ports:
+            - "5001:5001"
   
 
   creator:
@@ -23,9 +25,10 @@ services:
     image: bryan2chong/onlyfence/creator
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/creator
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/creator
       PYTHONUNBUFFERED: 1 
-  
+    ports:
+            - "5002:5002"
   content:
     build:
       context: ./
@@ -33,10 +36,11 @@ services:
     image: bryan2chong/onlyfence/content
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/content
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/content
   
       PYTHONUNBUFFERED: 1  
-
+    ports:
+            - "5003:5003"
     depends_on:
       - creator
     
@@ -48,10 +52,11 @@ services:
     image: bryan2chong/onlyfence/notification
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/notification
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/notification
      
       PYTHONUNBUFFERED: 1  
-
+    ports:
+            - "5000:5000"
   payment:
     build:
       context: ./
@@ -59,10 +64,12 @@ services:
     image: bryan2chong/onlyfence/payment
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/payment
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/payment
       PYTHONUNBUFFERED: 1  
     depends_on:
       - creator
+    ports:
+            - "5005:5005"
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -77,7 +84,7 @@ services:
     image: bryan2chong/onlyfence/activity_log
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/activity
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/activity
       PYTHONUNBUFFERED: 1  
       restart: on-failure
       rabbit_host: rabbitmq
@@ -94,7 +101,7 @@ services:
     image: bryan2chong/onlyfence/error
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/error
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/error
       PYTHONUNBUFFERED: 1 
       rabbit_host: rabbitmq
       rabbit_port: 5672
@@ -110,8 +117,10 @@ services:
     image: bryan2chong/onlyfence/subscription_link
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/subscription_link
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/subscription_link
       PYTHONUNBUFFERED: 1  
+    ports:
+            - "5006:5006"
 
   post_content:
     build:
@@ -120,10 +129,16 @@ services:
     image: bryan2chong/onlyfence/post_content
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/post_content
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/post_content
       PYTHONUNBUFFERED: 1 
       rabbit_host: rabbitmq
       rabbit_port: 5672
+      upload_url: "http://content:5003/upload" 
+      subscription_url: "http://subscription_link:5006/subscription/getsubscribers"
+      notification_url: "http://notification:5000/notify/"
+      creator_url: "http://creator:5002/creator/getinfo/"
+    ports:
+            - "5102:5102"
     depends_on:
       - content
       - notification
@@ -137,10 +152,16 @@ services:
     image: bryan2chong/onlyfence/view_content
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@localhost:3306/view_content
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/view_content
       PYTHONUNBUFFERED: 1 
       rabbit_host: rabbitmq
       rabbit_port: 5672
+      creator_URL: "http://creator:5002/creator/price" 
+      subscription_url: "http://subscription_link:5006/subscription/status"
+      unsubbed_url: "http://content:5003/unsubbed"
+      subbed_url: "http://content:5003/subbed"
+    ports:
+            - "5100:5100"
     depends_on:
         - content
         - subscription_link
@@ -155,6 +176,11 @@ services:
       PYTHONUNBUFFERED: 1 
       rabbit_host: rabbitmq
       rabbit_port: 5672
+      creator_URL: "http://creator:5002/creator/price" 
+      add_subscription_URL: "http://subscription_link:5006/subscription/add"
+      add_paymentLog_URL: "http://payment:5005/payments/log"
+    ports:
+            - "5101:5101"
     depends_on:
         - payment
         - subscription_link
