@@ -31,15 +31,16 @@
                                     <h4 class="mb-4">Welcome {{userType}},</h4>
                                     <div class="mb-3 row">
                                         <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control w-75" id="username">
+                                        <input type="text" class="form-control w-75" id="username" v-model="username">
                                     </div>
                                     <div class="mb-3 row">
                                         <label for="inputPassword" class="form-label">Password</label>
-                                        <input type="password" class="form-control w-75" id="inputPassword">
+                                        <input type="password" class="form-control w-75" id="inputPassword" v-model="password">
                                     </div>
                                     <div class="row">
-                                        <button type="button" class="btn btn-danger rounded-pill col-3 mx-1">Login</button>
-                                        <button type="button" class="btn btn-primary rounded-pill col-3 mx-1">Register</button>    
+                                        <button type="button" class="btn btn-danger rounded-pill col-3 mb-3" @click="login()">Login</button>
+                                        <span v-if="invalidInputs" class="text-danger">{{inputsMsg}}</span>
+                                        <!-- <button type="button" class="btn btn-primary rounded-pill col-3 mx-1">Register</button>     -->
                                     </div>
                                 </div>
                     
@@ -63,7 +64,7 @@
         </div>
     </div>
 
-
+<!-- LOGIN WITHOUT MODAL (but no value binded to vue app)  -->
     <!-- <div class="container mt-5 bg-light text-dark col-sm-10 rounded-3">
         <div class="row"> -->
             <!-- left half of login  -->
@@ -104,5 +105,8 @@
     <script type='module' src='./scripts/login.js'></script>
     <!-- navbar template -->
     <script src="./scripts/navbar.js"></script>
+    <!-- axios JS -->
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
 </body>
 </html>

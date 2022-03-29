@@ -51,7 +51,44 @@ def get_telegram():
                 "code": 200,
                 "data": consumerlist
             }), 200
+
+#creator account authentication
+@app.route("/consumer/authenticate", methods=['POST'])
+def creator_auth():
+    print('-----authenticating creator-----')
+    data = request.args
+    username = data.get('username')
+    status = consumerAccount.query.filter_by(USERNAME=username).first()
+
+    if (status):
+        password = data.get('password')
+        isVerified = True if status.PASSWORD == password else False     #verifies if password matches user's password
+
+        if (isVerified):
+            return jsonify(
+                {
+                    "code": 200,
+                    "data": {
+                        "consumerID": status.CONSUMERID 
+                    },
+                    "message": "Consumer exists!"
+                }
+            )
         
+        return jsonify(
+            {
+                "code": 204,
+                "message": "Incorrect credentials"
+            }
+        )
+
+    #username not found
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Consumer does not exist"
+        }
+    ), 404
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
