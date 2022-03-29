@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 from invokes import invoke_http
 from firebase import init_firebase, upload_firebase
-
+from os import environ
 import amqp_setup
 import pika
 import json
@@ -16,10 +16,10 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-upload_url = "http://localhost:5003/upload"
-subscription_url = "http://localhost:5006/subscription/getsubscribers"
-notification_url = "http://localhost:5000/notify/"
-creator_url = "http://localhost:5002/creator/getinfo/"
+upload_url =environ.get('upload_url') or "http://localhost:5003/upload"
+subscription_url =environ.get('subscription_url') or "http://localhost:5006/subscription/getsubscribers"
+notification_url =environ.get('notification_url') or "http://localhost:5000/notify/"
+creator_url =environ.get('creator_url') or "http://localhost:5002/creator/getinfo/"
 
 # Step 1 Upload the image & Upload information is returned (content.py)
 # -
@@ -159,4 +159,4 @@ def creatorInformation(creatorID):
 
 
 if __name__ == "__main__":
-    app.run(port=5102, debug=True)
+    app.run(host="0.0.0.0", port=5102, debug=True)

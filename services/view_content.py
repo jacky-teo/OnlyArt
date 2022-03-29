@@ -1,7 +1,7 @@
 ## Complex Microservice when consumer views content ##
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-
+from os import environ
 import os
 import sys
 
@@ -14,10 +14,10 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-subscription_url = "http://localhost:5006/subscription/status"
-creator_url = "http://localhost:5002/creator/price"
-unsubbed_url = "http://localhost:5003/unsubbed"
-subbed_url = "http://localhost:5003/subbed"
+subscription_url =environ.get('subscription_url') or "http://localhost:5006/subscription/status"
+creator_url =environ.get('creator_url') or "http://localhost:5002/creator/price"
+unsubbed_url =environ.get('unsubbed_url') or "http://localhost:5003/unsubbed"
+subbed_url =environ.get('subbed_url') or "http://localhost:5003/subbed"
 
 
 @app.route("/view_content",methods=["POST","GET"])
@@ -131,4 +131,4 @@ def view(creator_consumer):
 
 
 if __name__ == "__main__":
-    app.run(port=5100, debug=True)
+    app.run(host="0.0.0.0", port=5100, debug=True)

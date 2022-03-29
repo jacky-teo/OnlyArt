@@ -16,6 +16,10 @@ from invokes import invoke_http
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/payment'
+#USE FOR DOCKER ONLY. UNCOMMENT THIS AND COMMENT OUT THE is213@localhost DATABASE URL WHEN USING DOCKER-------------------
+#from os import environ
+#app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+#------------------------------------------------------------------------------------------
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -111,4 +115,4 @@ def receiveLogRequest():
             }), 400 # Bad Request Input
 
 if __name__ == '__main__':
-    app.run(port=5005, debug=True)
+    app.run(host="0.0.0.0", port=5005, debug=True)

@@ -8,6 +8,10 @@ from firebase import delete_firebase, update_firebase, init_firebase
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/content'
+#USE FOR DOCKER ONLY. UNCOMMENT THIS AND COMMENT OUT THE is213@localhost DATABASE URL WHEN USING DOCKER-------------------
+#from os import environ
+#app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
+#------------------------------------------------------------------------------------------
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -223,4 +227,4 @@ def update(postID):
 
 
 if __name__ == '__main__':
-    app.run(port=5003, debug=True)
+    app.run(host="0.0.0.0", port=5003, debug=True)

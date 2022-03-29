@@ -14,6 +14,13 @@ app.config['SQLALCHEMY_BINDS'] = {
     "consumer": 'mysql+mysqlconnector://is213@localhost:3306/consumer',
     "creator": 'mysql+mysqlconnector://is213@localhost:3306/creator'
 }
+#FOR DOCKER USAGE ONLY-------------------------------------------------------------------------------
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@host.docker.internal:3306/sub_link'
+#app.config['SQLALCHEMY_BINDS'] = {
+#    "consumer": 'mysql+mysqlconnector://is213@host.docker.internal:3306/consumer',
+#    "creator": 'mysql+mysqlconnector://is213@host.docker.internal:3306/creator'
+#}
+#-----------------------------------------------------------------------------------------------------
 # root@localhost will change
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -193,4 +200,4 @@ def get_all_subscribers(creatorid):
 
 
 if __name__ == '__main__':
-    app.run(port=5006, debug=True)
+    app.run(host="0.0.0.0", port=5006, debug=True)
