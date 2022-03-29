@@ -145,3 +145,17 @@ services:
         - content
         - subscription_link
         - creator
+  subscribe:
+    build:
+      context: ./
+      dockerfile: subscribe.dockerfile
+    image: bryan2chong/onlyfence/subscribe
+    restart: always
+    environment:
+      PYTHONUNBUFFERED: 1 
+      rabbit_host: rabbitmq
+      rabbit_port: 5672
+    depends_on:
+        - patyment
+        - subscription_link
+        - creator
