@@ -120,7 +120,22 @@ def confirmPayment():
             paymentLogResult_message = paymentLogResult['message']
             print("Payment Log Status: " + paymentLogResult_code + ": " + paymentLogResult_message)
 
-            return ""
+            if subscriptionLinkResult_code not in range (200,300):
+                return jsonify({
+                    "code": 500,
+                    "message": "Internal Server Error when updating Subscription Link Service. Error: " + ex_str
+                }), 500 
+
+            if paymentLogResult_code not in range (200,300):
+                return jsonify({
+                    "code": 500,
+                    "message": "Internal Server Error when Logging Payment. Error: " + ex_str
+                }), 500 
+            
+            return jsonify({
+                "code": 200,
+                "message": "Success! Subscription confirmed and payment logged."
+            })
 
         except Exception as e:
             #exception for error handling
@@ -134,10 +149,6 @@ def confirmPayment():
                 "code": 400,
                 "message": "Request should be in JSON. Error: " + ex_str
             }), 400 
-    #return error response if input invalid
-    #receive JSON from UI
-    #update subscription link
-    #thank you page
 
 def updateSubscriptionLink(data):
     print('Updating Subscription Link service...')
