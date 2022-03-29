@@ -159,4 +159,4 @@ def creatorInformation(creatorID):
 
 
 if __name__ == "__main__":
-    app.run(port=5102, debug=True)
+    app.run(host="0.0.0.0", port=5102, debug=True)
