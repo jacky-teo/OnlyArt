@@ -7,40 +7,102 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </head>
+
 <body class="bg-dark">
-    <div class="container mt-5 bg-light text-dark col-sm-10 rounded-3">
-        <div class="row">
+    <div id="loginPage">
+        <!-- user declaration buttons -->
+        <div class="position-absolute top-50 start-50 translate-middle">
+            <button type="button" class="btn btn-primary btn-lg p-5 mx-3 mb-3 userButtons" @click="declareUser('Creator')" id="creatorBtn" data-bs-toggle="modal" data-bs-target="#loginModal">I am a Creator.</button>
+            <button type="button" class="btn btn-primary btn-lg p-5 mx-3 mb-3 userButtons" @click="declareUser('Consumer')" id="consumerBtn" data-bs-toggle="modal" data-bs-target="#loginModal">I am a Content Consumer.</button>
+        </div>
+        
+        
+        <!-- Modal -->
+        <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModal">
+            <div class="modal-dialog modal-lg">
+                <!-- button to open and close modal  -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="container-fluid rounded-3">
+                            <div class="row">
+                                <!-- left half of login  -->
+                                <div class="col-sm-6 py-5 ps-5">
+                                    <h4 class="mb-4">Welcome {{userType}},</h4>
+                                    <div class="mb-3 row">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text" class="form-control w-75" id="username">
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label for="inputPassword" class="form-label">Password</label>
+                                        <input type="password" class="form-control w-75" id="inputPassword">
+                                    </div>
+                                    <div class="row">
+                                        <button type="button" class="btn btn-danger rounded-pill col-3 mx-1">Login</button>
+                                        <button type="button" class="btn btn-primary rounded-pill col-3 mx-1">Register</button>    
+                                    </div>
+                                </div>
+                    
+                                <!-- right half of login (make it an auto carousel showing sneaky fence images?) -->
+                                <div class="col-sm-6 bg-light rounded-end">     
+                                    <!-- this random form part is just for TESTING -->
+                                    <div>sexy pics of fences</div>
+                                    <div>sexy pics of fences</div>
+                                    <div>sexy pics of fences</div>
+                                    <div>sexy pics of fences</div>
+                                    <div>sexy pics of fences</div>
+                                    <div>sexy pics of fences</div>
+                                    <div>sexy pics of fences</div>
+                                    <div>sexy pics of fences</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- <div class="container mt-5 bg-light text-dark col-sm-10 rounded-3">
+        <div class="row"> -->
             <!-- left half of login  -->
-            <div class="col-sm-6 absolute left-half py-5 ps-5">
+            <!-- <div class="col-sm-6 absolute left-half py-5 ps-5">
                 <div class="mb-3 row">
                     <label for="username" class="col-sm-2 col-form-label">Username</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-8">
                         <input type="text" class="form-control" id="username">
                     </div>
                 </div>
                 <div class="mb-3 row">
                     <label for="inputPassword" class="col-sm-2 col-form-label">Password</label>
-                    <div class="col-sm-10">
+                    <div class="col-sm-8">
                         <input type="password" class="form-control" id="inputPassword">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col text-end"><button type="button" class="btn btn-danger">die fast w pain</button></div>
-                    <div class="col text-start"><button type="button" class="btn btn-primary">die slow no pain</button></div>
+                    <button type="button" class="btn btn-danger rounded-pill col-3 mx-1">Login</button>
+                    <button type="button" class="btn btn-primary rounded-pill col-3 mx-1">Register</button>    
                 </div>
-            </div>
+            </div> -->
 
             <!-- right half of login (make it an auto carousel showing sneaky fence images?) -->
-            <div class="col-sm-6 bg-warning rounded-3">     
-                <!-- rounded corners needs to only be on right top and bottom corners !! - not done -->
+            <!-- <div class="col-sm-6 bg-warning rounded-end">      -->
                 <!-- this random form part is just for TESTING -->
-                <div>sexy pics of fences</div>
+                <!-- <div>sexy pics of fences</div>
                 <div>sexy pics of fences</div>
                 <div>sexy pics of fences</div>
                 <div>sexy pics of fences</div>
             </div>
         </div>
-    </div>
+    </div> -->
+    
 
+    <!-- V3 Vue.js -->
+    <script src="https://unpkg.com/vue@next"></script>
+    <!-- login script -->
+    <script type='module' src='./scripts/login.js'></script>
+    <!-- navbar template -->
+    <script src="./scripts/navbar.js"></script>
 </body>
 </html>
