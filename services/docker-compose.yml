@@ -156,6 +156,6 @@ services:
       rabbit_host: rabbitmq
       rabbit_port: 5672
     depends_on:
-        - patyment
+        - payment
         - subscription_link
         - creator
