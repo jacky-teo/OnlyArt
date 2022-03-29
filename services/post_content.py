@@ -8,7 +8,7 @@ import sys
 from datetime import datetime
 from invokes import invoke_http
 from firebase import init_firebase, upload_firebase
-
+from os import environ
 import amqp_setup
 import pika
 import json
