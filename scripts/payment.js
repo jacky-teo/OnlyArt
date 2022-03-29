@@ -1,3 +1,4 @@
+// Hard coded session variables
 var platform_email = "sb-vrehs14346230@business.example.com";
 var consumerID = sessionStorage.getItem('consumerID')
 var payee_username = sessionStorage.getItem('creatorUsername');
@@ -5,9 +6,6 @@ var payee_email = sessionStorage.getItem('creatorEmail');
 var creatorID = sessionStorage.getItem('creatorID')
 var price = sessionStorage.getItem('price');
 var platform_fee = "5";
-
-// HTTP Request the order details (API call)
-// teRequest from payment microservice OR complex microservice
 
 document.getElementById('payment-summary').innerHTML = `
     <b>Transfering funds to:</b> <br>
@@ -67,12 +65,8 @@ paypal.Buttons({
 
             confirmSubscription(JSON.stringify(orderData))
 
-            // When ready to go live, remove the alert and show a success message within this page. For example:
-                var element = document.getElementById('paypal-button-container');
-                element.innerHTML = '';
-                element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                // Or go to another URL:  actions.redirect('thank_you.html');
-
+            // Start Loader here ============================================================================================================
+            // "Confirming subscription... Updating our database... Preparing your fences..."
         });
     }
 
@@ -95,7 +89,6 @@ async function confirmSubscription(data){
         body: data
     }
 
-    // STOPPING HERE, NEED TO FIND MORE INFORMATION ================================================================================================
     try {
         console.log('LOADING...')
         const response = 
@@ -108,24 +101,18 @@ async function confirmSubscription(data){
                 // Success Case
                 console.log('SUCCESS CASE')
                 console.log(result)
-
-                // code = result.code
-                // creatorUsername = result.creatorUsername
-                // creatorEmail = result.creatorEmail
-                // creatorID = result.creatorID
-                // price = result.price
                 
-                // sessionStorage.setItem('creatorUsername',creatorUsername)
-                // sessionStorage.setItem('creatorEmail',creatorEmail)
-                // sessionStorage.setItem('price',price)
-
-                // window.location.href = "./payment.html";
+                // Close loader here ============================================================================================================
+                var element = document.getElementById('paypal-button-container');
+                element.innerHTML = '';
+                element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                
             } else if (response.status === 404) {
                 // Error
                 console.log('Error: Response 404')
             } else {
                 // Error
-                console.log('Error: Response ???')
+                console.log('Error: Response 500')
                 throw response.status
             }
     } catch (error) {

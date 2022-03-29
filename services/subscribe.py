@@ -5,12 +5,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 
 import os, sys
-# from itsdangerous import json       #not sure how to use this module (copy pasted from labs) but fyi its for security purposes
-import requests
+
 from invokes import *
-import pika
-import json
+# import pika
+# import json
 # import amqp_setup
+# import requests
+# from itsdangerous import json       #not sure how to use this module (copy pasted from labs) but fyi its for security purposes
 
 app = Flask(__name__)
 CORS(app)
@@ -19,34 +20,37 @@ creator_URL = "http://localhost:5002/creator/price"
 add_subscription_URL ="http://localhost:5006/subscription/add"
 add_paymentLog_URL = "http://localhost:5005/payments/log"
 
-# app handles incoming HTTP request
+# Scenario 2a: Create subscription request
 @app.route("/subscribe", methods=['POST'])
-def check_request():
-    # Check if input data is valid and if request data is in json format
-    if request.is_json:
-        try: 
-            #input data correct, call processSubscription function
+def check_request(): 
+    if request.is_json: # Check if request data is in JSON format
+        try: # Valid JSON, call retrieveCreatorInformation() function
             attempt = request.get_json()
             print("Received a request to subscribe in JSON:", attempt)
             result = retrieveCreatorInformation(attempt)
             return result
 
-        except Exception as e:
-            #exception for error handling
+        except Exception as e: # Exception for error handling
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
             print(ex_str)
 
-            print('Failed to subscribe. Invalid JSON')
+            print('Failed to confirm subscription. Invalid JSON')
             return jsonify({
-                "code": 400,
-                "message": "Request should be in JSON. Error: " + ex_str
-            }), 400 # Bad Request Input
+                "code": 500,
+                "message": "Internal Server Error. Error: " + ex_str
+            }), 500 # Internal Server Error
+
+    else: # Invalid JSON
+        print('Failed to subscribe. Invalid JSON')
+        return jsonify({
+            "code": 400,
+            "message": "Request should be in JSON. Error: 400" 
+        }), 400 # Bad Request Input
 
 
-def retrieveCreatorInformation(attempt):
-    # Pull creator information from creator_account
+def retrieveCreatorInformation(attempt): # Pull creator information from creator_account
     print('-----Invoking creator_account microservice-----')
     retrieveInfo = invoke_http(creator_URL, method="GET", json=attempt)
     print('information_request:', retrieveInfo)
@@ -98,12 +102,10 @@ def retrieveCreatorInformation(attempt):
         # invoke_http(activity_log_URL, method="POST", json=order_result)            
         # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.info", body=message, properties=pika.BasicProperties(delivery_mode = 2))
 
+# Scenario 2b: Confirm Subscription Payment 
 @app.route("/confirmSubscription", methods = ['POST'])
-# Function that passes in result from PayPal service after payment processed
-def confirmPayment():
-    print('Checking if payment was processed successfully...')
-    #check if input data is valid and if request data is in json format
-    if request.is_json:
+def confirmPayment(): # Function that passes in result from PayPal service after payment processed
+    if request.is_json: # Check if request data is in JSON format
         try: 
             attempt = request.get_json()
             print("Received a request to link subscription in JSON:", attempt)
@@ -112,13 +114,13 @@ def confirmPayment():
             subscriptionLinkResult = updateSubscriptionLink(attempt)
             subscriptionLinkResult_code = subscriptionLinkResult['code']
             subscriptionLinkResult_message = subscriptionLinkResult['message']
-            print("Subscription Link Status: " + subscriptionLinkResult_code + ": " + subscriptionLinkResult_message)
+            print("Subscription Link Status: " + str(subscriptionLinkResult_code) + ": " + subscriptionLinkResult_message)
 
             # Update Payment Log
             paymentLogResult = updatePaymentLog(attempt)
             paymentLogResult_code = paymentLogResult['code']
             paymentLogResult_message = paymentLogResult['message']
-            print("Payment Log Status: " + paymentLogResult_code + ": " + paymentLogResult_message)
+            print("Payment Log Status: " + str(paymentLogResult_code) + ": " + paymentLogResult_message)
 
             if subscriptionLinkResult_code not in range (200,300):
                 return jsonify({
@@ -137,39 +139,43 @@ def confirmPayment():
                 "message": "Success! Subscription confirmed and payment logged."
             })
 
-        except Exception as e:
-            #exception for error handling
+        except Exception as e: # Exception for error handling
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
             print(ex_str)
 
-            print('Failed to subscribe. Invalid JSON')
+            print('Failed to confirm subscription. Invalid JSON')
             return jsonify({
-                "code": 400,
-                "message": "Request should be in JSON. Error: " + ex_str
-            }), 400 
+                "code": 500,
+                "message": "Internal Server Error. Error: " + ex_str
+            }), 500 # Internal Server Error
 
-def updateSubscriptionLink(data):
+    else: # Invalid JSON
+        print('Failed to confirm subscription. Invalid JSON')
+        return jsonify({
+            "code": 400,
+            "message": "Request should be in JSON. Error: "
+        }), 400 # Bad Request Input
+
+def updateSubscriptionLink(data): # Send new record to Subscription Link service
     print('Updating Subscription Link service...')
     prepJSON = {
         "CONSUMERID": data['CONSUMERID'],
         "CREATORID": data['CREATORID']
     }
     result = invoke_http(add_subscription_URL, method='POST', json=prepJSON)
-
     return result
 
-def updatePaymentLog(data):
+def updatePaymentLog(data): # Send new record to Payment service
     print('Updating Payment Log service...')
     prepJSON = {
         "TRANSACTIONID": data['id'],
         "CONSUMERID": data['CONSUMERID'],
         "CREATORID": data['CREATORID'],
-        "PAYMENT_AMOUNT": data['PRICE']
+        "PAYMENTAMOUNT": data['PRICE']
     }
     result = invoke_http(add_paymentLog_URL, method='POST', json=prepJSON)
-
     return result
         
 if __name__ == "__main__":

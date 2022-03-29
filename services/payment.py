@@ -1,20 +1,18 @@
-## Microservice to work with payment API ##
+## Microservice to Log Payment information ##
 
-#import required modules
-# from crypt import methods
 import os, sys
-#from asyncio.windows_events import NULL
+
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from datetime import datetime
+from invokes import invoke_http
+
+# from crypt import methods
+# from asyncio.windows_events import NULL
 # import json
 # import requests
 # from invokes import invoke_http
-
-
-from datetime import datetime
-
-from invokes import invoke_http
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/payment'
@@ -65,13 +63,12 @@ def get_all():
         }
     ), 404
 
-#create new payment record (handle successful transactions)
+# Create new payment record
 @app.route("/payments/log", methods=['POST'])
 # Receive HTTP request upon payment completion
 def receiveLogRequest():
-    # Check if the order contains valid JSON
-    if request.is_json:
-        try:            
+    if request.is_json: # Check if request data is in JSON format
+        try: # Valid, Prepare Payment Log            
             transaction_id = request.json.get('TRANSACTIONID')
             creator_id = request.json.get('CREATORID')
             consumer_id = request.json.get('CONSUMERID')
@@ -85,7 +82,7 @@ def receiveLogRequest():
                 transaction_date = datetime.now().strftime('%Y-%m-%d %H:%M:%S'), 
                 modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             
-            try:
+            try: # Upload to database
                 db.session.add(paymentLog)
                 db.session.commit()
             except Exception as e: 
@@ -101,8 +98,7 @@ def receiveLogRequest():
                     "message": "Payment Logged"
                 }
             ), 201 # Success
-        except Exception as e:
-            #exception for error handling
+        except Exception as e: # Exception for error handling
             exc_type, exc_obj, exc_tb = sys.exc_info()
             fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
