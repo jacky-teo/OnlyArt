@@ -7,9 +7,10 @@ from flask_cors import CORS
 import os, sys
 
 from invokes import *
-# import pika
-# import json
-# import amqp_setup
+import pika
+import amqp_setup
+import json
+
 # import requests
 # from itsdangerous import json       #not sure how to use this module (copy pasted from labs) but fyi its for security purposes
 
@@ -56,24 +57,13 @@ def retrieveCreatorInformation(attempt): # Pull creator information from creator
     print('information_request:', retrieveInfo)
     
     code = retrieveInfo["code"]
-    # message = json.dumps(retrieveInfo) 
+    message = json.dumps(retrieveInfo)
 
-    # amqp_setup.check_setup()
-
-    # Check HTTP request. 
     if code not in range(200, 300): # Error!
-        # # Inform the error microservice
-        # print('\n\n-----Publishing the error message with routing_key=subscribe.error-----')
+        # Inform the error microservice
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.retrieveCreatorInformation.error",
+                                         body=message, properties=pika.BasicProperties(delivery_mode=2))
 
-        # # Route error message to error microservice
-        # {amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.error", body=message, properties=pika.BasicProperties(delivery_mode = 2)) }
-
-        # # - reply from the invocation is not used;
-        # # continue even if this invocation fails    
-        # print("\nStatus ({:d}) published to the RabbitMQ Exchange:".format(
-        #     code), creator_information)
-
-        # 7. Return error
         return {
             "code": 500,
             "data": {"retrieveInfo": retrieveInfo},
@@ -81,8 +71,11 @@ def retrieveCreatorInformation(attempt): # Pull creator information from creator
         }
 
     else: # Success! 
+        # Inform the acitivity microservice
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.retrieveCreatorInformation.info",
+                                         body=message)
+
         # Retrieve payment details through creator_account microservice
-        
         data = retrieveInfo['data']
         price = data['PRICE']
 
@@ -98,10 +91,6 @@ def retrieveCreatorInformation(attempt): # Pull creator information from creator
                 "creatorUsername": creatorUsername
             }
 
-        # Update Activity AMQP 
-        # invoke_http(activity_log_URL, method="POST", json=order_result)            
-        # amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.info", body=message, properties=pika.BasicProperties(delivery_mode = 2))
-
 # Scenario 2b: Confirm Subscription Payment 
 @app.route("/confirmSubscription", methods = ['POST'])
 def confirmPayment(): # Function that passes in result from PayPal service after payment processed
@@ -116,28 +105,45 @@ def confirmPayment(): # Function that passes in result from PayPal service after
             subscriptionLinkResult_message = subscriptionLinkResult['message']
             print("Subscription Link Status: " + str(subscriptionLinkResult_code) + ": " + subscriptionLinkResult_message)
 
+            if subscriptionLinkResult_code not in range (200,300): # Error!
+                # Inform the error microservice
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updateSubscriptionLink.error",
+                                         body=json.dumps(subscriptionLinkResult), properties=pika.BasicProperties(delivery_mode=2))
+                return jsonify({
+                    "code": 500,
+                    "message": "Internal Server Error when updating Subscription Link Service. Error: " + ex_str
+                }), 500 
+            else: # Inform the acitivity microservice
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updateSubscriptionLink.info",
+                                         body=json.dump(subscriptionLinkResult))
+
             # Update Payment Log
             paymentLogResult = updatePaymentLog(attempt)
             paymentLogResult_code = paymentLogResult['code']
             paymentLogResult_message = paymentLogResult['message']
             print("Payment Log Status: " + str(paymentLogResult_code) + ": " + paymentLogResult_message)
 
-            if subscriptionLinkResult_code not in range (200,300):
-                return jsonify({
-                    "code": 500,
-                    "message": "Internal Server Error when updating Subscription Link Service. Error: " + ex_str
-                }), 500 
-
-            if paymentLogResult_code not in range (200,300):
+            if paymentLogResult_code not in range (200,300): # Error!
+                # Inform the error microservice
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updatePaymentLog.error",
+                                         body=json.dumps(paymentLogResult), properties=pika.BasicProperties(delivery_mode=2))
                 return jsonify({
                     "code": 500,
                     "message": "Internal Server Error when Logging Payment. Error: " + ex_str
                 }), 500 
+            else: # Inform the acitivity microservice
+                amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updatePaymentLog.info",
+                                         body=json.dump(paymentLogResult))
             
-            return jsonify({
+            # Confirm Success
+            successJSON = jsonify({
                 "code": 200,
                 "message": "Success! Subscription confirmed and payment logged."
             })
+            # Inform the acitivity microservice
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.confirmSubscription.info",
+                                         body=json.dump(successJSON))
+            return successJSON
 
         except Exception as e: # Exception for error handling
             exc_type, exc_obj, exc_tb = sys.exc_info()
