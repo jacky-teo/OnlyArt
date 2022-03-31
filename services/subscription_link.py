@@ -111,7 +111,7 @@ def check_status():
             return jsonify(
                 {
                     "code": 200,
-                    "data": status.CREATORID,
+                    "data": status.json(),
                     "message": "Already subscribed",
                     "isSubbed": 1
                 }

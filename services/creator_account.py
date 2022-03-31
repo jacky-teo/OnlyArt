@@ -43,7 +43,7 @@ class creatorAccount(db.Model):
 @app.route('/creator/price')
 def get_creator_price():
     data = request.get_json()
-    creatorid = data['data']
+    creatorid = data["CREATORID"]
     status = creatorAccount.query.filter_by(
         CREATORID=creatorid).first()
 
@@ -51,7 +51,7 @@ def get_creator_price():
         return jsonify(
             {
                 "code": 200,
-                "data": status.PRICE,
+                "data": status.json(),
                 'message': 'Creator price returned successfully'
             }
         )

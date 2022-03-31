@@ -53,6 +53,7 @@ def view(creator_consumer):
     subStatus = invoke_http(subscription_url, json=creator_consumer)
 
     subCode = subStatus["code"]
+    # message = subStatus["message"]
     message = json.dumps(subStatus)
 
     if subCode not in range(200, 300):
