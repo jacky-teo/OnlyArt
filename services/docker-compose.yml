@@ -117,7 +117,7 @@ services:
     image: bryan2chong/onlyfence/subscription_link
     restart: always
     environment:
-      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/subscription_link
+      dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/sub_link
       PYTHONUNBUFFERED: 1  
     ports:
             - "5006:5006"
@@ -156,7 +156,7 @@ services:
       PYTHONUNBUFFERED: 1 
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      creator_URL: "http://creator:5002/creator/price" 
+      creator_url: "http://creator:5002/creator/price" 
       subscription_url: "http://subscription_link:5006/subscription/status"
       unsubbed_url: "http://content:5003/unsubbed"
       subbed_url: "http://content:5003/subbed"
@@ -176,9 +176,9 @@ services:
       PYTHONUNBUFFERED: 1 
       rabbit_host: rabbitmq
       rabbit_port: 5672
-      creator_URL: "http://creator:5002/creator/price" 
-      add_subscription_URL: "http://subscription_link:5006/subscription/add"
-      add_paymentLog_URL: "http://payment:5005/payments/log"
+      creator_url: "http://creator:5002/creator/price" 
+      add_subscription_url: "http://subscription_link:5006/subscription/add"
+      add_paymentLog_url: "http://payment:5005/payments/log"
     ports:
             - "5101:5101"
     depends_on:

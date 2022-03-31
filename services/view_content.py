@@ -60,8 +60,7 @@ def view(creator_consumer):
     # message = json.dumps(subStatus)
 
     if subCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.error",
-                                         body=message, properties=pika.BasicProperties(delivery_mode=2))
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
 
         return {
             "code": 500,
@@ -70,8 +69,7 @@ def view(creator_consumer):
         }
 
     else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.info",
-                                         body=message)
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.info", body=message)
     print(subStatus)
     subData = subStatus['data']
     print(subData["status"])
@@ -85,8 +83,7 @@ def view(creator_consumer):
     crData = creatorPrice
 
     if crCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.error",
-                                         body=message, properties=pika.BasicProperties(delivery_mode=2))
+        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.error", body=message, properties=pika.BasicProperties(delivery_mode=2))
 
         return {
             "code": 500,
@@ -105,8 +102,7 @@ def view(creator_consumer):
         message = unsubbed["message"]
 
         if conCode not in range(200, 300):
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.unsubbed_content.error",
-                                             body=message, properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.unsubbed_content.error", body=message, properties=pika.BasicProperties(delivery_mode=2))
 
             return {
                 "code": 500,
@@ -125,8 +121,7 @@ def view(creator_consumer):
         message = subbed["message"]
 
         if conCode not in range(200, 300):
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subbed_content.error",
-                                             body=message, properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subbed_content.error", body=message, properties=pika.BasicProperties(delivery_mode=2))
 
             return {
                 "code": 500,
