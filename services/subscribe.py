@@ -111,11 +111,11 @@ def confirmPayment(): # Function that passes in result from PayPal service after
                                          body=json.dumps(subscriptionLinkResult), properties=pika.BasicProperties(delivery_mode=2))
                 return jsonify({
                     "code": 500,
-                    "message": "Internal Server Error when updating Subscription Link Service. Error: " + ex_str
+                    "message": "Internal Server Error when updating Subscription Link Service. Error: " + subscriptionLinkResult_message
                 }), 500 
             else: # Inform the acitivity microservice
                 amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updateSubscriptionLink.info",
-                                         body=json.dump(subscriptionLinkResult))
+                                         body=json.dumps(subscriptionLinkResult))
 
             # Update Payment Log
             paymentLogResult = updatePaymentLog(attempt)
@@ -129,11 +129,11 @@ def confirmPayment(): # Function that passes in result from PayPal service after
                                          body=json.dumps(paymentLogResult), properties=pika.BasicProperties(delivery_mode=2))
                 return jsonify({
                     "code": 500,
-                    "message": "Internal Server Error when Logging Payment. Error: " + ex_str
+                    "message": "Internal Server Error when Logging Payment. Error: " + paymentLogResult_message
                 }), 500 
             else: # Inform the acitivity microservice
                 amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updatePaymentLog.info",
-                                         body=json.dump(paymentLogResult))
+                                         body=json.dumps(paymentLogResult))
             
             # Confirm Success
             successJSON = jsonify({
@@ -142,7 +142,7 @@ def confirmPayment(): # Function that passes in result from PayPal service after
             })
             # Inform the acitivity microservice
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.confirmSubscription.info",
-                                         body=json.dump(successJSON))
+                                         body=json.dumps(successJSON))
             return successJSON
 
         except Exception as e: # Exception for error handling
