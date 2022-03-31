@@ -25,6 +25,7 @@ def view_content():
     if request.is_json:
         try:
             creator_consumer = request.get_json()
+            print(creator_consumer)
             result = view(creator_consumer)
             return(result)
 
@@ -49,11 +50,13 @@ def view_content():
 
 
 def view(creator_consumer):
+    
+    print('-----Invoking subscription_link microservice-----')
     subStatus = invoke_http(subscription_url, json=creator_consumer)
-
+    
     subCode = subStatus["code"]
-    # message = subStatus["message"]
-    message = json.dumps(subStatus)
+    message = subStatus["message"]
+    # message = json.dumps(subStatus)
 
     if subCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.error",
@@ -68,14 +71,17 @@ def view(creator_consumer):
     else:
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.info",
                                          body=message)
-
+    print(subStatus)
     subData = subStatus['data']
-    subType = subStatus['isSubbed']
+    print(subData["status"])
+    subType = subData['isSubbed']
 
-    creatorPrice = invoke_http(creator_url, json=subData)
+    print('-----Invoking creator_account microservice-----')
+    creatorPrice = invoke_http(creator_url, json=subData["status"])
+    print(creatorPrice)
 
     crCode = creatorPrice["code"]
-    crData = creatorPrice["data"]
+    crData = creatorPrice
 
     if crCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.error",
@@ -91,6 +97,7 @@ def view(creator_consumer):
             exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.info", body=message)
 
     if subType == 2:
+        print('-----Retrieving content for unsubbed consumer-----')
         unsubbed = invoke_http(unsubbed_url, json=crData)
 
         conCode = unsubbed["code"]
@@ -111,6 +118,7 @@ def view(creator_consumer):
 
         return unsubbed
     else:
+        print('-----Retrieving content for subscriber-----')
         subbed = invoke_http(subbed_url, json=crData)
         conCode = subbed["code"]
         message = subbed["message"]

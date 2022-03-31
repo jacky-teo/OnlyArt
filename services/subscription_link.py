@@ -9,17 +9,17 @@ from datetime import datetime
 import json
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/sub_link'
-app.config['SQLALCHEMY_BINDS'] = {
-    "consumer": 'mysql+mysqlconnector://is213@localhost:3306/consumer',
-    "creator": 'mysql+mysqlconnector://is213@localhost:3306/creator'
-}
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/sub_link'
+# app.config['SQLALCHEMY_BINDS'] = {
+#     "consumer": 'mysql+mysqlconnector://is213@localhost:3306/consumer',
+#     "creator": 'mysql+mysqlconnector://is213@localhost:3306/creator'
+# }
 #FOR DOCKER USAGE ONLY-------------------------------------------------------------------------------
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@host.docker.internal:3306/sub_link'
-#app.config['SQLALCHEMY_BINDS'] = {
-#    "consumer": 'mysql+mysqlconnector://is213@host.docker.internal:3306/consumer',
-#    "creator": 'mysql+mysqlconnector://is213@host.docker.internal:3306/creator'
-#}
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@host.docker.internal:3306/sub_link'
+app.config['SQLALCHEMY_BINDS'] = {
+   "consumer": 'mysql+mysqlconnector://is213@host.docker.internal:3306/consumer',
+   "creator": 'mysql+mysqlconnector://is213@host.docker.internal:3306/creator'
+}
 #-----------------------------------------------------------------------------------------------------
 # root@localhost will change
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -111,18 +111,16 @@ def check_status():
             return jsonify(
                 {
                     "code": 200,
-                    "data": status.json(),
-                    "message": "Already subscribed",
-                    "isSubbed": 1
+                    "data": {"status": status.json(), "isSubbed": 1},
+                    "message": "Already subscribed"
                 }
             )
         # if there does not exist a link between consumer and creator account
         return jsonify(
             {
                 "code": 200,
-                "data": creatorAccount.query.filter_by(CREATORID=creatorid).first().json(),
-                "message": "Not subscribed.",
-                "isSubbed": 2
+                "data": {"status": creatorAccount.query.filter_by(CREATORID=creatorid).first().json(), "isSubbed":2},
+                "message": "Not subscribed."
             }
         ), 200
     # consumer or creator account does not exist
