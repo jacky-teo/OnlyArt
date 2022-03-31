@@ -40,6 +40,7 @@
                                     <div class="row">
                                         <button type="button" class="btn btn-danger rounded-pill col-3 mb-3" @click="login()">Login</button>
                                         <span v-if="invalidInputs" class="text-danger">{{inputsMsg}}</span>
+                                        <span v-if="isLoginFail" class="text-danger">{{loginFailMsg}}</span>
                                         <!-- <button type="button" class="btn btn-primary rounded-pill col-3 mx-1">Register</button>     -->
                                     </div>
                                 </div>
