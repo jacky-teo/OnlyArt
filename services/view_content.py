@@ -14,13 +14,15 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-subscription_url =environ.get('subscription_url') or "http://localhost:5006/subscription/status"
-creator_url =environ.get('creator_url') or "http://localhost:5002/creator/price"
-unsubbed_url =environ.get('unsubbed_url') or "http://localhost:5003/unsubbed"
-subbed_url =environ.get('subbed_url') or "http://localhost:5003/subbed"
+subscription_url = environ.get(
+    'subscription_url') or "http://localhost:5006/subscription/status"
+creator_url = environ.get(
+    'creator_url') or "http://localhost:5002/creator/price"
+unsubbed_url = environ.get('unsubbed_url') or "http://localhost:5003/unsubbed"
+subbed_url = environ.get('subbed_url') or "http://localhost:5003/subbed"
 
 
-@app.route("/view_content",methods=["POST","GET"])
+@app.route("/view_content", methods=["POST", "GET"])
 def view_content():
     if request.is_json:
         try:
@@ -43,10 +45,9 @@ def view_content():
             }), 500
     else:
         return jsonify({
-                "code": 400,
-                "message": "no json was parsed or invalid json"
-            }), 400
-
+            "code": 400,
+            "message": "no json was parsed or invalid json"
+        }), 400
 
 
 def view(creator_consumer):
