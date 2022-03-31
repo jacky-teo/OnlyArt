@@ -140,9 +140,14 @@ def confirmPayment(): # Function that passes in result from PayPal service after
                 "code": 200,
                 "message": "Success! Subscription confirmed and payment logged."
             })
+            hehe = {
+                "code": 200,
+                "message": "Success! Subscription confirmed and payment logged."
+            }
+
             # Inform the acitivity microservice
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.confirmSubscription.info",
-                                         body=json.dumps(successJSON))
+                                         body=json.dumps(hehe))
             return successJSON
 
         except Exception as e: # Exception for error handling
