@@ -8,10 +8,10 @@ from flask_cors import CORS
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://is213@localhost:3306/creator'
-#USE FOR DOCKER ONLY. UNCOMMENT THIS AND COMMENT OUT THE is213@localhost DATABASE URL WHEN USING DOCKER-------------------
+# USE FOR DOCKER ONLY. UNCOMMENT THIS AND COMMENT OUT THE is213@localhost DATABASE URL WHEN USING DOCKER-------------------
 #from os import environ
 #app.config['SQLALCHEMY_DATABASE_URI'] = environ.get('dbURL')
-#------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------------------------------
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -43,7 +43,7 @@ class creatorAccount(db.Model):
 @app.route('/creator/price')
 def get_creator_price():
     data = request.get_json()
-    creatorid = data["CREATORID"]
+    creatorid = data['data']
     status = creatorAccount.query.filter_by(
         CREATORID=creatorid).first()
 
@@ -51,7 +51,7 @@ def get_creator_price():
         return jsonify(
             {
                 "code": 200,
-                "data": status.json(),
+                "data": status.PRICE,
                 'message': 'Creator price returned successfully'
             }
         )
@@ -109,7 +109,7 @@ def get_info(creatorid):
     ), 404
 
 
-#creator account authentication
+# creator account authentication
 @app.route("/creator/authenticate", methods=['POST'])
 def creator_auth():
     print('-----authenticating creator-----')
@@ -119,7 +119,8 @@ def creator_auth():
 
     if (status):
         password = data.get('password')
-        isVerified = True if status.PASSWORD == password else False     #verifies if password matches user's password
+        # verifies if password matches user's password
+        isVerified = True if status.PASSWORD == password else False
 
         if (isVerified):
             return jsonify(
@@ -131,7 +132,7 @@ def creator_auth():
                     "message": "Creator exists!"
                 }
             )
-        
+
         return jsonify(
             {
                 "code": 204,
@@ -139,13 +140,14 @@ def creator_auth():
             }
         )
 
-    #username not found
+    # username not found
     return jsonify(
         {
             "code": 404,
             "message": "Creator does not exist"
         }
     ), 404
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5002, debug=True)
