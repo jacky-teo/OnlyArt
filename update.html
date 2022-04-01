@@ -9,6 +9,10 @@
     <title>Post Content</title>
  
     <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Bootstrap libraries -->
     <meta name="viewport" 
         content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
@@ -28,21 +32,20 @@
         <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">OnlyFences</a>
-            <a href="./content.html">View All User's Content</a>
           </div>
         </nav>
         
     <div class="container">
-        <h1>Upload New Content</h1>
+        <h1>Update Content</h1>
         <br/>
 
-        <form action="http://localhost:5102/post_content" method='post' enctype=multipart/form-data id="forms">
+        <form action="http://host.docker.internal:5102/post_content" method='post' enctype=multipart/form-data id="forms">
 
         <div class="row">
             <div class="col">
                 <div class="input-group flex-nowrap" style="display: none;">
-                            <span class="input-group-text" id="addon-wrapping">CreatorID</span>
-                            <input type="text" class="form-control" name='creatorID' id="creatorID" aria-label="CreatorID" aria-describedby="addon-wrapping">
+                            <span class="input-group-text" id="addon-wrapping">POSTID</span>
+                            <input type="text" class="form-control" name='postID' id="postID" aria-label="PostID" aria-describedby="addon-wrapping">
                 </div>
             </div>
         </div>
@@ -60,12 +63,15 @@
         <div class="row">
             <div class="col">
                  <div class="input-group">
-                <input type="file" class="form-control" name="file" id="file" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-                <button class="btn btn-outline-secondary" type="submit" id="upload">Upload</button>
+                <input type="file" class="form-control" name="file" id="file" aria-describedby="inputGroupFileAddon04" aria-label="update">
+                <button class="btn btn-outline-secondary" type="submit" id="upload">Update</button>
                 
         </div>
             </div>
         </div>
+       
+                <!-- <input type=file name=file id="file">
+                <input type=submit value=Upload id='uploadbtn'> -->
          </form>
     </div>
     </div>
@@ -78,7 +84,8 @@
 
        
 <script>
-    document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID');
+    
+    document.getElementById('postID').value = sessionStorage.getItem('postID');
 </script>      
 </body>
 
