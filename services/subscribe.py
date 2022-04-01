@@ -17,9 +17,9 @@ import json
 app = Flask(__name__)
 CORS(app)
 
-creator_URL = environ.get('creator_URL') or "http://localhost:5002/creator/price" 
-add_subscription_URL =environ.get('add_subscription_URL') or "http://localhost:5006/subscription/add"
-add_paymentLog_URL = environ.get('add_paymentLog_URL') or"http://localhost:5005/payments/log"
+creator_URL = environ.get('creator_url') or "http://localhost:5002/creator/price" 
+add_subscription_URL =environ.get('add_subscription_url') or "http://localhost:5006/subscription/add"
+add_paymentLog_URL = environ.get('add_paymentLog_url') or"http://localhost:5005/payments/log"
 
 # Scenario 2a: Create subscription request
 @app.route("/subscribe", methods=['POST'])

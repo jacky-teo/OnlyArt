@@ -57,7 +57,6 @@ def view(creator_consumer):
     
     subCode = subStatus["code"]
     message = subStatus["message"]
-    # message = json.dumps(subStatus)
 
     if subCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
@@ -72,7 +71,6 @@ def view(creator_consumer):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.info", body=message)
     print(subStatus)
     subData = subStatus['data']
-    print(subData["status"])
     subType = subData['isSubbed']
 
     print('-----Invoking creator_account microservice-----')
@@ -97,6 +95,7 @@ def view(creator_consumer):
     if subType == 2:
         print('-----Retrieving content for unsubbed consumer-----')
         unsubbed = invoke_http(unsubbed_url, json=crData)
+        print(unsubbed)
 
         conCode = unsubbed["code"]
         message = unsubbed["message"]
@@ -117,6 +116,7 @@ def view(creator_consumer):
     else:
         print('-----Retrieving content for subscriber-----')
         subbed = invoke_http(subbed_url, json=crData)
+        print(subbed)
         conCode = subbed["code"]
         message = subbed["message"]
 
