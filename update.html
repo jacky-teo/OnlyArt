@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+ 
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width">
+ 
+    <title>Post Content</title>
+ 
+    <link rel="stylesheet" href="">
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!-- Bootstrap libraries -->
+    <meta name="viewport" 
+        content="width=device-width, initial-scale=1, shrink-to-fit=no">
+ 
+    <!-- Bootstrap CSS -->
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
+       rel='stylesheet'
+       integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
+       crossorigin='anonymous'>
+ 
+    <!-- Latest compiled and minified JavaScript -->
+    <script
+       src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+ 
+</head>
+ 
+<body >
+        <nav class="navbar navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">OnlyFences</a>
+          </div>
+        </nav>
+        
+    <div class="container">
+        <h1>Update Content</h1>
+        <br/>
+
+        <form action="http://host.docker.internal:5102/post_content" method='post' enctype=multipart/form-data id="forms">
+
+        <div class="row">
+            <div class="col">
+                <div class="input-group flex-nowrap" style="display: none;">
+                            <span class="input-group-text" id="addon-wrapping">POSTID</span>
+                            <input type="text" class="form-control" name='postID' id="postID" aria-label="PostID" aria-describedby="addon-wrapping">
+                </div>
+            </div>
+        </div>
+        <br/>
+        
+        <div class="row">
+            <div class="col">
+                <div class="input-group">
+                    <span class="input-group-text">Description</span>
+                    <textarea class="form-control" aria-label="Description" name='description'></textarea>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col">
+                 <div class="input-group">
+                <input type="file" class="form-control" name="file" id="file" aria-describedby="inputGroupFileAddon04" aria-label="update">
+                <button class="btn btn-outline-secondary" type="submit" id="upload">Update</button>
+                
+        </div>
+            </div>
+        </div>
+       
+                <!-- <input type=file name=file id="file">
+                <input type=submit value=Upload id='uploadbtn'> -->
+         </form>
+    </div>
+    </div>
+    <div id="err"></div>
+    <!-- Bootstrap Javascript; at the end of the <body> -->
+   <script 
+       src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
+       integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
+       crossorigin='anonymous'></script>
+
+       
+<script>
+    
+    document.getElementById('postID').value = sessionStorage.getItem('postID');
+</script>      
+</body>
+
+</html>
