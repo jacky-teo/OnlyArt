@@ -9,7 +9,7 @@ services:
     build:
       context: ./
       dockerfile: consumer.dockerfile
-    image: bryan2chong/onlyfence/consumer
+    image: erlynnehazey/onlyfence/consumer
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/consumer
@@ -22,7 +22,7 @@ services:
     build:
       context: ./
       dockerfile: creator.dockerfile
-    image: bryan2chong/onlyfence/creator
+    image: erlynnehazey/onlyfence/creator
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/creator
@@ -33,7 +33,7 @@ services:
     build:
       context: ./
       dockerfile: content.dockerfile
-    image: bryan2chong/onlyfence/content
+    image: erlynnehazey/onlyfence/content
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/content
@@ -49,7 +49,7 @@ services:
     build:
       context: ./
       dockerfile: notification.dockerfile
-    image: bryan2chong/onlyfence/notification
+    image: erlynnehazey/onlyfence/notification
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/notification
@@ -61,7 +61,7 @@ services:
     build:
       context: ./
       dockerfile: payment.dockerfile
-    image: bryan2chong/onlyfence/payment
+    image: erlynnehazey/onlyfence/payment
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/payment
@@ -81,7 +81,7 @@ services:
     build:
       context: ./
       dockerfile: activity_log.dockerfile
-    image: bryan2chong/onlyfence/activity_log
+    image: erlynnehazey/onlyfence/activity_log
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/activity
@@ -98,7 +98,7 @@ services:
     build:
       context: ./
       dockerfile: error.dockerfile
-    image: bryan2chong/onlyfence/error
+    image: erlynnehazey/onlyfence/error
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/error
@@ -114,7 +114,7 @@ services:
     build:
       context: ./
       dockerfile: subscription_link.dockerfile
-    image: bryan2chong/onlyfence/subscription_link
+    image: erlynnehazey/onlyfence/subscription_link
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/sub_link
@@ -126,7 +126,7 @@ services:
     build:
       context: ./
       dockerfile: post_content.dockerfile
-    image: bryan2chong/onlyfence/post_content
+    image: erlynnehazey/onlyfence/post_content
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/post_content
@@ -149,7 +149,7 @@ services:
     build:
       context: ./
       dockerfile: view_content.dockerfile
-    image: bryan2chong/onlyfence/view_content
+    image: erlynnehazey/onlyfence/view_content
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/view_content
@@ -170,7 +170,7 @@ services:
     build:
       context: ./
       dockerfile: subscribe.dockerfile
-    image: bryan2chong/onlyfence/subscribe
+    image: erlynnehazey/onlyfence/subscribe
     restart: always
     environment:
       PYTHONUNBUFFERED: 1 
