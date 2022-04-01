@@ -80,7 +80,7 @@ def view(creator_consumer):
     print(creatorPrice)
 
     crCode = creatorPrice["code"]
-    crData = creatorPrice
+    crData = creatorPrice['data']
 
     if crCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.error", body=message, properties=pika.BasicProperties(delivery_mode=2))
