@@ -9,10 +9,6 @@
     <title>Post Content</title>
  
     <link rel="stylesheet" href="">
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!-- Bootstrap libraries -->
     <meta name="viewport" 
         content="width=device-width, initial-scale=1, shrink-to-fit=no">
  
@@ -32,6 +28,7 @@
         <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">OnlyFences</a>
+            <a href="./content.html">View All User's Content</a>
           </div>
         </nav>
         
@@ -39,7 +36,7 @@
         <h1>Upload New Content</h1>
         <br/>
 
-        <form action="http://host.docker.internal:5102/post_content" method='post' enctype=multipart/form-data id="forms">
+        <form action="http://localhost:5102/post_content" method='post' enctype=multipart/form-data id="forms">
 
         <div class="row">
             <div class="col">
@@ -69,9 +66,6 @@
         </div>
             </div>
         </div>
-       
-                <!-- <input type=file name=file id="file">
-                <input type=submit value=Upload id='uploadbtn'> -->
          </form>
     </div>
     </div>
