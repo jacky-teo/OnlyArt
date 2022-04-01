@@ -1,166 +1,173 @@
 <!--gallery showing all content creators, rinelle working on this bc ive done this before-->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <script src="https://unpkg.com/vue@next"></script>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+  <script src="https://unpkg.com/vue@next"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-      .autocom-box{
-      z-index:100;
-      position:absolute;
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .autocom-box {
+      z-index: 100;
+      position: absolute;
       width: 100%;
       top: 100%;
-      }
-    </style>
+    }
+  </style>
 </head>
 
 
 <body>
-    <div id="app">
-    <nav class="px-5 navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">OnlyFences</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-      
-        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
-          <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-            </li>
-            <li class="nav-item">
-            </li>
-          </ul>
-          <div class="position-relative">
-            <div class="d-block">
+  <div id="app">
+    <div id="compApp">
+      <navbar></navbar>
+    </div>
+    <!-- <nav class="px-5 navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">OnlyFences</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+          </li>
+        </ul>
+        <div class="position-relative">
+          <div class="d-block">
             <form class="form-inline my-2 my-lg-0 d-flex">
-              <input class="form-control mr-sm-2" type="search" v-model="searchinput" placeholder="Search" aria-label="Search" @input="populateSearch()">
+              <input class="form-control mr-sm-2" type="search" v-model="searchinput" placeholder="Search"
+                aria-label="Search" @input="populateSearch()">
             </form>
-            </div>
-            <div class="autocom-box" v-if="searchinput!=''">
-              <ul class="list-group" v-for="search in searchresult">
-                <a :href="search.creatorID" class="list-group-item list-group-item-action">{{search.creatorname}}</a>
-              </ul>
-            </div>
+          </div>
+          <div class="autocom-box" v-if="searchinput!=''">
+            <ul class="list-group" v-for="search in searchresult">
+              <a :href="search.creatorID" class="list-group-item list-group-item-action">{{search.creatorname}}</a>
+            </ul>
           </div>
         </div>
-    </nav>
+      </div>
+    </nav> -->
 
 
     <!-- display gallery-->
     <div id='app'>
-        <div class='container-fluid text-center py-5'> Showing {{numcreators}} Results</div>
-        <div class='container-fluid px-5' id='cardgallery'>
-          <div class='row'>
-            <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for='creator in creatorlist'>
-              <div class="card my-3 mx-3 creatorcard">
-                <div class="card-body">
-                  <h5 class="card-title overflow-hidden">{{creator.creatorname}}</h5>
-                  <a :href="creator.creatorID" class="stretched-link"></a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class='container-fluid d-flex justify-content-center my-5'>
-          <div id='pagenav'>
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-              <div class="btn-group mr-2" role="group" aria-label="First group" v-for="n in numpages">
-                <a class="btn btn-outline-secondary mx-1" :href=`creator_gallery.html?page=${n}` role="button"
-                  v-if='n != thispage'>{{n}}</a>
-                <a class='btn btn-secondary mx-1' :href=`creator_gallery.html?page=${n}` role='button' v-else>{{n}}</a>
+      <div class='container-fluid text-center py-5'> Showing {{numcreators}} Results</div>
+      <div class='container-fluid px-5' id='cardgallery'>
+        <div class='row'>
+          <div class="col-12 col-sm-6 col-md-4 col-lg-3 col-xl-3" v-for='creator in creatorlist'>
+            <div class="card my-3 mx-3 creatorcard">
+              <div class="card-body">
+                <h5 class="card-title overflow-hidden">{{creator.creatorname}}</h5>
+                <a :href="creator.creatorID" class="stretched-link"></a>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>  
+      <div class='container-fluid d-flex justify-content-center my-5'>
+        <div id='pagenav'>
+          <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div class="btn-group mr-2" role="group" aria-label="First group" v-for="n in numpages">
+              <a class="btn btn-outline-secondary mx-1" :href=`creator_gallery.html?page=${n}` role="button"
+                v-if='n != thispage'>{{n}}</a>
+              <a class='btn btn-secondary mx-1' :href=`creator_gallery.html?page=${n}` role='button' v-else>{{n}}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="./scripts/navbar.js"></script>
 <script>
-const app = Vue.createApp({
+  const app = Vue.createApp({
     data() {
-        return {
-            creatorlist: [],
-            searchresult:[],
-            numcreators: 0,
-            numpages: 1,
-            resultsperpage: 12,
-            thispage: 1,
-            searchinput: '',
-        }
+      return {
+        creatorlist: [],
+        searchresult: [],
+        numcreators: 0,
+        numpages: 1,
+        resultsperpage: 12,
+        thispage: 1,
+        searchinput: '',
+      }
     },
     methods: {
       getCreators() {
-          //var creatorcount = 0;
-          console.log('getcreatorlist function is running');
-          var url_string = window.location.href; //window.location.href
-          var url = new URL(url_string);
-          console.log('pageid condition: ', url.searchParams.get("page"))
-          if (url.searchParams.get("page") != null) {
-              var pageID = parseInt(url.searchParams.get("page"));
-              this.thispage = pageID;
-          }
-          console.log('page: ', this.thispage)
-          url = "http://127.0.0.1:5002/creator";
+        //var creatorcount = 0;
+        console.log('getcreatorlist function is running');
+        var url_string = window.location.href; //window.location.href
+        var url = new URL(url_string);
+        console.log('pageid condition: ', url.searchParams.get("page"))
+        if (url.searchParams.get("page") != null) {
+          var pageID = parseInt(url.searchParams.get("page"));
+          this.thispage = pageID;
+        }
+        console.log('page: ', this.thispage)
+        url = "http://127.0.0.1:5002/creator";
 
-          let output = null;
+        let output = null;
 
-          // console.log(url)
-          axios.get(url)
-              .then((response) => {
-                  console.log("response: ",response)
-                  output = response.data.data.creators
-                  //creatorData = response.data // global var
-                  console.log("output: ",output)
-                  for (result of output) {
-                      creatorname = result.USERNAME;
-                      console.log("CN: ",creatorname)
-                      creatorID = result.CREATORID.substr(2, 4);
-                      let uppercondition = Number(this.thispage) * this.resultsperpage >= Number(creatorID);
-                      let lowercondition = (Number(this.thispage) - 1) * this.resultsperpage < Number(creatorID);
-                      console.log('upper: ', Number(this.thispage) * this.resultsperpage);
-                      console.log('lower: ', (Number(this.thispage) - 1) * this.resultsperpage);
+        // console.log(url)
+        axios.get(url)
+          .then((response) => {
+            console.log("response: ", response)
+            output = response.data.data.creators
+            //creatorData = response.data // global var
+            console.log("output: ", output)
+            for (result of output) {
+              creatorname = result.USERNAME;
+              console.log("CN: ", creatorname)
+              creatorID = result.CREATORID.substr(2, 4);
+              let uppercondition = Number(this.thispage) * this.resultsperpage >= Number(creatorID);
+              let lowercondition = (Number(this.thispage) - 1) * this.resultsperpage < Number(creatorID);
+              console.log('upper: ', Number(this.thispage) * this.resultsperpage);
+              console.log('lower: ', (Number(this.thispage) - 1) * this.resultsperpage);
 
-                      if (lowercondition && uppercondition) {
-                          let creatorobject = {};
-                          creatorobject['creatorID'] = `creator_info.html?cid=CR${creatorID}`;
-                          creatorobject['creatorname'] = creatorname;
-                          this.creatorlist.push(creatorobject);
-                      }
+              if (lowercondition && uppercondition) {
+                let creatorobject = {};
+                creatorobject['creatorID'] = `creator_info.html?cid=CR${creatorID}`;
+                creatorobject['creatorname'] = creatorname;
+                this.creatorlist.push(creatorobject);
+              }
 
-                      this.numcreators += 1;
-                      console.log('this numcreators: ', this.numcreators)
-                  }
-                  console.log(this.creatorlist);
-                  //this.numcreators = 35; //test 
-                  console.log('creators: ', this.numcreators)
-                  console.log('resultsperpage: ', this.resultsperpage)
-                  this.numpages = Math.ceil(this.numcreators / this.resultsperpage);
-                  console.log('numpages', this.numpages)
+              this.numcreators += 1;
+              console.log('this numcreators: ', this.numcreators)
+            }
+            console.log(this.creatorlist);
+            //this.numcreators = 35; //test 
+            console.log('creators: ', this.numcreators)
+            console.log('resultsperpage: ', this.resultsperpage)
+            this.numpages = Math.ceil(this.numcreators / this.resultsperpage);
+            console.log('numpages', this.numpages)
 
-              },
-                  (error) => {
-                      console.log(error);
-                      output = error
+          },
+            (error) => {
+              console.log(error);
+              output = error
 
-                  });
+            });
       },
-      populateSearch(){
-        this.searchresult =[];
-        console.log("CL ",this.creatorlist)
+      populateSearch() {
+        this.searchresult = [];
+        console.log("CL ", this.creatorlist)
         csearch = this.searchinput.toLowerCase();
         clist = this.creatorlist;
-        for (creator of clist){
-          console.log("Type: ",typeof(creator.creatorname))
+        for (creator of clist) {
+          console.log("Type: ", typeof (creator.creatorname))
           cn = creator.creatorname.toLowerCase();
           cid = creator.creatorID;
-          if (cn.includes(csearch)){
+          if (cn.includes(csearch)) {
             console.log(creator.creatorID);
             let creatorobject = {};
             creatorobject['creatorID'] = `creator_info.html?cid=CR${cid}`;
@@ -175,10 +182,11 @@ const app = Vue.createApp({
 
     },
     created() {
-        this.getCreators();
+      this.getCreators();
     }
-})
+  })
 
-const vm = app.mount('#app')
+  const vm = app.mount('#app')
 </script>
+
 </html>
