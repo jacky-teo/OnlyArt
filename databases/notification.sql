@@ -12,3 +12,8 @@ CREATE TABLE IF NOT EXISTS `notification` (
   `telegramtag` varchar(64) NOT NULL,
   PRIMARY KEY (`chatid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO notification(chatid,telegramtag) 
+VALUES 
+('121187187', '@jackyteojianqi'),
+('788802319', '@erlynnehazey');

@@ -5,7 +5,7 @@ function showError(message) {
         // Display an error under the main container
         $('#error').text("Creator not found") 
     }
-    
+    document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID');  
     $('#search').click(async() => { 
         if($('#contentTable > tr')){
             $('#contentTable > tr').remove()
@@ -13,10 +13,13 @@ function showError(message) {
 
         var rows = "";
 
-        $('#contentTable').show()         
+        $('#contentTable').show()
+        
+        console.log('creatorID')       
         var creatorID = $('#creatorID').val()
         var serviceURL = "http://127.0.0.1:5003/content/"+creatorID;
-        
+        var deleteURL = 'http://127.0.0.1:5003/delete/'
+        var updateURL = 'http://127.0.0.1:5003/update/'
         try {
             const response =
             await fetch(
@@ -37,7 +40,9 @@ function showError(message) {
                             "<td>" + content.DESCRIPTION + "</td>" +
                             "<td> <img src='" + result.urls[counter] + "'  width='100' height='100'></td>"+
                             "<td>" + content.POST_DATE + "</td>" +
-                            "<td>" + content.modified + "</td>" ;
+                            "<td>" + content.modified + "</td>" +
+                            // "<td>"+ "<a href='./update.html?postID="+content.POSTID +"'"+">"+ "</td>"+ // IM UNSURE T__T
+                            "<td> <a href='"+ deleteURL +  content.POSTID+ "'>Delete</a></td>";
                    rows += "<tr>" + eachRow + "</tr>";
                    counter ++
                 }

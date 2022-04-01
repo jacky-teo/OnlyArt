@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,redirect
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from datetime import datetime
@@ -43,6 +43,34 @@ class Content(db.Model):
     def json(self):
 
         return {"POSTID": self.POSTID, "CREATORID": self.CREATORID, "DESCRIPTION": self.DESCRIPTION, "IMAGE_ID": self.IMAGE_ID, "IMG_EXT": self.IMG_EXT, "POST_DATE": self.POST_DATE, "modified": self.modified}
+
+@app.route("/content/<string:creatorID>")
+def getAll(creatorID):
+    init_firebase()  # initialize firebase
+    content_list = Content.query.filter_by(CREATORID=creatorID)
+    bucket = storage.bucket()  # link to storage inside firebase
+    # get a list of images under specified creator
+    blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
+    urls = []  # used later to store urls
+    # upload via file
+
+    for item in blobs[1:]:
+        item.make_public()
+        # Get a list of Public URLS so images can be views
+        urls.append(item.public_url)
+
+    if content_list:
+        return jsonify({
+            "code": 200,
+            "data": [content.json() for content in content_list],
+            "urls": urls,
+            'message': 'Content found'
+        })
+    return jsonify({
+        "code": 404,
+        "message": "Content not found"
+    }
+    ), 404
 
 
 @app.route("/subbed")
@@ -167,24 +195,25 @@ def delete(postID):
 
         db.session.delete(content)
         db.session.commit()
-        return jsonify(
-            {
-                "code": 200,
-                "data": {
-                    "PostID": postID
-                },
-                'message': 'Delete successful'
-            }
-        )
-    return jsonify(
-        {
-            "code": 404,
-            "data": {
-                "PostID": postID
-            },
-            "message": "Content not found."
-        }
-    ), 404
+        return redirect("http://localhost/OnlyFence/upload.html")
+        # return jsonify(
+        #     {
+        #         "code": 200,
+        #         "data": {
+        #             "PostID": postID
+        #         },
+        #         'message': 'Delete successful'
+        #     }
+        # )
+    # return jsonify(
+    #     {
+    #         "code": 404,
+    #         "data": {
+    #             "PostID": postID
+    #         },
+    #         "message": "Content not found."
+    #     }
+    # ), 404
 
 
 @app.route("/update/<string:postID>", methods=['PUT', 'POST'])
@@ -208,6 +237,7 @@ def update(postID):
         content.modified = datetime.now()
 
         db.session.commit()
+        return redirect("http://localhost/OnlyFence/upload.html")
         return jsonify(
             {
                 "code": 200,
@@ -215,15 +245,15 @@ def update(postID):
                 'message': 'Update successful'
             }
         )
-    return jsonify(
-        {
-            "code": 404,
-            "data": {
-                "postID": postID
-            },
-            "message": "Content not found."
-        }
-    ), 404
+    # return jsonify(
+    #     {
+    #         "code": 404,
+    #         "data": {
+    #             "postID": postID
+    #         },
+    #         "message": "Content not found."
+    #     }
+    # ), 404
 
 
 if __name__ == '__main__':
