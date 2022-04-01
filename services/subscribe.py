@@ -110,9 +110,10 @@ def confirmPayment(): # Function that passes in result from PayPal service after
                 amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updateSubscriptionLink.error",
                                          body=json.dumps(subscriptionLinkResult), properties=pika.BasicProperties(delivery_mode=2))
                 return jsonify({
-                    "code": 500,
-                    "message": "Internal Server Error when updating Subscription Link Service. Error: " + subscriptionLinkResult_message
-                }), 500 
+                    "code": subscriptionLinkResult_code,
+                    "message": subscriptionLinkResult_message
+                }),  subscriptionLinkResult_code
+                
             else: # Inform the acitivity microservice
                 amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="subscribe.updateSubscriptionLink.info",
                                          body=json.dumps(subscriptionLinkResult))

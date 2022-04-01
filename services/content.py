@@ -83,8 +83,7 @@ def unsubbed():
     creatorID = data["CREATORID"]
     init_firebase()
 
-    content_list = Content.query.filter_by(CREATORID=creatorID).limit(
-        3)  # Limit the number of images users can view to 3
+    content_list = Content.query.filter_by(CREATORID=creatorID).limit(3)  # Limit the number of images users can view to 3
     bucket = storage.bucket()
     # limit the number of images the users can view to 3
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/', max_results=4))
