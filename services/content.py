@@ -126,7 +126,7 @@ def upload():
                 "data": {
                     "POSTID": postID
                 },
-                "message": "Cotent already exists."
+                "message": "Content already exists."
             }
         ), 400
     toUpload = Content(POSTID=postID, CREATORID=creatorID, DESCRIPTION=description, IMAGE_ID=imageID,

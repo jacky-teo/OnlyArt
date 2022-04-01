@@ -6,6 +6,8 @@ from firebase_admin import storage
 import os
 import sys
 from datetime import datetime
+
+from idna import ulabel
 from invokes import invoke_http
 from firebase import init_firebase, upload_firebase
 from os import environ
@@ -46,25 +48,51 @@ def post_content():
         print('--------Data Uploaded into SQL-----------')
         print(uploadInformation)
         print('-----------------------------------------')
+        if uploadInformation['code'] not in range(200,300):
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.error",body=uploadInformation['message'], properties=pika.BasicProperties(delivery_mode=2))
+            return uploadInformation
+        else:
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.info",body=uploadInformation['message'], properties=pika.BasicProperties(delivery_mode=2))
         # Add creatorID as a json file
-        # creatorID_JSON = json.dumps({"CREATORID": creatorID})
         
         # Get all the followers that are subscribed to creator
         consumerTelegram = telegramTags(creatorID)
         print('--------- Collected Telegram tags ---------')
         print(consumerTelegram)
         print('-------------------------------------------')
+        if consumerTelegram['code'] not in range(200,300):
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.error",body=consumerTelegram['message'], properties=pika.BasicProperties(delivery_mode=2))
+            return consumerTelegram
+        else:
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=consumerTelegram['message'], properties=pika.BasicProperties(delivery_mode=2))
         creatorinfo = creatorInformation(creatorID)  # Get creator information
         # Get creator name to use for notification status
         creatorname = creatorinfo['data']['username']
+
+        if creatorinfo['code'] not in range(200,300):
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.get_creator.error",body=creatorinfo['message'], properties=pika.BasicProperties(delivery_mode=2))
+            return creatorinfo
+        else:
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=creatorinfo['message'], properties=pika.BasicProperties(delivery_mode=2))
+        print('--------- creatorname-------------')
+        print(creatorname)
+        print('----------------------------------')
         notifyStatus = notifyUsers(consumerTelegram, creatorname)  # notify users
         print('--------- Users Notified ---------')
         print(notifyStatus)
-        print('-------------------------------------------')
+        print('----------------------------------')
+        if notifyStatus['code'] not in range(200,300):
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.error",body=notifyStatus['message'], properties=pika.BasicProperties(delivery_mode=2))
+            return notifyStatus
+        else:
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.info",body=notifyStatus['message'], properties=pika.BasicProperties(delivery_mode=2))
 
-        if notifyStatus['code'] == 201 and creatorinfo['code'] == 200 and uploadInformation['code'] == 201 and consumerTelegram['code']==200:
+        if notifyStatus['code'] == 200 and creatorinfo['code'] == 200 and consumerTelegram['code']==200 and uploadInformation['code'] ==201 :
             print('REDIRECTING PAGE AS UPLOAD AND NOTIFCATION IS SUCCESSFUL')
             return  redirect("http://localhost/OnlyFence/upload_success.html")  # redirect users to upload_success.html
+
+        return notifyStatus
+
 
     except Exception as e:
         # Unexpected error in code
@@ -82,79 +110,21 @@ def post_content():
 
 def upload_content(json):
     uploadInformation = invoke_http(upload_url, method='POST', json=json)
-
-    uploadCode = uploadInformation['code']
-    message = uploadInformation['message']
-
-    if uploadCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.error",
-                                         body=message, properties=pika.BasicProperties(delivery_mode=2))
-
-        return {
-            "code": 500,
-            "data": {"uploadInformation": uploadInformation},
-            "message": "Failed to upload image"
-        }
-    else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.info",
-                                         body=message)
     return uploadInformation
 
 
 def telegramTags(creatorID):
     tags = invoke_http(f'{subscription_url}/{creatorID}', method="GET",)
-    tagsCode = tags['code']
-    message = tags['message']
-    if tagsCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.error",
-                                         body=message)
-        return {
-            "code": 500,
-            "data": {"tags": tags},
-            "message": "Failed to retrieve subscribers"
-        }
-    else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",
-                                         body=message)
     return tags
 
 
 def notifyUsers(tags, creatorname):
-    notification_status = invoke_http(
-        f"{notification_url}{creatorname}", json=tags)
-    notiCode = notification_status['code']
-    message = notification_status['message']
-
-    if notiCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.error",
-                                         body=message)
-        return {
-            "code": 500,
-            "data": {"notification_status": notification_status},
-            "message": "Failed to notify users"
-        }
-    else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.info",
-                                         body=message)
+    notification_status = invoke_http(f"{notification_url}{creatorname}", json=tags)
     return notification_status
 
 
 def creatorInformation(creatorID):
     info = invoke_http(f'{creator_url}{creatorID}')
-    infoCode = info['code']
-    message = info['message']
-
-    if infoCode not in range(200, 300):
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.get_creator.error",
-                                         body=message)
-        return {
-            "code": 500,
-            "data": {"info": info},
-            "message": "Failed to notify retrieve creator ID"
-        }
-    else:
-        amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.get_creator.info",
-                                         body=message)
     return info
 
 

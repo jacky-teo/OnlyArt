@@ -46,7 +46,9 @@ def upload_firebase(file,creatorID,description):
 
     # ['img1.png', 'img3.png']
         lastImgID = lastImgID.replace('img','')
-        lastImgID = lastImgID.replace('.png','')
+        index = lastImgID.index(".")
+        lastImgID = lastImgID[:index]
+        # lastImgID = lastImgID.replace('.png','')
         imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
     else:
         imageID = 'img1'
