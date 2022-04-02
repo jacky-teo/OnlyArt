@@ -2,7 +2,9 @@ const app = Vue.createApp({
     data(){
         return {
             postlist:[],
-            creatorid:""
+            creatorid:"",
+            loginURL: './login.html',
+            subType: ''
         }
     },
     methods:{
@@ -35,7 +37,8 @@ const app = Vue.createApp({
             )
                 .then((response) => {
                     console.log("response: ", response)
-                    let output = response.data;
+                    let output = response.data.data;
+                    this.subType = response.data.SubType;
                     let urls = response.data.urls; // Get all image URLs
 
                     for (result of output){
@@ -61,6 +64,22 @@ const app = Vue.createApp({
     },
     created(){
         this.getContent()
+
+        //checks if user has logged in; redirect to login.html if not logged in
+        if (!sessionStorage.getItem('ConsumerID')) {
+            window.location.href = this.loginURL;
+        }
+    },
+    computed: {
+        unsubcribed() {
+            if (this.subType === 1) {   
+                return false
+                
+            } else if (this.subType === 2) {
+                return true
+
+            }
+        }
     }
 })
 const vm = app.mount("#app")
