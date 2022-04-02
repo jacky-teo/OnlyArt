@@ -89,7 +89,8 @@ def post_content():
 
         if notifyStatus['code'] == 200 and creatorinfo['code'] == 200 and consumerTelegram['code']==200 and uploadInformation['code'] ==201 :
             print('REDIRECTING PAGE AS UPLOAD AND NOTIFCATION IS SUCCESSFUL')
-            return  redirect("http://localhost/OnlyFence/upload_success.html")  # redirect users to upload_success.html
+            return  redirect("http://localhost/ESD%20Project/OnlyFence/content.html")  # redirect users to content.html
+            # http://localhost/OnlyFence/content.html (to be used instead and make sure directory correct)
 
         return notifyStatus
 
@@ -114,7 +115,7 @@ def upload_content(json):
 
 
 def telegramTags(creatorID):
-    tags = invoke_http(f'{subscription_url}/{creatorID}', method="GET",)
+    tags = invoke_http(f'{subscription_url}/{creatorID}', method="GET")
     return tags
 
 
