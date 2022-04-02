@@ -12,24 +12,22 @@ navbar.component('navbar', {
     },
     computed: {
         links() {
-            // href links at consumer
-            if (window.location.href.includes("creator_gallery")) {
+            if (window.location.href.includes("upload")) {
                 return {
-                    homeLink: ""
-                }
-            }
-            else if (window.location.href.includes("upload")) {
-                return {
-                    // href links at creator (upload.html)
-                    homeLink: "",
+                    homeLink: "./upload.html",
                     viewLink: "./content.html"
                 }
             }
             else if (window.location.href.includes("content")) {
                 return {
-                    // href links at creator (content.html)
-                    homeLink: "",
-                    uploadLink: "./upload.html"
+                    homeLink: "./upload.html",
+                    viewLink: "./content.html"
+                }
+            }
+            else {
+                return {
+                    homeLink: "./upload.html",
+                    viewLink: "./content.html"
                 }
             }
         }
@@ -39,13 +37,10 @@ navbar.component('navbar', {
       <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
-            <a class="nav-link" :href=links.homeLink>Home</a>
+            <a class="nav-link" :href=links.homeLink>Upload</a>
           </li>
           <li class="nav-item">
-          <a class="nav-link" :href=links.uploadLink>Upload</a>
-          </li>
-          <li class="nav-item ">
-            <a class="nav-link" :href=links.viewLink>Content</a>
+          <a class="nav-link" :href=links.viewLink>View</a>
           </li>
         </ul>
       </div>
