@@ -18,6 +18,11 @@ navbar.component('navbar', {
           homeLink: ""
         }
       }
+      else{
+        return {
+            homeLink: "creator_gallery.html",
+        }
+    }
     }
   },
   template: `<nav class="px-5 navbar navbar-expand-lg navbar-dark bg-dark">
