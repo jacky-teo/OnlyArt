@@ -24,21 +24,23 @@
         <navbar></navbar>
     </div>
 
-    <div class="container">
-        <div class="row ">
-            <div class="col text-center">
-                <h2>CREATOR CONTENT</h2>
+    <div class="container mt-5">
+        <div class="card mx-auto d-block" style="width: 40%;">
+            <h5 class="card-header">Content Creator</h5>
+            <div class="card-body">
+                <p class="card-text">Click on the button below to view all current content</p>
+                <div class="row" id="searchField">
+                    <div class="col">
+                        <button class="btn btn-outline-dark" id="search">Fetch Data</button>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row" id="searchField">
-            <div class="col">
-                <button class="btn btn-primary" id="search">View All Current Content</button>
-            </div>
-        </div>
+
     </div>
-    <div id="main-container" class="container">
-        <h1 class="display-4">Content Listing</h1>
-        <table class='table table-striped border-1'>
+    <div id="main-container" class="container" style="display:none;">
+        <span class="display-6 ">Content Listing</span>
+        <table class='mt-3 table table-striped border-1'>
             <thead class='table-dark'>
                 <tr>
                     <th>POSTID</th>
@@ -54,9 +56,10 @@
             <tbody id="contentTable"></tbody>
         </table>
     </div>
-    </div>
 
-    <p id="error"></p>
+    <div id="error" class="container mt-5 pt-5 text-center">
+        <span class="display-6">No Content Found.</span>
+    </div>
 
 </body>
 <script src="./scripts/content.js"></script>
