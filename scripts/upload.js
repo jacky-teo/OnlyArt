@@ -1,4 +1,4 @@
-//insert value of Creat
+//insert value of CreatorID into hidden form input
 document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID');
 
 const app = Vue.createApp({
@@ -17,8 +17,8 @@ const app = Vue.createApp({
 
             showDesciptionErr: false,
             showFileErr: false,
-            descErrMsg: 'Description is empty',
-            fileErrMsg: 'No file uploaded',
+            descErrMsg: 'Description is empty.',
+            fileErrMsg: 'No file uploaded :(',
         }
     },
     methods:{
