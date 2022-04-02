@@ -34,8 +34,8 @@ const app = Vue.createApp({
                 }
             )
                 .then((response) => {
-                    console.log("response: ",response)
-                    output = response.data.data;
+                    console.log("response: ", response)
+                    let output = response.data;
                     let urls = response.data.urls; // Get all image URLs
 
                     for (result of output){
