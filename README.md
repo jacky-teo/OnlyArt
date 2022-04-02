@@ -21,10 +21,11 @@ OnlyFence is a content subscription service that allows content creators to earn
 
 ## User Scenarios / Walkthrough
 ### 1) Consumer Searches for Creator to Subscribe to
-1. blablabla
-2. blebleble
-3. blublublu
-4. blobloblo
+1. Starting from **"xxx.html"*** page, the user...
+2. blablabla
+3. blebleble
+4. blublublu
+5. blobloblo
 
 ### 2a) Create Subscription Request
   1. On the **"creator_info.html"** page, if a user is not subscribed to the creator, a subscribe button will be present.
@@ -47,10 +48,11 @@ OnlyFence is a content subscription service that allows content creators to earn
   16. UI shows a confirmation message and a button that allows the user to return to **"creator_info.html"**.
 
 ### 3) Creator Posts New Content
-1. fencefencefence
-2. fancefancefance
-3. funcefuncefunce
-4. foncefoncefonce
+1. Starting from **"xxx.html"*** page, the user...
+2. fencefencefence
+3. fancefancefance
+4. funcefuncefunce
+5. foncefoncefonce
 
 ## Tools Available
 - Docker
