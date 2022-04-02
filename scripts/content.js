@@ -14,6 +14,8 @@ $('#search').click(async () => {
     }
 
     var rows = "";
+    $('#main-container').show()
+
     $('#contentTable').show()
 
     var creatorID = sessionStorage.getItem('CreatorID');
