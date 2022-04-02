@@ -3,7 +3,7 @@ document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID')
 
 const app = Vue.createApp({
     created() {
-        checks if user has logged in; redirect to login.html if not logged in
+        //checks if user has logged in; redirect to login.html if not logged in
         if (!sessionStorage.getItem('CreatorID')) {
             window.location.href = this.loginURL;
         }
