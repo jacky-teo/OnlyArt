@@ -8,6 +8,7 @@ document.getElementById('payment-information').innerHTML = `
     <b>Creator: </b> ${creator_name}
     `;
 
+// Function for Subscribe Button
 async function redirectPayment() {
     console.log("--- JS FUNCTION redirectPayment() ---")
     
@@ -24,6 +25,7 @@ async function redirectPayment() {
 
     try {
         console.log('LOADING...')
+        // Call Subscribe.py to request for payment information
         const response = 
             await fetch(
                 subscribeURL, otherParams
@@ -35,6 +37,7 @@ async function redirectPayment() {
                 console.log('SUCCESS CASE')
                 console.log(result)
 
+                // Redirect to payment html with payment information
                 code = result.code
                 creatorUsername = result.creatorUsername
                 creatorEmail = result.creatorEmail
@@ -45,7 +48,7 @@ async function redirectPayment() {
                 sessionStorage.setItem('creatorEmail',creatorEmail)
                 sessionStorage.setItem('price',price)
 
-                window.location.href = "./payment.html";
+                window.location.href = "./payment.html"; 
             } else if (response.status === 404) {
                 // Error
                 console.log('Error: Response 404')
@@ -59,43 +62,3 @@ async function redirectPayment() {
     }
 
 }
-
-
-
-// $('subscribe').click(function(){
-//     $.ajax({
-//         url: subscribeURL,
-//         type: "GET",
-//         success: function(result){
-//             console.log(result)
-//         },
-//         error: function(error){
-//             console.log(`Error ${error}`)
-//         }
-//     })
-// })
-
-// $(async() => {
-//     var subscribeURL = "http://localhost:5101/subscribe"
-
-//     try {
-//         const response = 
-//             await fetch(
-//                 subscribeURL, { method: 'GET' }
-//             );
-//         const result = await response.json();
-//             if (response.status === 200) {
-//                 // Success Case
-//                 console.log('SUCCESS CASE')
-//             } else if (response.status === 404) {
-//                 // Error
-//                 console.log('Error: Response 404')
-//             } else {
-//                 // Error
-//                 console.log('Error: Response ???')
-//                 throw response.status
-//             }
-//     } catch (error) {
-//         console.log('Error: Error in the service')
-//     }
-// })
