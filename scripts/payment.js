@@ -7,6 +7,7 @@ var creatorID = sessionStorage.getItem('creatorID')
 var price = sessionStorage.getItem('price');
 var platform_fee = "5";
 
+document.getElementById("loader").style.display = "none";
 document.getElementById('payment-summary').innerHTML = `
     <b>Transfering funds to:</b> <br>
     ${payee_username}<br>
@@ -67,6 +68,7 @@ paypal.Buttons({
 
             // Start Loader here ============================================================================================================
             // "Confirming subscription... Updating our database... Preparing your fences..."
+            document.getElementById("loader").style.display = "block";
         });
     }
 
@@ -103,10 +105,10 @@ async function confirmSubscription(data){
                 console.log(result)
                 
                 // Close loader here ============================================================================================================
+                document.getElementById("loader").style.display = "none";
                 var element = document.getElementById('paypal-button-container');
-                element.innerHTML = '';
-                element.innerHTML = '<h3>Thank you for your payment!</h3>';
-                // Redirect to view_content.html
+                element.innerHTML = "<h3>Thank you for your payment!</h3><br><button type='button' onclick='redirectBack()'>Continue</button>";
+                // Redirect to creator_info.html
                 
             } else if (response.status === 404) {
                 // Error
@@ -121,9 +123,9 @@ async function confirmSubscription(data){
     }
 }
 
-
-
-
+function redirectBack(){
+    window.location.href = "./creator_info.html"; 
+}
 
 
 // For Paypal Javascript SDK
