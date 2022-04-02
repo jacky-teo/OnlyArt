@@ -6,12 +6,12 @@ const app = Vue.createApp({
         //checks if user has logged in; redirect to login.html if not logged in
         if (!sessionStorage.getItem('CreatorID')) {
             window.location.href = this.loginURL;
-        } 
+        }
     },
     data() {
         return {
             loginURL: "./login.html",
-            
+
             description: "",
             uploadFile: null,
 
@@ -21,12 +21,12 @@ const app = Vue.createApp({
             fileErrMsg: 'No file uploaded :(',
         }
     },
-    methods:{
+    methods: {
         checkForm: function (e) {
             if (this.description && this.uploadFile) {
                 return true;
             }
-    
+
             if (!this.description) {
                 this.showDesciptionErr = true;
             }
@@ -34,14 +34,14 @@ const app = Vue.createApp({
             if (!this.uploadFile) {
                 this.showFileErr = true;
             }
-    
+
             e.preventDefault();
         },
         updateFile(event) {
             console.log(event);
         }
     },
-    
+
 })
 
 app.mount("#app")

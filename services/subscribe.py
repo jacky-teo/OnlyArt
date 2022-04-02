@@ -37,7 +37,6 @@ def check_request():
             ex_str = str(e) + " at " + str(exc_type) + ": " + fname + ": line " + str(exc_tb.tb_lineno)
             print(ex_str)
 
-            print('Failed to confirm subscription. Invalid JSON')
             return jsonify({
                 "code": 500,
                 "message": "Internal Server Error. Error: " + ex_str
