@@ -71,7 +71,7 @@ services:
   payment_log:
     build:
       context: ./
-      dockerfile: payment.dockerfile
+      dockerfile: payment_log.dockerfile
     image: jackyteojianqi/onlyfence/payment_log
     restart: always
     environment:
