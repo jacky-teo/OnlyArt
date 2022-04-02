@@ -30,74 +30,77 @@
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">OnlyFences</a>
-          </div>
-        </nav>
-        
-    <div class="container">
-        <h1>Update Content</h1>
-        <br/>
-
-        <form action="http://localhost:5003/update" method='post' enctype=multipart/form-data id="forms">
-
-        <div class="row">
-            <div class="col">
-                <div class="input-group flex-nowrap">
-                            <span class="input-group-text" id="addon-wrapping">POSTID</span>
-                            <input type="text" class="form-control" name='postID' id="postID" aria-label="PostID" aria-describedby="addon-wrapping" placeholder="Please input the POSTID of the content you would like to update">
-                </div>
-            </div>
         </div>
     </nav>
     <!-- <div id="compApp">
         <navbar></navbar>
     </div> -->
+    <div class="container">
+        <h1>Update Content</h1>
+        <br />
 
-    <div class="container mt-5">
+        <form action="http://localhost:5003/update" method='post' enctype=multipart/form-data id="forms">
 
-        <div class="card mx-auto d-block" style="width: 60%;">
-            <div class="card-body">
-                <h1 class="card-title">Update Content</h1>
-                <div class="card-text">
-                    <form action="http://host.docker.internal:5102/post_content" method='post'
-                        enctype=multipart/form-data id="forms"></form>
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="input-group flex-nowrap" style="display: none;">
-                                <span class="input-group-text" id="addon-wrapping">POSTID</span>
-                                <input type="text" class="form-control" name='postID' id="postID" aria-label="PostID"
-                                    aria-describedby="addon-wrapping">
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col">
+                    <div class="input-group flex-nowrap">
+                        <span class="input-group-text" id="addon-wrapping">POSTID</span>
+                        <input type="text" class="form-control" name='postID' id="postID" aria-label="PostID"
+                            aria-describedby="addon-wrapping"
+                            placeholder="Please input the POSTID of the content you would like to update">
                     </div>
-                    <br />
-
-                    <div class="row">
-                        <div class="col">
-                            <div class="input-group">
-                                <span class="input-group-text">Description</span>
-                                <textarea class="form-control" aria-label="Description" name='description'></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <br />
-                    <div class="row">
-                        <div class="col">
-                            <div class="input-group">
-                                <input type="file" class="form-control" name="file" id="file"
-                                    aria-describedby="inputGroupFileAddon04" aria-label="update">
-                                <button class="btn btn-outline-secondary" type="submit" id="upload">Update</button>
-
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- <input type=file name=file id="file">
-                                <input type=submit value=Upload id='uploadbtn'> -->
-                    </form>
                 </div>
             </div>
-        </div>
+
+
+            <div class="container mt-5">
+
+                <div class="card mx-auto d-block" style="width: 60%;">
+                    <div class="card-body">
+                        <h1 class="card-title">Update Content</h1>
+                        <div class="card-text">
+                            <form action="http://host.docker.internal:5102/post_content" method='post'
+                                enctype=multipart/form-data id="forms"></form>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group flex-nowrap" style="display: none;">
+                                        <span class="input-group-text" id="addon-wrapping">POSTID</span>
+                                        <input type="text" class="form-control" name='postID' id="postID"
+                                            aria-label="PostID" aria-describedby="addon-wrapping">
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Description</span>
+                                        <textarea class="form-control" aria-label="Description"
+                                            name='description'></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <input type="file" class="form-control" name="file" id="file"
+                                            aria-describedby="inputGroupFileAddon04" aria-label="update">
+                                        <button class="btn btn-outline-secondary" type="submit"
+                                            id="upload">Update</button>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <input type=file name=file id="file">
+                                <input type=submit value=Upload id='uploadbtn'> -->
+        </form>
+    </div>
+    </div>
+    </div>
 
     </div>
     </div>
@@ -115,6 +118,5 @@
 </body>
 <script src="https://unpkg.com/vue@next"></script>
 <script src="./scripts/navbar_creator.js"></script>
-
 
 </html>
