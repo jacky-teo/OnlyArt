@@ -68,11 +68,11 @@ services:
     ports:
             - "5000:5000"
 
-  payment:
+  payment_log:
     build:
       context: ./
       dockerfile: payment.dockerfile
-    image: jackyteojianqi/onlyfence/payment
+    image: jackyteojianqi/onlyfence/payment_log
     restart: always
     environment:
       dbURL: mysql+mysqlconnector://is213@host.docker.internal:3306/payment
@@ -192,10 +192,10 @@ services:
       rabbit_port: 5672
       creator_url: "http://creator:5002/creator/price" 
       add_subscription_url: "http://subscription_link:5006/subscription/add"
-      add_paymentLog_url: "http://payment:5005/payments/log"
+      add_paymentLog_url: "http://payment_log:5005/payments/log"
     ports:
             - "5101:5101"
     depends_on:
-        - payment
+        - payment_log
         - subscription_link
         - creator
