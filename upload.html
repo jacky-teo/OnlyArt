@@ -1,85 +1,85 @@
 <!DOCTYPE html>
 <html>
- 
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width">
- 
+
     <title>Post Content</title>
- 
+
     <link rel="stylesheet" href="">
-    <meta name="viewport" 
-        content="width=device-width, initial-scale=1, shrink-to-fit=no">
- 
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
     <!-- Bootstrap CSS -->
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css'
-       rel='stylesheet'
-       integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC'
-       crossorigin='anonymous'>
- 
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css' rel='stylesheet'
+        integrity='sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC' crossorigin='anonymous'>
+
     <!-- Latest compiled and minified JavaScript -->
-    <script
-       src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
- 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 </head>
- 
-<body >
-        <nav class="navbar navbar-dark bg-dark">
+
+<body>
+    <div id="compApp">
+        <navbar></navbar>
+    </div>
+    <!-- <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">OnlyFences</a>
             <a href="./content.html">View All User's Content</a>
-          </div>
-        </nav>
-        
+        </div>
+    </nav> -->
+
     <div class="container">
         <h1>Upload New Content</h1>
-        <br/>
+        <br />
 
         <form action="http://localhost:5102/post_content" method='post' enctype=multipart/form-data id="forms">
 
-        <div class="row">
-            <div class="col">
-                <div class="input-group flex-nowrap" style="display: none;">
-                            <span class="input-group-text" id="addon-wrapping">CreatorID</span>
-                            <input type="text" class="form-control" name='creatorID' id="creatorID" aria-label="CreatorID" aria-describedby="addon-wrapping">
+            <div class="row">
+                <div class="col">
+                    <div class="input-group flex-nowrap" style="display: none;">
+                        <span class="input-group-text" id="addon-wrapping">CreatorID</span>
+                        <input type="text" class="form-control" name='creatorID' id="creatorID" aria-label="CreatorID"
+                            aria-describedby="addon-wrapping">
+                    </div>
                 </div>
             </div>
-        </div>
-        <br/>
-        
-        <div class="row">
-            <div class="col">
-                <div class="input-group">
-                    <span class="input-group-text">Description</span>
-                    <textarea class="form-control" aria-label="Description" name='description'></textarea>
+            <br />
+
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <span class="input-group-text">Description</span>
+                        <textarea class="form-control" aria-label="Description" name='description'></textarea>
+                    </div>
                 </div>
             </div>
-        </div>
-        <br/>
-        <div class="row">
-            <div class="col">
-                 <div class="input-group">
-                <input type="file" class="form-control" name="file" id="file" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
-                <button class="btn btn-outline-secondary" type="submit" id="upload">Upload</button>
-                
-        </div>
+            <br />
+            <div class="row">
+                <div class="col">
+                    <div class="input-group">
+                        <input type="file" class="form-control" name="file" id="file"
+                            aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        <button class="btn btn-outline-secondary" type="submit" id="upload">Upload</button>
+
+                    </div>
+                </div>
             </div>
-        </div>
-         </form>
+        </form>
     </div>
     </div>
     <div id="err"></div>
     <!-- Bootstrap Javascript; at the end of the <body> -->
-   <script 
-       src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
-       integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
-       crossorigin='anonymous'></script>
+    <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js'
+        integrity='sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM'
+        crossorigin='anonymous'></script>
 
-       
-<script>
-    document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID');
-</script>      
+    <script>
+        document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID');
+    </script>
 </body>
+<script src="https://unpkg.com/vue@next"></script>
+<script src="./scripts/navbar_creator.js"></script>
 
 </html>
