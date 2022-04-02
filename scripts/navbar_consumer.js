@@ -12,13 +12,8 @@ app.component('navbar', {
     },
     computed: {
         links() {
-            // href links at upload directory
+            // href links at consumer
             if (window.location.href.includes("creator_gallery")) {
-                return {
-                    homeLink: "./"
-                }
-            }
-            else {
                 return {
                     homeLink: ""
                 }
@@ -26,10 +21,10 @@ app.component('navbar', {
         }
     },
     template: `<nav class="px-5 navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">OnlyFences</a>
+      <a class="navbar-brand" href="#">OnlyFence</a>
       <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
+          <li class="nav-item">
             <a class="nav-link" :href=links.homeLink>Home</a>
           </li>
         </ul>
