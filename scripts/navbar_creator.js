@@ -1,10 +1,10 @@
 // vue.js for universal navbar
-const app = Vue.createApp({
+const navbar = Vue.createApp({
 
 })
 
 //navbar vue component
-app.component('navbar', {
+navbar.component('navbar', {
     data() {
         return {
             appName: 'OnlyFence'
@@ -51,4 +51,4 @@ app.component('navbar', {
       </div>
     </nav>`
 })
-app.mount("#compApp")
+navbar.mount("#compApp")
