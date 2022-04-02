@@ -112,6 +112,7 @@ def view(creator_consumer):
             amqp_setup.channel.basic_publish(
                 exchange=amqp_setup.exchangename, routing_key="view_content.unsubbed_content.info", body=message)
 
+        unsubbed["SubType"] = subType
         return unsubbed
     else:
         print('-----Retrieving content for subscriber-----')
@@ -131,6 +132,8 @@ def view(creator_consumer):
         else:
             amqp_setup.channel.basic_publish(
                 exchange=amqp_setup.exchangename, routing_key="view_content.subbed_content.info", body=message)
+
+        subbed["SubType"] = subType
         return subbed
 
 

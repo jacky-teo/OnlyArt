@@ -90,7 +90,8 @@ def post_content():
         if notifyStatus['code'] == 200 and creatorinfo['code'] == 200 and consumerTelegram['code']==200 and uploadInformation['code'] ==201 :
             print('REDIRECTING PAGE AS UPLOAD AND NOTIFCATION IS SUCCESSFUL')
             return  redirect("http://localhost/ESD%20Project/OnlyFence/content.html")  # redirect users to content.html
-            # http://localhost/OnlyFence/content.html (to be used instead and make sure directory correct)
+            return  redirect("http://localhost/OnlyFence/content.html")
+            # http://localhost/OnlyFence/content.html (to be used instead, must make sure directory correct)
 
         return notifyStatus
 

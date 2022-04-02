@@ -193,7 +193,8 @@ def delete(postID):
 
         db.session.delete(content)
         db.session.commit()
-        return redirect("http://localhost/OnlyFence/upload.html")
+        return redirect("http://localhost/ESD%20Project/OnlyFence/upload.html?newContent=1")
+        # return redirect("http://localhost/OnlyFence/upload.html")
         # return jsonify(
         #     {
         #         "code": 200,
