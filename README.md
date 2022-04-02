@@ -21,12 +21,36 @@ OnlyFence is a content subscription service that allows content creators to earn
 
 ## User Scenarios / Walkthrough
 ### 1) Consumer Searches for Creator to Subscribe to
+1. blablabla
+2. blebleble
+3. blublublu
+4. blobloblo
 
 ### 2a) Create Subscription Request
+  1. On the **"creator_info.html"** page, if a user is not subscribed to the creator, a subscribe button will be present.
+  2. Clicking on the subscribe button will call *subscribe.py* through the **"/subscribe"** API.
+  3. *Subscribe.py* will request for the creator's payment information from *creator_account.py* through the **"/creator/price"** API.
+  4. *Subscribe.py* will return the information to the UI.
+  5. The UI will redirect the user to **"payment.html"** page, which holds the Paypal components.
+  6. Clicking on the Paypal button will call the Paypal API which receives the creator information from the UI.
+  7. Paypal API will generate an order on their servers and generate a pop-up window for the user to provide their payment information and approve the transaction.
 
 ### 2b) Confirm Subscription Payment
+  8. Once a user approves the transaction on the Paypal pop-up window, Paypal will immediately capture the transaction. Funds will be transferred from the user's account, to the creator account, platform account and to Paypal for service fees.
+  9. Paypal API will return a JSON with an order summary and status, to the UI.
+  10. Upon receiving the JSON, the UI will call *subscribe.py* through the **"/confirmSubscription"** API.
+  11. *Subscribe.py* will send the subscription information to *subscription_link.py* through the **"/subscription/add"** API.
+  12. *Subscription_link.py* will create a new record in the *subscription_link* database.
+  13. *Subscribe.py* will send the subscription information to payment_log.py through the **"/payments/log"** API.
+  14. *Payment_log.py* will create a new record in the *payment_log* database.
+  15. *Subscribe.py* will return a successful status to the UI.
+  16. UI shows a confirmation message and a button that allows the user to return to **"creator_info.html"**.
 
 ### 3) Creator Posts New Content
+1. fencefencefence
+2. fancefancefance
+3. funcefuncefunce
+4. foncefoncefonce
 
 ## Tools Available
 - Docker
