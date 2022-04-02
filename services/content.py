@@ -156,8 +156,7 @@ def upload():
                 "message": "Content already exists."
             }
         ), 400
-    toUpload = Content(POSTID=postID, CREATORID=creatorID, DESCRIPTION=description, IMAGE_ID=imageID,
-                       IMG_EXT=imageEXT, POST_DATE=None, modified=None)  # Create object to update sql
+    toUpload = Content(POSTID=postID, CREATORID=creatorID, DESCRIPTION=description, IMAGE_ID=imageID,IMG_EXT=imageEXT, POST_DATE=None, modified=None)  # Create object to update sql
 
     try:
         db.session.add(toUpload)  # Update SQL
@@ -182,7 +181,6 @@ def upload():
 @app.route("/delete/<string:postID>", methods=['POST', 'GET', 'DELETE'])
 def delete(postID):
     init_firebase()  # Initiate firebase
-    # creatorID,imageID= postID.split('_')
     # Get postID information from Database
     content = Content.query.filter_by(POSTID=postID).first()
     # Get Creator ID
@@ -216,23 +214,22 @@ def delete(postID):
     # ), 404
 
 
-@app.route("/update/<string:postID>", methods=['PUT', 'POST'])
-def update(postID):
+@app.route("/update", methods=['PUT', 'POST','GET'])
+def update():
+    postID =request.form['postID'] #Get the Post ID from the form
     content = Content.query.filter_by(POSTID=postID).first()
-    information = content.json()
-    if content:
-        imageID = f"{information['imageID']}"
-        if data['IMAGE_ID']:
-            creatorID = data['CREATORID']
-            file = request.files['file']  # Get file from HTML post request
-            if file:
-                fileEXT = file.mimetype.split('/')[1]
-                # calls firebase atomic mircoservice to update image inside firebase
-                update_firebase(creatorID, imageID, file, fileEXT)
+    postinformation = postID.split('_')
+    creatorID,imageID = postinformation[0], postinformation[1]
+    if content: # Check if post exist
+        file = request.files['file'] #Get file from HTML post request
+        if file != None: #If file exist, do the following
+            fileEXT = file.mimetype.split('/')[1]
+            content.IMG_EXT = fileEXT
+            # calls firebase atomic mircoservice to update image inside firebase
+            update_firebase(creatorID, imageID, file, fileEXT)
 
-        data = request.get_json()
-        if data['DESCRIPTION']:
-            content.DESCRIPTION = data['DESCRIPTION']
+        if request.form['description'] != '':
+            content.DESCRIPTION = request.form['description']
 
         content.modified = datetime.now()
 
