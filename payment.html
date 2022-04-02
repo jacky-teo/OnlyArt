@@ -16,21 +16,26 @@
     <div id="compApp">
         <navbar></navbar>
     </div>
-    <h1>
+    <h1 class="text-center my-4">
         Payment Page for OnlyFence!
     </h1>
+    <div class="card position-absolute top-50 start-50 translate-middle" style="width: 36rem;">
+        <div class="card-body">
+          <h5 class="card-title" id="payment-summary">Payment Page for OnlyFence!</h5>
+          <p class="card-text">
+            <!-- -------------------- PAYPAL COMPONENT -------------------- -->
+            <!-- Include the PayPal JavaScript SDK; insert sandbox Business account app client ID after "client-id=" -->
+            <script src="https://www.paypal.com/sdk/js?currency=SGD&client-id=Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M&merchant-id=sb-go47cv14389012@business.example.com"></script>
 
-    <p id="payment-summary"></p>
-
-    <!-- -------------------- PAYPAL COMPONENT -------------------- -->
-    <!-- Include the PayPal JavaScript SDK; insert sandbox Business account app client ID after "client-id=" -->
-    <script src="https://www.paypal.com/sdk/js?currency=SGD&client-id=Afx50ZFn0R7g2tyN0P08kc3fBR0Csy8w1J25MND90MVCnpbLwiaIS-UiNElzqypPKulongQDAcq41D0M&merchant-id=sb-go47cv14389012@business.example.com"></script>
-
-    <!-- Set up a container element for the button -->
-    <div id="paypal-button-container"></div>
+            <!-- Set up a container element for the button -->
+            <div id="paypal-button-container"></div>
+            
+            <!-- script for paypal components -->
+            <script src="scripts/payment.js"></script>
+          </p>
+        </div>
+    </div>
     
-    <!-- script for paypal components -->
-    <script src="scripts/payment.js"></script>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
