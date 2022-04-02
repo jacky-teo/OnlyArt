@@ -19,7 +19,7 @@ OnlyFence is a content subscription service that allows content creators to earn
 3. Start using OnlyFence by accessing the "login.html" page.
 4. Log in using the appropriate accounts (see **Test Accounts** for credentials)
 
-## User Scenarios
+## User Scenarios / Walkthrough
 ### 1) Consumer Searches for Creator to Subscribe to
 
 ### 2a) Create Subscription Request
@@ -27,14 +27,6 @@ OnlyFence is a content subscription service that allows content creators to earn
 ### 2b) Confirm Subscription Payment
 
 ### 3) Creator Posts New Content
-
-
--Consumer Logs In  
--Content creator signs in to their account  
--Consumer subscribes to content creator  
--Content creator posts to their profile  
--Consumer views content of the subscribed content creator  
--Content creator views post statistics  
 
 ## Tools Available
 - Docker
