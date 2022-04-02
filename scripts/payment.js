@@ -106,6 +106,7 @@ async function confirmSubscription(data){
                 var element = document.getElementById('paypal-button-container');
                 element.innerHTML = '';
                 element.innerHTML = '<h3>Thank you for your payment!</h3>';
+                // Redirect to view_content.html
                 
             } else if (response.status === 404) {
                 // Error

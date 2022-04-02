@@ -10,7 +10,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>View Content</title>
+    <title>OnlyFence - Creator Profile</title>
+    <link rel="icon" type="image/x-icon"
+        href="https://e7.pngegg.com/pngimages/446/743/png-clipart-brown-wooden-fence-fence-garden-fence-pattern-outdoor-structure-branch.png">
     <style>
         .center {
             position: absolute;
@@ -56,7 +58,7 @@
 
     <div id="app" class="mx-5" style="display:none">
         <div class="text-center fs-1 m-3">CREATOR {{creatorid}}</div>
-        <div class="text-center"><button type="button" class="btn btn-dark">Subscribe</button></div>
+        <div class="text-center"><button type="button" class="btn btn-dark" onclick="redirectPayment()">Subscribe</button></div>
         <div class="card-group row-cols-3">
             <div class="col" v-for="post in postlist">
                 <div class="card m-3">
@@ -77,7 +79,7 @@
 <!-- Vue Js -->
 <script src="https://unpkg.com/vue@next"></script>
 <!-- creator_info script -->
-<script src="./scripts/navbar.js"></script>
+<script src="./scripts/navbar_consumer.js"></script>
 <script src="../OnlyFence/scripts/creator_info.js"></script>
 
 </html>
