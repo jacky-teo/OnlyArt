@@ -5,7 +5,7 @@ function showError(message) {
         // Display an error under the main container
         $('#error').text("Creator not found") 
     }
-    document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID');  
+
     $('#search').click(async() => { 
         if($('#contentTable > tr')){
             $('#contentTable > tr').remove()
@@ -15,9 +15,8 @@ function showError(message) {
 
         $('#contentTable').show()
         
-        console.log('creatorID')       
-        var creatorID = $('#creatorID').val()
-        var serviceURL = "http://127.0.0.1:5003/content/"+creatorID;
+        var creatorID = sessionStorage.getItem('CreatorID');  
+        var serviceURL = "http://127.0.0.1:5003/content/" + creatorID;
         var deleteURL = 'http://127.0.0.1:5003/delete/'
         var updateURL = 'http://127.0.0.1:5003/update/'
         try {
@@ -49,7 +48,7 @@ function showError(message) {
                     // add all the rows to the table
                     $('#contentTable').append(rows);
                 } else if (response.status == 404) {
-                    // No books
+                    // No content
                     showError(result.message);
                 } else {
                     // unexpected outcome, throw the error
