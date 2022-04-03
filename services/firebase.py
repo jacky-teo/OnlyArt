@@ -52,8 +52,6 @@ def upload_firebase(file,creatorID,description):
         elif lastImgID > largest:
             largest = lastImgID
 
-
-    
     if lastImgID != None: #If its not none,
     #     # numImage = len(url_links)
     #     # imageID = 'img' +str(int(numImage)+1)

@@ -77,6 +77,7 @@ def post_content():
             return creatorinfo
         else:
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=message, properties=pika.BasicProperties(delivery_mode=2))
+
         print('--------- creatorname-------------')
         print(creatorname)
         print('----------------------------------')
@@ -85,6 +86,7 @@ def post_content():
         print(notifyStatus)
         print('----------------------------------')
         message = json.dumps(notifyStatus)
+
         if notifyStatus['code'] not in range(200,300):
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
             return notifyStatus

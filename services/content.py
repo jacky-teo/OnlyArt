@@ -85,7 +85,6 @@ def find_by_creatorID():
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
     urls = []  # used later to store urls
     # upload via file
-
     for item in blobs[1:]:
         item.make_public()
         # Get a list of Public URLS so images can be views
@@ -145,7 +144,6 @@ def upload():
     print('------------------------------')
     postID, creatorID, description, imageID, imageEXT = data['POSTID'], data[
         'CREATORID'], data['DESCRIPTION'], data['IMAGE_ID'], data['IMG_EXT']
-    # postID,creatorID, description,imageID,imageEXT = request.json.get('POSTID', None),request.json.get('CREATORID', None),request.json.get('DESCRIPTION', None),request.json.get('IMAGE_ID', None),request.json.get('IMG_EXT', None)
     if (Content.query.filter_by(POSTID=postID).first()):
         return jsonify(
             {
@@ -195,15 +193,6 @@ def delete(postID):
         db.session.commit()
         # return redirect("http://localhost/ESD%20Project/OnlyFence/upload.html?newContent=1")
         return redirect("http://localhost/OnlyFence/content.html")
-        # return jsonify(
-        #     {
-        #         "code": 200,
-        #         "data": {
-        #             "PostID": postID
-        #         },
-        #         'message': 'Delete successful'
-        #     }
-        # )
     return jsonify(
         {
             "code": 404,
@@ -219,20 +208,23 @@ def delete(postID):
 def update():
     postID =request.form['postID'] #Get the Post ID from the form
     content = Content.query.filter_by(POSTID=postID).first()
-    if request.form['description'] != '':
-        content.DESCRIPTION = request.form['description']
+    postinformation = postID.split('_')
+    creatorID,imageID = postinformation[0], postinformation[1]
+    if content: # Check if post exist
+        file = request.files['file'] #Get file from HTML post request
+        if file != None: #If file exist, do the following
+            fileEXT = file.mimetype.split('/')[1]
+            content.IMG_EXT = fileEXT
+            # calls firebase atomic mircoservice to update image inside firebase
+            update_firebase(creatorID, imageID, file, fileEXT)
+
+        if request.form['description'] != '':
+            content.DESCRIPTION = request.form['description']
 
         content.modified = datetime.now()
 
         db.session.commit()
         return redirect("http://localhost/OnlyFence/upload.html")
-        return jsonify(
-            {
-                "code": 200,
-                "data": content.json(),
-                'message': 'Update successful'
-            }
-        )
     return redirect("http://localhost/OnlyFence/update.html")
 
 
