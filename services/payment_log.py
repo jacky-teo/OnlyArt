@@ -93,7 +93,7 @@ def receiveLogRequest():
                 return jsonify(
                     {
                         "code": 500, 
-                        "message": "An error occured creating Payment Log: " + str(e)
+                        "message": "An error occurred creating Payment Log: " + str(e)
                     }
                 ), 500 # Internal Server Error
             return jsonify(

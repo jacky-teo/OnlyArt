@@ -69,6 +69,7 @@ paypal.Buttons({
             // Start Loader here ============================================================================================================
             // "Confirming subscription... Updating our database... Preparing your fences..."
             document.getElementById("loader").style.display = "block";
+            document.getElementById("card-body").style.display = "none";
         });
     }
 
@@ -106,6 +107,7 @@ async function confirmSubscription(data){
                 
                 // Close loader here ============================================================================================================
                 document.getElementById("loader").style.display = "none";
+                document.getElementById("card-body").style.display = "block";
                 var element = document.getElementById('paypal-button-container');
                 element.innerHTML = "<h3>Thank you for your payment!</h3><br><button type='button' onclick='redirectBack()'>Continue</button>";
                 // Redirect to creator_info.html
