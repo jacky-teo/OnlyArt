@@ -1,6 +1,6 @@
 // Hard coded session variables
 var platform_email = "sb-vrehs14346230@business.example.com";
-var consumerID = sessionStorage.getItem('consumerID')
+var consumerID = sessionStorage.getItem('ConsumerID')
 var payee_username = sessionStorage.getItem('creatorUsername');
 var payee_email = sessionStorage.getItem('creatorEmail');
 var creatorID = sessionStorage.getItem('creatorID')
