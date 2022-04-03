@@ -52,7 +52,9 @@ $(document).ready(async () => {
             // for loop to setup all table rows with obtained Content data
             var counter = 0;
             for (const content of contents) {
-                eachRow = "<td>" + content.DESCRIPTION + "</td>" +
+                eachRow = 
+                    "<td>" + content.POSTID + "</td>" +
+                    "<td>" + content.DESCRIPTION + "</td>" +
                     "<td> <img src='" + result.urls[counter] + "'  width='100' height='100'></td>" +
                     "<td>" + content.POST_DATE + "</td>" +
                     "<td>" + content.modified + "</td>" +
