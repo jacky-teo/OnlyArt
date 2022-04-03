@@ -1,6 +1,6 @@
 // Hard coded session variables
 var platform_email = "sb-vrehs14346230@business.example.com";
-var consumerID = sessionStorage.getItem('consumerID')
+var consumerID = sessionStorage.getItem('ConsumerID')
 var payee_username = sessionStorage.getItem('creatorUsername');
 var payee_email = sessionStorage.getItem('creatorEmail');
 var creatorID = sessionStorage.getItem('creatorID')
@@ -67,8 +67,8 @@ paypal.Buttons({
             confirmSubscription(JSON.stringify(orderData))
 
             // Start Loader here ============================================================================================================
-            // "Confirming subscription... Updating our database... Preparing your fences..."
             document.getElementById("loader").style.display = "block";
+            document.getElementById('paypal-button-container').style.display = "none";
         });
     }
 
@@ -107,6 +107,7 @@ async function confirmSubscription(data){
                 // Close loader here ============================================================================================================
                 document.getElementById("loader").style.display = "none";
                 var element = document.getElementById('paypal-button-container');
+                element.style.display = "block";
                 element.innerHTML = "<h3>Thank you for your payment!</h3><br><button type='button' onclick='redirectBack()'>Continue</button>";
                 // Redirect to creator_info.html
                 
@@ -116,6 +117,7 @@ async function confirmSubscription(data){
             } else {
                 // Error
                 console.log('Error: Response 500')
+                console.log(result)
                 throw response.status
             }
     } catch (error) {

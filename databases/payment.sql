@@ -99,8 +99,8 @@ DELIMITER ;
 --
 
 INSERT INTO CONSUMERACCOUNT(USERNAME,PASSWORD,TELEGRAM) 
-VALUES ('imnew', 'pass123','@tinklebell'),
-('logi', 'pass123','@hutthutt');
+VALUES ('imnew', 'pass123','@jackyteojianqi'),
+('logi', 'pass123','@erlynnehazey');
 
 -- ---------------------------------------------------------------- --
 --                     PAYMENT_LOG TABLE                        --

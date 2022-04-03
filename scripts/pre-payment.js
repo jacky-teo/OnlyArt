@@ -6,7 +6,7 @@ if (!sessionStorage.getItem('ConsumerID')) {
 creator_id = "CR001"
 creator_name = "jackyteo"
 sessionStorage.setItem('creatorID',"CR001")
-sessionStorage.setItem('consumerID',"CON001")
+sessionStorage.setItem('ConsumerID',"CON001")
 // sessionStorage.setItem('creatorName',"John Doe")
 
 document.getElementById('payment-information').innerHTML = `

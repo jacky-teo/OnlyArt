@@ -137,7 +137,6 @@ def unsubbed():
 @app.route("/upload", methods=['POST', 'GET'])
 def upload():
     data = request.get_json()
-
     data = json.loads(data)
     print('--------Upload data-----------')
     print(data)
@@ -175,6 +174,17 @@ def upload():
         }
     ), 201
 
+@app.route("/update", methods=['PUT', 'POST','GET'])
+def update():
+    postID =request.form['postID'] #Get the Post ID from the form
+    content = Content.query.filter_by(POSTID=postID).first()
+    if request.form['description'] != '':
+        content.DESCRIPTION = request.form['description']
+        content.modified = datetime.now()
+        db.session.commit()
+        return redirect("http://localhost/OnlyFence/content.html")
+    return redirect("http://localhost/OnlyFence/update.html")
+
 
 @app.route("/delete/<string:postID>", methods=['POST', 'GET', 'DELETE'])
 def delete(postID):
@@ -195,37 +205,13 @@ def delete(postID):
         return redirect("http://localhost/OnlyFence/content.html")
     return jsonify(
         {
-            "code": 404,
+            "code": 200,
             "data": {
                 "PostID": postID
             },
             "message": "Content not found."
         }
-    ), 404
-
-
-@app.route("/update", methods=['PUT', 'POST','GET'])
-def update():
-    postID =request.form['postID'] #Get the Post ID from the form
-    content = Content.query.filter_by(POSTID=postID).first()
-    postinformation = postID.split('_')
-    creatorID,imageID = postinformation[0], postinformation[1]
-    if content: # Check if post exist
-        file = request.files['file'] #Get file from HTML post request
-        if file != None: #If file exist, do the following
-            fileEXT = file.mimetype.split('/')[1]
-            content.IMG_EXT = fileEXT
-            # calls firebase atomic mircoservice to update image inside firebase
-            update_firebase(creatorID, imageID, file, fileEXT)
-
-        if request.form['description'] != '':
-            content.DESCRIPTION = request.form['description']
-
-        content.modified = datetime.now()
-
-        db.session.commit()
-        return redirect("http://localhost/OnlyFence/upload.html")
-    return redirect("http://localhost/OnlyFence/update.html")
+    ), 200
 
 
 if __name__ == '__main__':
