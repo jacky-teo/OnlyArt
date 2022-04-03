@@ -84,15 +84,14 @@ const app = Vue.createApp({
 })
 const vm = app.mount("#app")
 
-// Hardcode creatorID sessionStorage
-sessionStorage.setItem('creatorID',"CR001")
-
 // Function for Subscribe Button
 async function redirectPayment() {
     console.log("--- JS FUNCTION redirectPayment() ---")
     
     var subscribeURL = "http://localhost:5101/subscribe"
-    var data = {CREATORID: sessionStorage.getItem('creatorID')}
+    var data = {
+        CREATORID: sessionStorage.getItem('CreatorID')
+    }
     var otherParams = {
         method: 'POST',
         headers: {

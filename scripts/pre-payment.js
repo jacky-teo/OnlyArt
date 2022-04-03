@@ -1,3 +1,8 @@
+//checks if user has logged in; redirect to login.html if not logged in
+if (!sessionStorage.getItem('ConsumerID')) {
+    window.location.href = "./login.html";
+}
+
 creator_id = "CR001"
 creator_name = "jackyteo"
 sessionStorage.setItem('creatorID',"CR001")

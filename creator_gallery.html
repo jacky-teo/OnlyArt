@@ -40,6 +40,9 @@
           <li class="nav-item active mx-4">
             <a class="nav-link" href="#">Home</a>
           </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light btn-sm mt-1 ms-2" @click="logout()">Logout</a>
+          </li>
         </ul>
         <div class="position-relative">
           <div class="d-block">
@@ -177,6 +180,10 @@
           }
         }
 
+      },
+      logout() {
+        sessionStorage.setItem('ConsumerID', '')
+        location.reload();
       }
     },
     computed: {

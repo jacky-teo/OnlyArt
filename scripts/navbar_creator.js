@@ -10,6 +10,12 @@ navbar.component('navbar', {
             appName: 'OnlyFence'
         }
     },
+    methods: {
+        logout() {
+            sessionStorage.setItem('CreatorID', '')
+            location.reload();
+        }
+    },
     computed: {
         links() {
             if (window.location.href.includes("upload")) {
@@ -43,20 +49,23 @@ navbar.component('navbar', {
         }
     },
     template: `<nav class="px-5 navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">OnlyFence</a>
-      <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" :href=links.homeLink>Upload</a>
-          </li>
-          <li class="nav-item">
-          <a class="nav-link" :href=links.viewLink>View</a>
-          </li>
-          <li class="nav-item">
-          <a class="nav-link" :href=links.updateLink>Edit</a>
-          </li>
-        </ul>
-      </div>
+    <a class="navbar-brand" href="#">OnlyFence</a>
+        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link ms-2" :href=links.homeLink>Upload</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ms-2" :href=links.viewLink>View</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link ms-2" :href=links.updateLink>Edit</a>
+                </li>
+                <li class="nav-item">
+                <a class="btn btn-outline-light btn-sm mt-1 ms-2" @click="logout()">Logout</a>
+                </li>
+            </ul>
+        </div>
     </nav>`
 })
 navbar.mount("#compApp")

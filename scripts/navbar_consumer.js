@@ -10,6 +10,12 @@ navbar.component('navbar', {
       appName: 'OnlyFence'
     }
   },
+  methods: {
+    logout() {
+      sessionStorage.setItem('ConsumerID', '')
+      location.reload();
+    }
+},
   computed: {
     links() {
       // href links at consumer
@@ -31,6 +37,9 @@ navbar.component('navbar', {
         <ul class="navbar-nav mr-auto">
           <li class="nav-item">
             <a class="nav-link" :href=links.homeLink>Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-outline-light btn-sm mt-1 ms-2" @click="logout()">Logout</a>
           </li>
         </ul>
       </div>
