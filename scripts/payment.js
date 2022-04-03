@@ -118,6 +118,7 @@ async function confirmSubscription(data){
             } else {
                 // Error
                 console.log('Error: Response 500')
+                console.log(result)
                 throw response.status
             }
     } catch (error) {
