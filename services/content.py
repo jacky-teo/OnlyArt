@@ -193,8 +193,8 @@ def delete(postID):
 
         db.session.delete(content)
         db.session.commit()
-        return redirect("http://localhost/ESD%20Project/OnlyFence/upload.html?newContent=1")
-        # return redirect("http://localhost/OnlyFence/upload.html")
+        # return redirect("http://localhost/ESD%20Project/OnlyFence/upload.html?newContent=1")
+        return redirect("http://localhost/OnlyFence/content.html")
         # return jsonify(
         #     {
         #         "code": 200,
@@ -204,33 +204,23 @@ def delete(postID):
         #         'message': 'Delete successful'
         #     }
         # )
-    # return jsonify(
-    #     {
-    #         "code": 404,
-    #         "data": {
-    #             "PostID": postID
-    #         },
-    #         "message": "Content not found."
-    #     }
-    # ), 404
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "PostID": postID
+            },
+            "message": "Content not found."
+        }
+    ), 404
 
 
 @app.route("/update", methods=['PUT', 'POST','GET'])
 def update():
     postID =request.form['postID'] #Get the Post ID from the form
     content = Content.query.filter_by(POSTID=postID).first()
-    postinformation = postID.split('_')
-    creatorID,imageID = postinformation[0], postinformation[1]
-    if content: # Check if post exist
-        file = request.files['file'] #Get file from HTML post request
-        if file != None: #If file exist, do the following
-            fileEXT = file.mimetype.split('/')[1]
-            content.IMG_EXT = fileEXT
-            # calls firebase atomic mircoservice to update image inside firebase
-            update_firebase(creatorID, imageID, file, fileEXT)
-
-        if request.form['description'] != '':
-            content.DESCRIPTION = request.form['description']
+    if request.form['description'] != '':
+        content.DESCRIPTION = request.form['description']
 
         content.modified = datetime.now()
 
@@ -243,15 +233,7 @@ def update():
                 'message': 'Update successful'
             }
         )
-    # return jsonify(
-    #     {
-    #         "code": 404,
-    #         "data": {
-    #             "postID": postID
-    #         },
-    #         "message": "Content not found."
-    #     }
-    # ), 404
+    return redirect("http://localhost/OnlyFence/update.html")
 
 
 if __name__ == '__main__':
