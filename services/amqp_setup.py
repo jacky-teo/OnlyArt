@@ -1,8 +1,8 @@
 import pika
 
 from os import environ
-hostname = environ.get('rabbit_host') or 'localhost' ###
-port = environ.get('rabbit_port') or 5672 ###
+hostname = environ.get('rabbit_host') or 'localhost'
+port = environ.get('rabbit_port') or 5672
 # connect to the broker and set up a communication channel in the connection
 connection = pika.BlockingConnection(
     pika.ConnectionParameters(
@@ -43,7 +43,7 @@ channel.queue_declare(queue=queue_name, durable=True)
 
 # bind Activity_Log queue
 channel.queue_bind(exchange=exchangename,
-                   queue=queue_name, routing_key='#.info')
+                   queue=queue_name, routing_key='#')
 # bind the queue to the exchange via the key
 # 'routing_key=#' => any routing_key would be matched
 
