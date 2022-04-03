@@ -41,13 +41,13 @@
             <a class="nav-link" href="#">Home</a>
           </li>
           <li class="nav-item">
-            <a class="btn btn-outline-light btn-sm mt-1 ms-2" @click="logout()">Logout</a>
+            <a class="btn btn-outline-light btn-sm mt-1" @click="logout()">Logout</a>
           </li>
         </ul>
         <div class="position-relative">
           <div class="d-block">
             <form class="form-inline my-2 my-lg-0 d-flex">
-              <input class="form-control mr-sm-2" type="search" v-model="searchinput" placeholder="Search"
+              <input class="form-control mr-sm-2 ms-2" type="search" v-model="searchinput" placeholder="Search"
                 aria-label="Search" @input="populateSearch()">
             </form>
           </div>
