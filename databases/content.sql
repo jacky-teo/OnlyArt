@@ -26,10 +26,23 @@ CREATE TABLE CONTENT(
 
 INSERT INTO CONTENT(POSTID,CREATORID,DESCRIPTION,IMAGE_ID,IMG_EXT) 
 VALUES 
-('CR001_img11','CR001', 'this is img11', "img11",'png'),
-('CR001_img12','CR001', 'this is img12', "img12",'png'),
-('CR001_img13','CR001', 'this is img13', "img13",'png'),
-('CR001_img14','CR001', 'this is img14', "img14",'png')
--- ('CR002_IMG1','CR002', 'this is cr2img1', 'cr2img1'),
--- ('CR002_IMG2','CR002', 'this is cr2img2', 'cr2img2'),
--- ('CR002_IMG3','CR002', 'this is cr2img3', 'cr2img3');
+('CR001_img1','CR001', 'My Hero Academia Artwork ', "img1",'jpeg'),
+('CR001_img2','CR001', 'Painted a girl biting her nails', "img2",'jpeg'),
+('CR001_img3','CR001', 'Red Scarf', "img3",'jpeg'),
+('CR001_img4','CR001', 'Pastel painting of a girl', "img4",'jpeg'),
+('CR001_img5','CR001', 'Sword Art Online', "img5",'jpeg'),
+('CR001_img6','CR001', 'Blade works', "img6",'jpeg'),
+('CR001_img7','CR001', 'Blue Lightning', "img7",'jpeg'),
+('CR001_img8','CR001', 'Son Goku and Moon', "img8",'jpeg'),
+('CR001_img9','CR001', 'WindowBlower', "img9",'jpeg'),
+('CR001_img10','CR001', 'Koi fish my dreams', "img10",'jpeg'),
+('CR002_img1','CR001', 'Cinna at peace', "img1",'jpeg'),
+('CR002_img2','CR001', 'Cinna love', "img2",'jpeg'),
+('CR002_img3','CR001', 'Cinna Relax', "img3",'jpeg'),
+('CR002_img4','CR001', 'Cinna sad', "img4",'jpeg'),
+('CR002_img5','CR001', 'TOO CUTE LA', "img5",'jpeg'),
+('CR002_img6','CR001', 'The cutest', "img6",'jpeg'),
+('CR002_img7','CR001', "I'm a detective", "img7",'jpeg'),
+('CR002_img8','CR001', "I gave up on life", "img8",'jpeg'),
+('CR002_img9','CR001', 'Kuromi UwU OwO', "img9",'jpeg'),
+('CR002_img10','CR001', 'Melody UwU Owo', "img10",'jpeg')
