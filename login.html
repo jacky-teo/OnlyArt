@@ -18,14 +18,24 @@
 
 <body class="bg-dark">
     <div id="loginPage">
+        <!-- <div class="text-light text-center">
+            <h1>OnlyFence</h1>
+        </div> -->
+        
         <!-- user declaration buttons -->
         <div class="position-absolute top-50 start-50 translate-middle">
-            <button type="button" class="btn btn-light btn-lg py-4 px-5 mx-3 mb-3 userButtons"
-                @click="declareUser('Creator')" id="creatorBtn" data-bs-toggle="modal"
-                data-bs-target="#loginModal">Creator</button>
-            <button type="button" class="btn btn-light btn-lg py-4 px-5 mx-3 mb-3 userButtons"
-                @click="declareUser('Consumer')" id="consumerBtn" data-bs-toggle="modal"
-                data-bs-target="#loginModal">Consumer</button>
+            <div class="text-light text-center pb-5">
+                <h1>OnlyFence</h1>
+            </div>
+            <div class="pb-5">
+                <button type="button" class="btn btn-light btn-lg py-4 px-5 mx-3 mb-3 userButtons"
+                    @click="declareUser('Creator')" id="creatorBtn" data-bs-toggle="modal"
+                    data-bs-target="#loginModal">Creator</button>
+                <button type="button" class="btn btn-light btn-lg py-4 px-5 mx-3 mb-3 userButtons"
+                    @click="declareUser('Consumer')" id="consumerBtn" data-bs-toggle="modal"
+                    data-bs-target="#loginModal">Consumer</button>
+            </div>
+            
         </div>
 
 
