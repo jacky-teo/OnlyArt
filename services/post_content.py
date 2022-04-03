@@ -48,11 +48,12 @@ def post_content():
         print('--------Data Uploaded into SQL-----------')
         print(uploadInformation)
         print('-----------------------------------------')
+        message = json.dumps(uploadInformation)
         if uploadInformation['code'] not in range(200,300):
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.error",body=uploadInformation['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
             return uploadInformation
         else:
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.info",body=uploadInformation['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.upload_content.info",body=message, properties=pika.BasicProperties(delivery_mode=2))
         # Add creatorID as a json file
         
         # Get all the followers that are subscribed to creator
@@ -60,20 +61,22 @@ def post_content():
         print('--------- Collected Telegram tags ---------')
         print(consumerTelegram)
         print('-------------------------------------------')
+        message = json.dumps(consumerTelegram)
         if consumerTelegram['code'] not in range(200,300):
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.error",body=consumerTelegram['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
             return consumerTelegram
         else:
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=consumerTelegram['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=message, properties=pika.BasicProperties(delivery_mode=2))
         creatorinfo = creatorInformation(creatorID)  # Get creator information
         # Get creator name to use for notification status
         creatorname = creatorinfo['data']['username']
+        message = json.dumps(creatorinfo)
 
         if creatorinfo['code'] not in range(200,300):
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.get_creator.error",body=creatorinfo['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.get_creator.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
             return creatorinfo
         else:
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=creatorinfo['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=message, properties=pika.BasicProperties(delivery_mode=2))
         print('--------- creatorname-------------')
         print(creatorname)
         print('----------------------------------')
@@ -81,11 +84,12 @@ def post_content():
         print('--------- Users Notified ---------')
         print(notifyStatus)
         print('----------------------------------')
+        message = json.dumps(notifyStatus)
         if notifyStatus['code'] not in range(200,300):
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.error",body=notifyStatus['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
             return notifyStatus
         else:
-            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.info",body=notifyStatus['message'], properties=pika.BasicProperties(delivery_mode=2))
+            amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.info",body=message, properties=pika.BasicProperties(delivery_mode=2))
 
         if notifyStatus['code'] == 200 and creatorinfo['code'] == 200 and consumerTelegram['code']==200 and uploadInformation['code'] ==201 :
             print('REDIRECTING PAGE AS UPLOAD AND NOTIFCATION IS SUCCESSFUL')

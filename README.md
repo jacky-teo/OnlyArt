@@ -15,17 +15,16 @@ OnlyFence is a content subscription service that allows content creators to earn
 
 ## How to set up OnlyFence
 1. Start WAMP and run all SQL scripts under the "databases" folder.
-2. Run Docker Compose (?)
+2. Run Docker-Compose up
 3. Start using OnlyFence by accessing the "login.html" page.
 4. Log in using the appropriate accounts (see **Test Accounts** for credentials)
 
 ## User Scenarios / Walkthrough
 ### 1) Consumer Searches for Creator to Subscribe to
-1. Starting from **"xxx.html"*** page, the user...
-2. blablabla
-3. blebleble
-4. blublublu
-5. blobloblo
+1. Starting from **"view_content.html"*** page, the user searches for a creator
+2. *view_content.py* will request for the subscription status of the consumer from the *subscription_link.py* through the **"/subscription/status"** API.
+3. *view_content.py* will request for the subscription price of the creator from the *creator_account.py* through the **"/creator/price"** API. (assumed that consumer is not subscribed)
+4. *view_content.py* will request for the content of the creator from the *content.py* and display it on the UI for the consumer through the **"/unsubbed"** API. It shows the latest 3 results since the consumer is not subscribed.
 
 ### 2a) Create Subscription Request
   1. On the **"creator_info.html"** page, if a user is not subscribed to the creator, a subscribe button will be present.
@@ -48,11 +47,14 @@ OnlyFence is a content subscription service that allows content creators to earn
   16. UI shows a confirmation message and a button that allows the user to return to **"creator_info.html"**.
 
 ### 3) Creator Posts New Content
-1. Starting from **"xxx.html"*** page, the user...
-2. fencefencefence
-3. fancefancefance
-4. funcefuncefunce
-5. foncefoncefonce
+1. Starting from **"upload.html"*** page, the creator selects an image to upload and a message to write. The creator will the click upload to post new content
+2.  *post_content.py* will send the content information to *content.py* which will upload the content into firebase and return the upload status through the **"/upload"** API
+3. *post_content.py* will request for the subscription status of the consumer from the *subscription_link.py* through the **"/subscription/status"** API.
+4. *post_content.py* will request for the creator name from *creator_account.py* through **"/creator/getinfo/<string:creatorid>"** API 
+5. *post_content.py* will send the creator name and subscriber information to *notification.py* through the **"/notify/<string:creatorname>"** API
+6. *notification.py* will invoke the telegram bot in *telebot.py* to notify subscribed consumers that the creator has posted new content
+7. *notification.py* will return the notification status to *post_content.py*
+8. *post_content.py* will returnt the status of the notification and content upload status to the UI so the creator can view it.
 
 ## Tools Available
 - Docker
