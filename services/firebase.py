@@ -43,13 +43,14 @@ def upload_firebase(file,creatorID,description):
         lastImgID =id  #Assign image ID
     
     if lastImgID != None: #If its not none,
-
+        numImage = len(url_links)
+        imageID = 'img' +str(int(numImage)+1)
     # ['img1.png', 'img3.png']
-        lastImgID = lastImgID.replace('img','')
-        index = lastImgID.index(".")
-        lastImgID = lastImgID[:index]
-        # lastImgID = lastImgID.replace('.png','')
-        imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
+        # lastImgID = lastImgID.replace('img','')
+        # index = lastImgID.index(".")
+        # lastImgID = lastImgID[:index]
+        # # lastImgID = lastImgID.replace('.png','')
+        # imageID = 'img'+ str(int(lastImgID)+1)## Create the Image ID based on the number of files inside the storage under creatorID
     else:
         imageID = 'img1'
 
