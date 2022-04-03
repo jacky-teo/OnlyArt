@@ -1,6 +1,3 @@
-//insert value of CreatorID into hidden form input
-document.getElementById('creatorID').value = sessionStorage.getItem('CreatorID');
-
 const app = Vue.createApp({
     created() {
         //checks if user has logged in; redirect to login.html if not logged in
@@ -13,7 +10,6 @@ const app = Vue.createApp({
             loginURL: "./login.html",
 
             description: "",
-            uploadFile: null,
 
             showDesciptionErr: false,
             showFileErr: false,
@@ -23,22 +19,28 @@ const app = Vue.createApp({
     },
     methods: {
         checkForm: function (e) {
-            if (this.description && this.uploadFile) {
+            var uploadFile = document.getElementById(file).value;
+            console.log(uploadFile);
+
+            if (this.description && uploadFile) {
+                this.showDesciptionErr = false;
+                this.showFileErr = false;
                 return true;
             }
 
             if (!this.description) {
                 this.showDesciptionErr = true;
+            } else {
+                this.showDesciptionErr = false;
             }
 
-            if (!this.uploadFile) {
+            if (!uploadFile) {
                 this.showFileErr = true;
+            } else {
+                this.showFileErr = false;
             }
 
             e.preventDefault();
-        },
-        updateFile(event) {
-            console.log(event);
         }
     },
 

@@ -20,6 +20,9 @@
       top: 100%;
     }
   </style>
+  
+  <!-- font stylesheet -->
+  <link rel="stylesheet" href="styles/styles.css">
 </head>
 
 
@@ -97,6 +100,7 @@
         resultsperpage: 12,
         thispage: 1,
         searchinput: '',
+        loginURL: "./login.html",
       }
     },
     methods: {
@@ -180,6 +184,11 @@
     },
     created() {
       this.getCreators();
+
+      //checks if user has logged in; redirect to login.html if not logged in
+      if (!sessionStorage.getItem('ConsumerID')) {
+            window.location.href = this.loginURL;
+        }
     }
   })
 

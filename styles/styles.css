@@ -1,1 +1,13 @@
-/* styles *.
+/* imports font used */
+@import url('http://fonts.cdnfonts.com/css/bogart');
+
+/* font of main body */
+body {  
+    font-family: 'Bogart', sans-serif;
+    font-size: 16px;
+}
+
+/* bolded font in navbar */
+#compApp, nav {
+    font-weight: 600;
+}

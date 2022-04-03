@@ -1,3 +1,15 @@
+//check if user is an authenticated creator
+if (!sessionStorage.getItem('CreatorID')) {
+    window.location.href = "./login.html"       //redirects user to login page if not
+}
+
+$('#closeSuccess').click(() => {
+    $('#successAlert').hide();
+})
+
+// $('#closeFail').click(() => {
+//     $('#failAlert').hide();
+// })
 
 function showError(message) {
     // Hide the table and button in the event of error
@@ -7,8 +19,11 @@ function showError(message) {
     $('#error').show()
 }
 
+$('#successAlert').hide();
+// $('#failAlert').hide();
 $('#error').hide()
-$('#search').click(async () => {
+
+$(document).ready(async () => {
     if ($('#contentTable > tr')) {
         $('#contentTable > tr').remove()
     }
@@ -37,14 +52,12 @@ $('#search').click(async () => {
             // for loop to setup all table rows with obtained Content data
             var counter = 0;
             for (const content of contents) {
-                eachRow = "<td>" + content.POSTID + "</td>" +
-                    "<td>" + content.CREATORID + "</td>" +
-                    "<td>" + content.DESCRIPTION + "</td>" +
+                eachRow = "<td>" + content.DESCRIPTION + "</td>" +
                     "<td> <img src='" + result.urls[counter] + "'  width='100' height='100'></td>" +
                     "<td>" + content.POST_DATE + "</td>" +
                     "<td>" + content.modified + "</td>" +
                     // "<td>"+ "<a href='./update.html?postID="+content.POSTID +"'"+">"+ "</td>"+ // IM UNSURE T__T
-                    "<td> <a href='" + deleteURL + content.POSTID + "'>Delete</a></td>";
+                    "<td> <a href='" + deleteURL + content.POSTID + "' class='text-danger'>Delete</a></td>";
                 rows += "<tr>" + eachRow + "</tr>";
                 counter++
             }

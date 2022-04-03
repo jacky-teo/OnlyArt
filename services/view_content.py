@@ -56,7 +56,8 @@ def view(creator_consumer):
     subStatus = invoke_http(subscription_url, json=creator_consumer)
     
     subCode = subStatus["code"]
-    message = subStatus["message"]
+    message = json.dumps(subStatus)
+    print(message)
 
     if subCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subscription_status.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
@@ -79,6 +80,7 @@ def view(creator_consumer):
 
     crCode = creatorPrice["code"]
     crData = creatorPrice['data']
+    message = json.dumps(creatorPrice)
 
     if crCode not in range(200, 300):
         amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.creator_price.error", body=message, properties=pika.BasicProperties(delivery_mode=2))
@@ -98,7 +100,7 @@ def view(creator_consumer):
         print(unsubbed)
 
         conCode = unsubbed["code"]
-        message = unsubbed["message"]
+        message = json.dumps(unsubbed)
 
         if conCode not in range(200, 300):
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.unsubbed_content.error", body=message, properties=pika.BasicProperties(delivery_mode=2))
@@ -112,13 +114,14 @@ def view(creator_consumer):
             amqp_setup.channel.basic_publish(
                 exchange=amqp_setup.exchangename, routing_key="view_content.unsubbed_content.info", body=message)
 
+        unsubbed["SubType"] = subType
         return unsubbed
     else:
         print('-----Retrieving content for subscriber-----')
         subbed = invoke_http(subbed_url, json=crData)
         print(subbed)
         conCode = subbed["code"]
-        message = subbed["message"]
+        message = json.dumps(subbed)
 
         if conCode not in range(200, 300):
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="view_content.subbed_content.error", body=message, properties=pika.BasicProperties(delivery_mode=2))
@@ -131,6 +134,8 @@ def view(creator_consumer):
         else:
             amqp_setup.channel.basic_publish(
                 exchange=amqp_setup.exchangename, routing_key="view_content.subbed_content.info", body=message)
+
+        subbed["SubType"] = subType
         return subbed
 
 

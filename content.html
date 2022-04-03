@@ -18,6 +18,8 @@
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
+    <!-- font stylesheet -->
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 
 <body>
@@ -26,35 +28,50 @@
     </div>
 
     <div class="container mt-5">
-        <div class="card mx-auto d-block" style="width: 40%;">
-            <h5 class="card-header">Content Creator</h5>
-            <div class="card-body">
-                <p class="card-text">Click on the button below to view all current content</p>
-                <div class="row" id="searchField">
-                    <div class="col">
-                        <button class="btn btn-outline-dark" id="search">Fetch Data</button>
+        <div class="row">
+            <div class="col">
+                <div class="card d-block">
+                    <h6 class="card-header"><strong>To:</strong> Content Creator</h6>
+                    <div class="card-body">
+                        <p class="card-text">Edit or update your content here!</p>
                     </div>
                 </div>
             </div>
-        </div>
 
+            <div class="col">
+                <!-- successful upload alert -->
+                <div class="row justify-content-end">
+                    <div class="alert alert-success alert-dismissible fade show w-50" role="alert" id="successAlert">
+                        <strong>Upload Successful!</strong> 
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="closeSuccess"></button>
+                    </div>
+                </div>
+
+                <!-- failed upload alert -->
+                <!-- <div class="row justify-content-end">
+                    <div class="alert alert-secondary alert-dismissible fade show top-0 end-0 w-50" role="alert" id="failAlert">
+                        <strong>Upload failed.</strong> :(
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" id="closeFail"></button>
+                    </div>
+                </div> -->
+            </div>
+        </div>
     </div>
+    <br>
+
     <div id="main-container" class="container" style="display:none;">
-        <span class="display-6 ">Content Listing</span>
-        <table class='mt-3 table table-striped border-1'>
-            <thead class='table-dark'>
+        <table class='mt-3 table table-hover'>
+            <thead class="text-center">
                 <tr>
-                    <th>POSTID</th>
-                    <th>CREATORID</th>
-                    <th>DESCRIPTION</th>
-                    <th>IMAGE</th>
-                    <th>POST_DATE</th>
-                    <th>MODIFIED</th>
+                    <th>Description</th>
+                    <th>Content</th>
+                    <th>Date Posted</th>
+                    <th>Date Modified</th>
                     <!-- <th>EDIT</th> -->
-                    <th>DELETE</th>
+                    <th>Delete</th>
                 </tr>
             </thead>
-            <tbody id="contentTable"></tbody>
+            <tbody id="contentTable" class="text-center"></tbody>
         </table>
     </div>
 
@@ -62,6 +79,7 @@
         <span class="display-6">No Content Found.</span>
     </div>
 
+    
 </body>
 <script src="./scripts/content.js"></script>
 <script src="https://unpkg.com/vue@next"></script>
