@@ -19,6 +19,12 @@ OnlyFence is a content subscription service that allows content creators to earn
 3. Start using OnlyFence by accessing the "login.html" page.
 4. Log in using the appropriate accounts (see **Test Accounts** for credentials)
 
+## How to set up Telegram Notifications
+1. Start telebot.py. This bot will record consumer's telegram tag (e.g. @onlyfenceuser) and chat id in the Notification database to be referenced for future messages to be sent. 
+2. Consumer sends https://t.me/onlyfence_bot a /start message so that the chat id of the consumer can be recorded.
+3. When a content creator posts a message using the post_content.py complex microservice, the notification.py microservice will first retrieve the chatid of subscribed consumers based on their telegram tags, by referencing from the Notification database.
+4. The notification.py microservice will then send each subscribed consumer a notification message using a telegram API link and the chatid of the consumer.
+
 ## User Scenarios / Walkthrough
 ### 1) Consumer Searches for Creator to Subscribe to
 1. Starting from **"view_content.html"*** page, the user searches for a creator
@@ -52,7 +58,7 @@ OnlyFence is a content subscription service that allows content creators to earn
 3. *post_content.py* will request for the subscription status of the consumer from the *subscription_link.py* through the **"/subscription/status"** API.
 4. *post_content.py* will request for the creator name from *creator_account.py* through **"/creator/getinfo/<string:creatorid>"** API 
 5. *post_content.py* will send the creator name and subscriber information to *notification.py* through the **"/notify/<string:creatorname>"** API
-6. *notification.py* will invoke the telegram bot in *telebot.py* to notify subscribed consumers that the creator has posted new content
+6. *notification.py* will invoke the telegram API using telegram tag and telegram chat id recorded by *telebot.py* to notify subscribed consumers that the creator has posted new content
 7. *notification.py* will return the notification status to *post_content.py*
 8. *post_content.py* will returnt the status of the notification and content upload status to the UI so the creator can view it.
 
@@ -64,7 +70,7 @@ OnlyFence is a content subscription service that allows content creators to earn
 - RabbitMQ (AMQP)
 - Firebase_admin
 - PayPal API
-- Telegram Bot
+- Telegram API/Bot
 
 ## Accounts
 **For Sandbox Accounts**    
