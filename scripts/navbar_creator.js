@@ -14,20 +14,30 @@ navbar.component('navbar', {
         links() {
             if (window.location.href.includes("upload")) {
                 return {
-                    homeLink: "./upload.html",
-                    viewLink: "./content.html"
+                    homeLink: "",
+                    viewLink: "./content.html",
+                    updateLink:"./update.html"
                 }
             }
             else if (window.location.href.includes("content")) {
                 return {
                     homeLink: "./upload.html",
-                    viewLink: "./content.html"
+                    viewLink: "",
+                    updateLink:"./update.html"
+                }
+            }
+            else if (window.location.href.includes("update")) {
+                return {
+                    homeLink: "./upload.html",
+                    viewLink: "./content.html",
+                    updateLink:""
                 }
             }
             else {
                 return {
                     homeLink: "./upload.html",
-                    viewLink: "./content.html"
+                    viewLink: "./content.html",
+                    updateLink:"./update.html"
                 }
             }
         }
@@ -41,6 +51,9 @@ navbar.component('navbar', {
           </li>
           <li class="nav-item">
           <a class="nav-link" :href=links.viewLink>View</a>
+          </li>
+          <li class="nav-item">
+          <a class="nav-link" :href=links.updateLink>Edit</a>
           </li>
         </ul>
       </div>

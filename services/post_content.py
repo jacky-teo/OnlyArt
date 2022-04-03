@@ -77,6 +77,7 @@ def post_content():
             return creatorinfo
         else:
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.retrieve_telegram.info",body=message, properties=pika.BasicProperties(delivery_mode=2))
+
         print('--------- creatorname-------------')
         print(creatorname)
         print('----------------------------------')
@@ -85,6 +86,7 @@ def post_content():
         print(notifyStatus)
         print('----------------------------------')
         message = json.dumps(notifyStatus)
+
         if notifyStatus['code'] not in range(200,300):
             amqp_setup.channel.basic_publish(exchange=amqp_setup.exchangename, routing_key="post_content.send_notification.error",body=message, properties=pika.BasicProperties(delivery_mode=2))
             return notifyStatus
@@ -93,7 +95,7 @@ def post_content():
 
         if notifyStatus['code'] == 200 and creatorinfo['code'] == 200 and consumerTelegram['code']==200 and uploadInformation['code'] ==201 :
             print('REDIRECTING PAGE AS UPLOAD AND NOTIFCATION IS SUCCESSFUL')
-            return  redirect("http://localhost/ESD%20Project/OnlyFence/content.html")  # redirect users to content.html
+            # return  redirect("http://localhost/ESD%20Project/OnlyFence/content.html")  # redirect users to content.html
             return  redirect("http://localhost/OnlyFence/content.html")
             # http://localhost/OnlyFence/content.html (to be used instead, must make sure directory correct)
 

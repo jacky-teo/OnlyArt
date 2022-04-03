@@ -85,7 +85,6 @@ def find_by_creatorID():
     blobs = list(bucket.list_blobs(prefix=f'{creatorID}/'))
     urls = []  # used later to store urls
     # upload via file
-
     for item in blobs[1:]:
         item.make_public()
         # Get a list of Public URLS so images can be views
@@ -145,7 +144,6 @@ def upload():
     print('------------------------------')
     postID, creatorID, description, imageID, imageEXT = data['POSTID'], data[
         'CREATORID'], data['DESCRIPTION'], data['IMAGE_ID'], data['IMG_EXT']
-    # postID,creatorID, description,imageID,imageEXT = request.json.get('POSTID', None),request.json.get('CREATORID', None),request.json.get('DESCRIPTION', None),request.json.get('IMAGE_ID', None),request.json.get('IMG_EXT', None)
     if (Content.query.filter_by(POSTID=postID).first()):
         return jsonify(
             {
@@ -193,26 +191,17 @@ def delete(postID):
 
         db.session.delete(content)
         db.session.commit()
-        return redirect("http://localhost/ESD%20Project/OnlyFence/upload.html?newContent=1")
-        # return redirect("http://localhost/OnlyFence/upload.html")
-        # return jsonify(
-        #     {
-        #         "code": 200,
-        #         "data": {
-        #             "PostID": postID
-        #         },
-        #         'message': 'Delete successful'
-        #     }
-        # )
-    # return jsonify(
-    #     {
-    #         "code": 404,
-    #         "data": {
-    #             "PostID": postID
-    #         },
-    #         "message": "Content not found."
-    #     }
-    # ), 404
+        # return redirect("http://localhost/ESD%20Project/OnlyFence/upload.html?newContent=1")
+        return redirect("http://localhost/OnlyFence/content.html")
+    return jsonify(
+        {
+            "code": 404,
+            "data": {
+                "PostID": postID
+            },
+            "message": "Content not found."
+        }
+    ), 404
 
 
 @app.route("/update", methods=['PUT', 'POST','GET'])
@@ -236,22 +225,7 @@ def update():
 
         db.session.commit()
         return redirect("http://localhost/OnlyFence/upload.html")
-        return jsonify(
-            {
-                "code": 200,
-                "data": content.json(),
-                'message': 'Update successful'
-            }
-        )
-    # return jsonify(
-    #     {
-    #         "code": 404,
-    #         "data": {
-    #             "postID": postID
-    #         },
-    #         "message": "Content not found."
-    #     }
-    # ), 404
+    return redirect("http://localhost/OnlyFence/update.html")
 
 
 if __name__ == '__main__':
