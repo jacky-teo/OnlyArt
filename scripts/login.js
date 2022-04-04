@@ -12,7 +12,7 @@ const app = Vue.createApp({
             invalidInputs: false,
             inputsMsg: 'Login fields incomplete.',
             isLoginFail: false,
-            loginFailMsg: 'Incorrect credentials.',
+            loginFailMsg: '',
 
             consumerRedirect: './creator_gallery.html',
             creatorRedirect: './upload.html',
@@ -92,6 +92,7 @@ const app = Vue.createApp({
                     
                     if (code != 200) {                  //incorrect password
                         this.isLoginFail = true
+                        this.loginFailMsg = data['message']
 
                     } else {                            //authenticated
                         this.isLoginFail = false;
@@ -104,8 +105,10 @@ const app = Vue.createApp({
                     }
                 })
                 .catch((err) => {
+                    //username not found in database
                     console.log(err);
-
+                    this.isLoginFail = true
+                    this.loginFailMsg = this.userType + ' does not exist.'
                 })
             }
         }
