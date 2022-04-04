@@ -114,6 +114,7 @@ def get_info(creatorid):
 def creator_auth():
     print('-----authenticating creator-----')
     data = request.args
+    print(data)
     username = data.get('username')
     status = creatorAccount.query.filter_by(USERNAME=username).first()
 
@@ -136,7 +137,7 @@ def creator_auth():
         return jsonify(
             {
                 "code": 204,
-                "message": "Incorrect credentials"
+                "message": "Incorrect credentials."
             }
         )
 
@@ -144,7 +145,7 @@ def creator_auth():
     return jsonify(
         {
             "code": 404,
-            "message": "Creator does not exist"
+            "message": "Creator does not exist."
         }
     ), 404
 

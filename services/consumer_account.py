@@ -61,6 +61,7 @@ def get_telegram():
 def creator_auth():
     print('-----authenticating creator-----')
     data = request.args
+    print(data)
     username = data.get('username')
     status = consumerAccount.query.filter_by(USERNAME=username).first()
 
@@ -82,7 +83,7 @@ def creator_auth():
         return jsonify(
             {
                 "code": 204,
-                "message": "Incorrect credentials"
+                "message": "Incorrect credentials."
             }
         )
 
@@ -90,7 +91,7 @@ def creator_auth():
     return jsonify(
         {
             "code": 404,
-            "message": "Consumer does not exist"
+            "message": "Consumer does not exist."
         }
     ), 404
 

@@ -17,6 +17,7 @@ const app = Vue.createApp({
             if (thisurl.searchParams.get("cid") != null) {
                 var CID = thisurl.searchParams.get("cid");
                 this.creatorid = CID;
+                sessionStorage.setItem('creatorID', CID);
                 console.log("CID: ",CID)            
             } else {
                 console.log("CID not found.");
@@ -59,7 +60,7 @@ const app = Vue.createApp({
                     console.log(error)
                     output = error
                 }
-                )
+            )
         }
     },
     created(){
@@ -87,10 +88,11 @@ const vm = app.mount("#app")
 // Function for Subscribe Button
 async function redirectPayment() {
     console.log("--- JS FUNCTION redirectPayment() ---")
+    console.log(sessionStorage);
     
     var subscribeURL = "http://localhost:5101/subscribe"
     var data = {
-        CREATORID: sessionStorage.getItem('CreatorID')
+        CREATORID: sessionStorage.getItem('creatorID')
     }
     var otherParams = {
         method: 'POST',
