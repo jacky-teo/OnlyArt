@@ -59,14 +59,15 @@
 
 
     <div id="app" class="mx-5" style="display:none">
-        <div class="text-center fs-2 m-3">Creator {{creatorid}}</div>
+        <div class="text-center fs-2 m-3">{{creatorname}}</div>
+        <div class="text-center m-3">{{numPost}} posts</div>
         <div class="text-center"><button type="button" class="btn btn-dark" onclick="redirectPayment()" v-if="unsubcribed">Subscribe</button></div>
+        <div id="empty" class="text-center my-3 center"></div>
         <div class="card-group row-cols-3">
             <div class="col" v-for="post in postlist">
                 <div class="card m-3">
                     <img :src="post.imgurl" class="card-img-top" alt="...">
                     <div class="card-body">
-                        <h5 class="card-title">{{post.creator}}</h5>
                         <p class="card-text">{{post.desc}}</p>
                     </div>
                     <div class="card-footer">
@@ -82,6 +83,6 @@
 <script src="https://unpkg.com/vue@next"></script>
 <!-- creator_info script -->
 <script src="./scripts/navbar_consumer.js"></script>
-<script src="../OnlyFence/scripts/creator_info.js"></script>
+<script src="../scripts/creator_info.js"></script>
 
 </html>

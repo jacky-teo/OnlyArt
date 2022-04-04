@@ -177,7 +177,7 @@
           if (cn.includes(csearch)) {
             console.log(creator.creatorID);
             let creatorobject = {};
-            creatorobject['creatorID'] = `creator_info.html?cid=CR${cid}`;
+            creatorobject['creatorID'] = cid;
             creatorobject['creatorname'] = cn;
             this.searchresult.push(creatorobject);
           }

@@ -4,7 +4,9 @@ const app = Vue.createApp({
             postlist:[],
             creatorid:"",
             loginURL: './login.html',
-            subType: ''
+            subType: '',
+            creatorname:"",
+            numPost: 0,
         }
     },
     methods:{
@@ -37,14 +39,13 @@ const app = Vue.createApp({
                 }
             )
                 .then((response) => {
-                    console.log("response: ", response)
+                    //console.log("response: ", response)
                     let output = response.data.data;
                     this.subType = response.data.SubType;
                     let urls = response.data.urls; // Get all image URLs
 
                     for (result of output){
                         listobject = {};
-                        listobject['creator'] = result.CREATORID;
                         listobject['desc']= result.DESCRIPTION;
                         listobject['imgurl']=urls[counter] // using this line instead cause ive already stored the imageURLs inside the response
                         listobject['postid']= result.POSTID
@@ -55,16 +56,38 @@ const app = Vue.createApp({
                     console.log("done");
                     document.getElementById("app").style.display = "block";
                     document.getElementById("loader").style.display = "none";
+                    this.numPost =counter;
+                    if (counter==0){
+                        document.getElementById("empty").innerText = "This creator has no posts yet!";
+                    }
                 },
                 (error) => {
                     console.log(error)
                     output = error
                 }
             )
-        }
+        },
+        showcreatorName(){
+            creatornum = Number(this.creatorid.substr(2, 4));
+            url = "http://127.0.0.1:5002/creator";
+
+            let output = null;
+    
+            // console.log(url)
+            axios.get(url)
+              .then((response) => {
+                output = response.data.data.creators;
+                //creatorData = response.data // global var
+                //console.log("creatornum output: ", output);
+                result = output[creatornum-1];
+                cn = result.USERNAME;
+                console.log("creatornum result: ", cn);
+                this.creatorname = cn;
+            })}
     },
     created(){
-        this.getContent()
+        this.getContent();
+        this.showcreatorName();
 
         //checks if user has logged in; redirect to login.html if not logged in
         if (!sessionStorage.getItem('ConsumerID')) {
@@ -72,6 +95,7 @@ const app = Vue.createApp({
         }
     },
     computed: {
+        
         unsubcribed() {
             if (this.subType === 1) {   
                 return false
