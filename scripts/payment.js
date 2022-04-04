@@ -1,4 +1,4 @@
-// Hard coded session variables
+//session variables
 var platform_email = "sb-vrehs14346230@business.example.com";
 var consumerID = sessionStorage.getItem('ConsumerID')
 var payee_username = sessionStorage.getItem('creatorUsername');
@@ -126,7 +126,7 @@ async function confirmSubscription(data){
 }
 
 function redirectBack(){
-    window.location.href = "./creator_info.html"; 
+    window.location.href = "./creator_info.html?cid=" + creatorID; 
 }
 
 
