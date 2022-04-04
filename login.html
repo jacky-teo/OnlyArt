@@ -21,7 +21,7 @@
         <!-- <div class="text-light text-center">
             <h1>OnlyFence</h1>
         </div> -->
-        
+
         <!-- user declaration buttons -->
         <div class="position-absolute top-50 start-50 translate-middle">
             <div class="text-light text-center pb-5">
@@ -35,7 +35,7 @@
                     @click="declareUser('Consumer')" id="consumerBtn" data-bs-toggle="modal"
                     data-bs-target="#loginModal">Consumer</button>
             </div>
-            
+
         </div>
 
 
@@ -53,15 +53,17 @@
                                     <h4 class="mb-4">Welcome {{userType}}!</h4>
                                     <div class="mb-3 row">
                                         <label for="username" class="form-label">Username</label>
-                                        <input type="text" class="form-control w-75" id="username" v-model="username">
+                                        <input style='width:90%;' type="text" class="form-control" id="username"
+                                            v-model="username">
                                     </div>
                                     <div class="mb-4 row">
                                         <label for="inputPassword" class="form-label">Password</label>
-                                        <input type="password" class="form-control w-75" id="inputPassword"
-                                            v-model="password">
+                                        <input style='width:90%;' type="password" class="form-control"
+                                            id="inputPassword" v-model="password">
                                     </div>
-                                    <div class="row">
-                                        <button type="button" class="btn btn-outline-dark rounded-pill col-4 mb-3"
+                                    <div style='width:95%' class="row">
+                                        <button type="button"
+                                            class="mx-auto btn btn-outline-dark rounded-pill col-4 mb-3"
                                             @click="login()">Login</button>
                                         <span v-if="invalidInputs" class="text-danger">{{inputsMsg}}</span>
                                         <span v-if="isLoginFail" class="text-danger">{{loginFailMsg}}</span>
@@ -70,27 +72,24 @@
                                     </div>
                                 </div>
 
-                                <!-- right half of login (make it an auto carousel showing sneaky fence images?) -->
+                                <!-- right half of login -->
                                 <div class="col-sm-6 bg-light rounded-end p-0">
-                                    <div id="welcome" class="carousel slide carousel-fade bg-light" data-bs-ride="carousel" style="width: 387px; height: 382px; overflow: hidden;">
+                                    <div id="welcome" class="carousel slide carousel-fade bg-light"
+                                        data-bs-ride="carousel" style="width: 387px; height: 382px; overflow: hidden;">
                                         <div class="carousel-inner rounded-end">
                                             <div class="carousel-item active">
-                                                <img src="https://images.unsplash.com/photo-1521401707913-31dbbe09ca2c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" class="d-block h-100 " alt="first image">
-                                                <div class="carousel-caption d-none d-md-block mt-4">
-                                                    <h5>OnlyFence</h5>
-                                                </div>
+                                                <img src="https://images.unsplash.com/photo-1521401707913-31dbbe09ca2c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80"
+                                                    class="d-block h-100 " alt="first image">
                                             </div>
                                             <div class="carousel-item">
-                                                <img src="https://images.unsplash.com/photo-1583805978118-ba9a81ac1399?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80" class="d-block h-100" alt="second image">
-                                                <div class="carousel-caption d-none d-md-block">
-                                                    <h5>OnlyFence</h5>
-                                                </div>
+                                                <img src="https://images.unsplash.com/photo-1583805978118-ba9a81ac1399?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
+                                                    class="d-block h-100" alt="second image">
+
                                             </div>
                                             <div class="carousel-item">
-                                                <img src="https://images.unsplash.com/photo-1604015641586-6fa03629f976?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80" class="d-block h-100 w-100" alt="third image">
-                                                <div class="carousel-caption d-none d-md-block">
-                                                    <h5>OnlyFence</h5>
-                                                </div>
+                                                <img src="https://images.unsplash.com/photo-1604015641586-6fa03629f976?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=436&q=80"
+                                                    class="d-block h-100 w-100" alt="third image">
+
                                             </div>
                                         </div>
                                     </div>

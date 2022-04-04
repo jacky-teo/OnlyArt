@@ -20,7 +20,7 @@
       top: 100%;
     }
   </style>
-  
+
   <!-- font stylesheet -->
   <link rel="stylesheet" href="styles/styles.css">
 </head>
@@ -37,26 +37,29 @@
 
       <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active mx-4">
+          <li class="nav-item active mx-2">
             <a class="nav-link" href="#">Home</a>
           </li>
-          <li class="nav-item">
+          <li>
+            <div class="position-relative">
+              <div class="d-block">
+                <form class="form-inline my-2 my-lg-0 d-flex">
+                  <input class="form-control mr-sm-2 ms-2" type="search" v-model="searchinput"
+                    placeholder="Search for Creator" aria-label="Search" @input="populateSearch()">
+                </form>
+              </div>
+              <div class="autocom-box" v-if="searchinput!=''">
+                <ul class="list-group" v-for="search in searchresult">
+                  <a :href="search.creatorID" class="list-group-item list-group-item-action">{{search.creatorname}}</a>
+                </ul>
+              </div>
+            </div>
+          </li>
+          <li class="nav-item ms-4">
             <a class="btn btn-outline-light btn-sm mt-1" @click="logout()">Logout</a>
           </li>
         </ul>
-        <div class="position-relative">
-          <div class="d-block">
-            <form class="form-inline my-2 my-lg-0 d-flex">
-              <input class="form-control mr-sm-2 ms-2" type="search" v-model="searchinput" placeholder="Search"
-                aria-label="Search" @input="populateSearch()">
-            </form>
-          </div>
-          <div class="autocom-box" v-if="searchinput!=''">
-            <ul class="list-group" v-for="search in searchresult">
-              <a :href="search.creatorID" class="list-group-item list-group-item-action">{{search.creatorname}}</a>
-            </ul>
-          </div>
-        </div>
+
       </div>
     </nav>
 
@@ -194,8 +197,8 @@
 
       //checks if user has logged in; redirect to login.html if not logged in
       if (!sessionStorage.getItem('ConsumerID')) {
-            window.location.href = this.loginURL;
-        }
+        window.location.href = this.loginURL;
+      }
     }
   })
 

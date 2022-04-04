@@ -22,28 +22,28 @@ navbar.component('navbar', {
                 return {
                     homeLink: "",
                     viewLink: "./content.html",
-                    updateLink:"./update.html"
+                    updateLink: "./update.html"
                 }
             }
             else if (window.location.href.includes("content")) {
                 return {
                     homeLink: "./upload.html",
                     viewLink: "",
-                    updateLink:"./update.html"
+                    updateLink: "./update.html"
                 }
             }
             else if (window.location.href.includes("update")) {
                 return {
                     homeLink: "./upload.html",
                     viewLink: "./content.html",
-                    updateLink:""
+                    updateLink: ""
                 }
             }
             else {
                 return {
                     homeLink: "./upload.html",
                     viewLink: "./content.html",
-                    updateLink:"./update.html"
+                    updateLink: "./update.html"
                 }
             }
         }
@@ -54,15 +54,15 @@ navbar.component('navbar', {
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
                     <a class="nav-link ms-2" :href=links.homeLink>Upload</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link ms-2" :href=links.viewLink>View</a>
-                </li>
+                </li>                
                 <li class="nav-item">
                     <a class="nav-link ms-2" :href=links.updateLink>Edit</a>
                 </li>
                 <li class="nav-item">
-                <a class="btn btn-outline-light btn-sm mt-1 ms-2" @click="logout()">Logout</a>
+                    <a class="nav-link ms-2 me-3" :href=links.viewLink>View</a>
+                </li>
+                <li class="nav-item">
+                <a class="btn btn-outline-light ms-2" @click="logout()">Logout</a>
                 </li>
             </ul>
         </div>
