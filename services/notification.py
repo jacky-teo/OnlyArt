@@ -74,7 +74,7 @@ def find_by_isbn13(telegramtag):
         }
     ), 404
 
-#for testing purposes only
+#FOR TESTING PURPOSES ONLY
 @app.route("/chat/<string:telegramtag>", methods=['POST'])
 def create_notif(telegramtag):
     if (Notification.query.filter_by(telegramtag=telegramtag).first()):
