@@ -20,6 +20,7 @@ CORS(app)
 creator_URL = environ.get('creator_url') or "http://localhost:5002/creator/price" 
 add_subscription_URL =environ.get('add_subscription_url') or "http://localhost:5006/subscription/add"
 add_paymentLog_URL = environ.get('add_paymentLog_url') or"http://localhost:5005/payments/log"
+consumer_URL = environ.get('consumer_url') or "http://localhost:5001/consumer/retrievetelegram/" 
 
 # Scenario 2a: Create subscription request
 @app.route("/subscribe", methods=['POST'])
@@ -168,13 +169,20 @@ def confirmPayment(): # Function that passes in result from PayPal service after
             "code": 400,
             "message": "Request should be in JSON. Error: "
         }), 400 # Bad Request Input
+def getTeletag(consumerID):
+    information = invoke_http(f'{consumer_URL}/{consumerID}',method="GET")
+    return information
 
 def updateSubscriptionLink(data): # Send new record to Subscription Link service
     print('Updating Subscription Link service...')
+    telegram = getTeletag(data['CONSUMERID'])
+    print(telegram)
     prepJSON = {
         "CONSUMERID": data['CONSUMERID'],
-        "CREATORID": data['CREATORID']
+        "CREATORID": data['CREATORID'],
+        "TELEGRAM" :telegram['data']
     }
+    
     result = invoke_http(add_subscription_URL, method='POST', json=prepJSON)
     return result
 
