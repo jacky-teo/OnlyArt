@@ -74,5 +74,23 @@ def creator_auth():
         }
     ), 404
 
+@app.route("/consumer/retrievetelegram/<string:consumerID>")
+def get_telegram(consumerID):
+    status = consumerAccount.query.filter_by(CONSUMERID=consumerID).first()
+
+    if (status):
+        return jsonify(
+            {
+                "code": 200,
+                "data":status.TELEGRAM,
+                'message': 'Creator information successfully returned'
+            }
+        )
+    return jsonify(
+        {
+            "code": 404,
+            "message": "Creator does not exist"
+        }
+    ), 404
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5001, debug=True)
