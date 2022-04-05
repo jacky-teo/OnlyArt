@@ -180,6 +180,7 @@ services:
         - content
         - subscription_link
         - creator
+        
   subscribe:
     build:
       context: ./
@@ -193,9 +194,11 @@ services:
       creator_url: "http://creator:5002/creator/price" 
       add_subscription_url: "http://subscription_link:5006/subscription/add"
       add_paymentLog_url: "http://payment_log:5005/payments/log"
+      consumer_url: "http://consumer:5001/consumer/retrievetelegram/"
     ports:
             - "5101:5101"
     depends_on:
         - payment_log
         - subscription_link
         - creator
+        - consumer
