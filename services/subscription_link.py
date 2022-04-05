@@ -132,12 +132,12 @@ def check_status():
     )
 
 # scenario 2
-
-
 @app.route('/subscription/add', methods=["POST"])
 def create_subscription():
+    print(request.json)
     creatorid = request.json.get('CREATORID')
     consumerid = request.json.get('CONSUMERID')
+    telegram = request.json.get('TELEGRAM')
 
     if (subscriptionLink.query.filter_by(CREATORID=creatorid, CONSUMERID=consumerid).first()):
         return jsonify(
@@ -149,11 +149,11 @@ def create_subscription():
     else:
         created = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         modified = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        telegram = consumerAccount.query.filter_by(
-            CONSUMERID=consumerid).first()
+        # telegram = consumerAccount.query.filter_by(
+        #     CONSUMERID=consumerid).first()
 
         subcribedParing = subscriptionLink(
-            CREATORID=creatorid, CONSUMERID=consumerid, TELEGRAM=telegram.TELEGRAM, CREATED=created, MODIFIED=modified)
+            CREATORID=creatorid, CONSUMERID=consumerid, TELEGRAM=telegram, CREATED=created, MODIFIED=modified)
 
         try:
             db.session.add(subcribedParing)
@@ -173,7 +173,6 @@ def create_subscription():
         ), 201
 
 # scenario 3
-
 
 @app.route('/subscription/getsubscribers/<string:creatorid>')
 def get_all_subscribers(creatorid):
