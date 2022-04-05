@@ -134,7 +134,6 @@ def check_status():
 # scenario 2
 @app.route('/subscription/add', methods=["POST"])
 def create_subscription():
-    print(request.json)
     creatorid = request.json.get('CREATORID')
     consumerid = request.json.get('CONSUMERID')
     telegram = request.json.get('TELEGRAM')
