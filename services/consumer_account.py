@@ -83,13 +83,13 @@ def get_telegram(consumerID):
             {
                 "code": 200,
                 "data":status.TELEGRAM,
-                'message': 'Creator information successfully returned'
+                'message': 'Consumer telegram tag successfully returned'
             }
         )
     return jsonify(
         {
             "code": 404,
-            "message": "Creator does not exist"
+            "message": "Consumer does not exist"
         }
     ), 404
 if __name__ == '__main__':
