@@ -3,15 +3,6 @@ OnlyFence is a content subscription service that allows content creators to earn
 
 ![Fences](https://cdn.vox-cdn.com/thumbor/NXI3rAC_jN7zEcdUbBM4K6bbBPM=/0x0:3000x2000/1200x0/filters:focal(0x0:3000x2000):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/21760265/iStock_598783266.jpg)
 
-## TO-DO
-- [Done] Design UI page [Login & POST]
-- [ ] Use of REST API 
-- [Done] Set Up Database 
-- [Done] Figure out Telegram Bot & Paypal API
-- [Done] Finish Proposal Slides
-- [ ] Design the HTML pages
-- [ ] Integrate KongAPI
-- [ ] Finish Complex Microservices
 
 ## How to set up OnlyFence
 1. Start WAMP and run all SQL scripts under the "databases" folder.
@@ -62,15 +53,19 @@ OnlyFence is a content subscription service that allows content creators to earn
 7. *notification.py* will return the notification status to *post_content.py*
 8. *post_content.py* will returnt the status of the notification and content upload status to the UI so the creator can view it.
 
-## Tools Available
-- Docker
+## Python Modules
 - Flask (Micro Web Framework for Python)
 - Flask_CORS (Cross-origin AJAX)
 - FlaskSQLAlchemy (Python SQL Toolkit)
-- RabbitMQ (AMQP)
 - Firebase_admin
+- Pika
+- Telegram Bot
+
+## Tools
+- Docker
+- RabbitMQ (AMQP)
 - PayPal API
-- Telegram API/Bot
+- Telegram API
 
 ## Accounts
 **For Sandbox Accounts**    
