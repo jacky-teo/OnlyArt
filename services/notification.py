@@ -144,10 +144,10 @@ def send_notif(creatorname):
     if countnotif == 0:
         return jsonify(
             {
-                "code": 200,
+                "code": 404,
                 "message": "Data sent does not match any records in database. Notification was unsuccessful. No notifs sent."
             }
-        ), 200
+        ), 404
     else:
         successmsg = "Notification was successful." + \
             str(countnotif) + " number of notifs were sent."
