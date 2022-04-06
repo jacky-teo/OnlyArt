@@ -56,7 +56,7 @@ def get_all():
             {
                 "code": 200,
                 "data": {
-                    "books": [transaction.json() for transaction in transactions]
+                    "transactions": [transaction.json() for transaction in transactions]
                 }
             }
         )
