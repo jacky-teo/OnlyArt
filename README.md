@@ -1,17 +1,19 @@
-# OnlyFence
-OnlyFence is a content subscription service that allows content creators to earn money from users who subscribe to their content. This is a similar concept to OnlyFans and Patreon.  
+# OnlyArt
+OnlyArt is a content subscription service that allows content creators to earn money from users who subscribe to their content. This is a similar concept to Patreon.  
+
+Project was originally named: "Onlyfence"
 
 ![Fences](https://cdn.vox-cdn.com/thumbor/NXI3rAC_jN7zEcdUbBM4K6bbBPM=/0x0:3000x2000/1200x0/filters:focal(0x0:3000x2000):no_upscale()/cdn.vox-cdn.com/uploads/chorus_asset/file/21760265/iStock_598783266.jpg)
 
 
-## How to set up OnlyFence
+## How to set up OnlyArt
 1. Start WAMP and run all SQL scripts under the "databases" folder.
 2. Run Docker-Compose up
-3. Start using OnlyFence by accessing the "login.html" page.
+3. Start using OnlyArt by accessing the "login.html" page.
 4. Log in using the appropriate accounts (see **Test Accounts** for credentials)
 
 ## How to set up Telegram Notifications
-1. Start telebot.py. This bot will record consumer's telegram tag (e.g. @onlyfenceuser) and chat id in the Notification database to be referenced for future messages to be sent. 
+1. Start telebot.py. This bot will record consumer's telegram tag (e.g. @OnlyArtUser) and chat id in the Notification database to be referenced for future messages to be sent. 
 2. Consumer sends https://t.me/onlyfence_bot a /start message so that the chat id of the consumer can be recorded.
 3. When a content creator posts a message using the post_content.py complex microservice, the notification.py microservice will first retrieve the chatid of subscribed consumers based on their telegram tags, by referencing from the Notification database.
 4. The notification.py microservice will then send each subscribed consumer a notification message using a telegram API link and the chatid of the consumer.
@@ -73,7 +75,7 @@ user: G03T02@gmail.com
 password: SubwayEatFresh123  
 
 ## Test Accounts
-### OnlyFence
+### OnlyArt
 ##### Customer Accounts
   @jackyteojianqi  
 Username: imnew  
