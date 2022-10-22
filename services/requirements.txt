@@ -11,7 +11,7 @@ pika==1.2.0
 pycryptodome==3.14.1
 python-telegram-bot==13.11
 python-dotenv==0.19.2
-python-jwt==3.3.2
+python-jwt==3.3.4
 requests==2.27.1
 requests_toolbelt==0.9.1
 sseclient==0.0.27
